@@ -1,0 +1,45 @@
+<view class="container" wx:if="{{game}}">
+  <view class="card header-card">
+    <view class="round">当前回合：第 {{game.currentRound}} 回合</view>
+    <view class="players-grid">
+      <block wx:for="{{game.players}}" wx:key="id">
+        <view class="player-chip {{activeIndex===index?'active':''}}" data-index="{{index}}" bindtap="selectPlayer">
+          <view class="avatar">{{avatars[index % avatars.length]}}</view>
+          <text class="name">{{item.name}}</text>
+          <text class="score">{{item.score}}分</text>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <view class="card action-card">
+    <view class="title">给 {{game.players[activeIndex].name}} 加减分</view>
+    <view class="ops">
+      <button class="minus" data-delta="-10" bindtap="applyDelta">-10</button>
+      <button class="minus" data-delta="-5" bindtap="applyDelta">-5</button>
+      <button class="plus" data-delta="5" bindtap="applyDelta">+5</button>
+      <button class="plus" data-delta="10" bindtap="applyDelta">+10</button>
+    </view>
+    <view class="custom-row">
+      <input class="custom-input" type="number" value="{{customDelta}}" bindinput="onCustomInput" placeholder="自定义分值" />
+      <button class="primary-btn confirm-btn" bindtap="applyCustom">确认</button>
+    </view>
+  </view>
+
+  <view class="action-row">
+    <button class="secondary-btn" bindtap="nextRound">下一回合</button>
+    <button class="primary-btn" bindtap="endGame">结束计分</button>
+  </view>
+
+  <view class="card log-card" wx:if="{{roundList.length}}">
+    <view class="title2">历史回合得分</view>
+    <block wx:for="{{roundList}}" wx:key="round">
+      <view class="round-item">
+        <view class="round-tag">第{{item.round}}回合</view>
+        <block wx:for="{{item.scores}}" wx:key="at">
+          <view class="log-line"><text>{{item.playerName}}</text><text>{{item.delta>0?'+':''}}{{item.delta}}</text></view>
+        </block>
+      </view>
+    </block>
+  </view>
+</view>
