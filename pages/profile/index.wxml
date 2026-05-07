@@ -6,12 +6,12 @@
     </view>
   </view>
   <view class="card">
-    <view class="title">历史计分记录</view>
+    <view class="title">历史计分记录（点击查看详情）</view>
     <block wx:if="{{history.length===0}}"><text>暂无记录</text></block>
     <block wx:for="{{history}}" wx:key="id">
-      <view class="item">
+      <view class="item" data-id="{{item.id}}" bindtap="openRecord">
         <text>{{item.players.length}}人局 · {{item.finishedAtText}}</text>
-        <text>冠军：{{item.ranking[0].name}} {{item.ranking[0].score}}分</text>
+        <text>冠军：{{item.ranking[0].name}} {{item.ranking[0].score}}分 ></text>
       </view>
     </block>
   </view>

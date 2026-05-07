@@ -4,8 +4,7 @@ function createPlayers(count) {
   return Array.from({ length: count }).map((_, i) => ({
     id: `${Date.now()}_${i}`,
     name: `玩家${i + 1}`,
-    score: 0,
-    avatar: '/assets/avatar.png'
+    score: 0
   }));
 }
 
@@ -13,17 +12,13 @@ Page({
   data: {
     presetCounts: [2, 3, 4],
     playerCount: 4,
-    players: createPlayers(4)
+    players: createPlayers(4),
+    avatars: ['😀', '😎', '🀄', '🐯', '🐼', '🦊', '🐬', '🦁']
   },
   syncPlayers(count) {
     const players = this.data.players.slice(0, count);
     while (players.length < count) {
-      players.push({
-        id: `${Date.now()}_${players.length}`,
-        name: `玩家${players.length + 1}`,
-        score: 0,
-        avatar: '/assets/avatar.png'
-      });
+      players.push({ id: `${Date.now()}_${players.length}`, name: `玩家${players.length + 1}`, score: 0 });
     }
     this.setData({ playerCount: count, players });
   },
@@ -37,12 +32,12 @@ Page({
     this.setData({ players });
   },
   startGame() {
-    const game = {
+    saveCurrentGame({
       players: this.data.players.map((p) => ({ ...p, score: 0 })),
       rounds: [],
+      currentRound: 1,
       createdAt: Date.now()
-    };
-    saveCurrentGame(game);
+    });
     wx.navigateTo({ url: '/pages/score-board/index' });
   }
 });

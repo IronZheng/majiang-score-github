@@ -3,11 +3,12 @@ const { getHistory } = require('../../utils/storage');
 Page({
   data: { userInfo: null, history: [] },
   onShow() {
-    const history = getHistory().map((item) => ({
-      ...item,
-      finishedAtText: new Date(item.finishedAt).toLocaleString()
-    }));
+    const history = getHistory().map((item) => ({ ...item, finishedAtText: new Date(item.finishedAt).toLocaleString() }));
     this.setData({ history, userInfo: wx.getStorageSync('mj_user') || null });
+  },
+  openRecord(e) {
+    const { id } = e.currentTarget.dataset;
+    wx.navigateTo({ url: `/pages/result/index?id=${id}` });
   },
   login() {
     wx.getUserProfile({
