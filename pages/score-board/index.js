@@ -1,12 +1,21 @@
 const { getCurrentGame, saveCurrentGame, addHistory, clearCurrentGame } = require('../../utils/storage');
 
 Page({
-  data: { game: null, activeIndex: 0, customDelta: '', avatars: ['😀', '😎', '🀄', '🐯', '🐼', '🦊', '🐬', '🦁'] },
+  data: { game: null, activeIndex: 0, customDelta: '', roundList: [], avatars: ['😀', '😎', '🀄', '🐯', '🐼', '🦊', '🐬', '🦁'] },
   onShow() {
     const game = getCurrentGame();
     if (!game) return wx.navigateBack();
     if (!game.currentRound) game.currentRound = 1;
-    this.setData({ game });
+    this.refreshView(game);
+  },
+  refreshView(game) {
+    const map = {};
+    (game.rounds || []).forEach((r) => {
+      if (!map[r.round]) map[r.round] = [];
+      map[r.round].push(r);
+    });
+    const roundList = Object.keys(map).map((round) => ({ round: Number(round), scores: map[round] })).sort((a, b) => b.round - a.round);
+    this.setData({ game, roundList });
   },
   selectPlayer(e) { this.setData({ activeIndex: Number(e.currentTarget.dataset.index) }); },
   onCustomInput(e) { this.setData({ customDelta: e.detail.value }); },
@@ -19,13 +28,14 @@ Page({
     p.score += delta;
     game.rounds.push({ playerId: p.id, playerName: p.name, delta, round: game.currentRound, at: Date.now() });
     saveCurrentGame(game);
-    this.setData({ game, customDelta: '' });
+    this.setData({ customDelta: '' });
+    this.refreshView(game);
   },
   nextRound() {
     const game = this.data.game;
     game.currentRound += 1;
     saveCurrentGame(game);
-    this.setData({ game });
+    this.refreshView(game);
     wx.showToast({ title: `进入第${game.currentRound}回合`, icon: 'none' });
   },
   endGame() {

@@ -1,5 +1,6 @@
-.header-card { background: #edf6ff; }
+.header-card { background: #eaf4ff; }
 .action-card { background: #fff6ef; }
+.log-card{background:#f4fff8}
 .round { color: #2f7ac9; font-weight: 700; margin-bottom: 12rpx; }
 .players-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16rpx; }
 .player-chip { background: #fff; border: 1rpx solid #d5e9fb; border-radius: 14rpx; padding: 16rpx; text-align: center; }
@@ -17,3 +18,7 @@
 .confirm-btn { width: 180rpx; }
 .action-row { display:flex; gap: 16rpx; }
 .action-row button { flex:1; }
+.title2{font-size:28rpx;font-weight:600;color:#28714e;margin-bottom:10rpx}
+.round-item{background:#fff;border:1rpx solid #d3f0dd;border-radius:10rpx;padding:10rpx;margin-bottom:10rpx}
+.round-tag{color:#4b8f6b;font-weight:600;margin-bottom:8rpx}
+.log-line{display:flex;justify-content:space-between;padding:6rpx 0}

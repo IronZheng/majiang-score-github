@@ -30,4 +30,16 @@
     <button class="secondary-btn" bindtap="nextRound">下一回合</button>
     <button class="primary-btn" bindtap="endGame">结束计分</button>
   </view>
+
+  <view class="card log-card" wx:if="{{roundList.length}}">
+    <view class="title2">历史回合得分</view>
+    <block wx:for="{{roundList}}" wx:key="round">
+      <view class="round-item">
+        <view class="round-tag">第{{item.round}}回合</view>
+        <block wx:for="{{item.scores}}" wx:key="at">
+          <view class="log-line"><text>{{item.playerName}}</text><text>{{item.delta>0?'+':''}}{{item.delta}}</text></view>
+        </block>
+      </view>
+    </block>
+  </view>
 </view>

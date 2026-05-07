@@ -7,12 +7,8 @@
         <text>{{item.score}} 分</text>
       </view>
     </block>
-    <view class="btn-row">
-      <button class="primary-btn" open-type="share">分享给好友</button>
-      <button class="secondary-btn" bindtap="previewPoster">预览战绩图</button>
-      <button class="secondary-btn" bindtap="savePoster">保存战绩图</button>
-    </view>
   </view>
+
   <view class="card detail-card">
     <view class="title">📒 每轮得分详情</view>
     <block wx:for="{{roundList}}" wx:key="round">
@@ -26,6 +22,14 @@
         </block>
       </view>
     </block>
+  </view>
+
+  <view class="card share-card">
+    <view class="btn-row">
+      <button class="primary-btn" open-type="share">分享给好友</button>
+      <button class="secondary-btn" bindtap="previewPoster">预览战绩图</button>
+      <button class="secondary-btn" bindtap="savePoster">保存战绩图</button>
+    </view>
   </view>
 
   <canvas canvas-id="posterCanvas" class="poster-canvas" style="width: 690rpx; height: {{posterHeight}}px;"></canvas>
