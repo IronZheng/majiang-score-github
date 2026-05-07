@@ -3,6 +3,9 @@ const { getHistory } = require('../../utils/storage');
 Page({
   data: { userInfo: null, history: [] },
   onShow() {
+    const tabBar = this.getTabBar && this.getTabBar();
+    if (tabBar) tabBar.setData({ selected: 1 });
+
     const history = getHistory().map((item) => ({ ...item, finishedAtText: new Date(item.finishedAt).toLocaleString() }));
     this.setData({ history, userInfo: wx.getStorageSync('mj_user') || null });
   },

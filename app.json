@@ -13,6 +13,7 @@
     "backgroundColor": "#f7fbff"
   },
   "tabBar": {
+    "custom": true,
     "color": "#6f87a3",
     "selectedColor": "#2f7ac9",
     "backgroundColor": "#ffffff",
@@ -20,15 +21,11 @@
     "list": [
       {
         "pagePath": "pages/scoring-setup/index",
-        "text": "计分",
-        "iconPath": "assets/icons/score.svg",
-        "selectedIconPath": "assets/icons/score-active.svg"
+        "text": "计分"
       },
       {
         "pagePath": "pages/profile/index",
-        "text": "我的",
-        "iconPath": "assets/icons/profile.svg",
-        "selectedIconPath": "assets/icons/profile-active.svg"
+        "text": "我的"
       }
     ]
   },

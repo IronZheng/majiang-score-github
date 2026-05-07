@@ -9,6 +9,10 @@ function createPlayers(count) {
 }
 
 Page({
+  onShow() {
+    const tabBar = this.getTabBar && this.getTabBar();
+    if (tabBar) tabBar.setData({ selected: 0 });
+  },
   data: {
     presetCounts: [2, 3, 4],
     playerCount: 4,

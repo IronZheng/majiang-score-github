@@ -1,4 +1,5 @@
 page {
+  padding-bottom: 128rpx;
   background: #f4f9ff;
   color: #1f3f5b;
   font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, sans-serif;
