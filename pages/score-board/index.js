@@ -38,6 +38,23 @@ Page({
     this.refreshView(game);
     wx.showToast({ title: `进入第${game.currentRound}回合`, icon: 'none' });
   },
+  resetGame() {
+    wx.showModal({
+      title: '确认重置',
+      content: '重置后将清空当前所有回合记录，确定继续吗？',
+      confirmColor: '#d4a900',
+      success: (res) => {
+        if (!res.confirm) return;
+        const game = this.data.game;
+        game.players = game.players.map((p) => ({ ...p, score: 0 }));
+        game.rounds = [];
+        game.currentRound = 1;
+        saveCurrentGame(game);
+        this.setData({ activeIndex: 0, customDelta: '' });
+        this.refreshView(game);
+      }
+    });
+  },
   endGame() {
     const game = this.data.game;
     const ranking = game.players.slice().sort((a, b) => b.score - a.score);

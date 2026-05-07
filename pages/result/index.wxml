@@ -1,23 +1,23 @@
 <view class="container" wx:if="{{record}}">
   <view class="card rank-card">
     <view class="title">🏆 最终排名（共{{record.totalRounds || 1}}回合）</view>
-    <block wx:for="{{record.ranking}}" wx:key="id">
+    <block wx:for="{{record.ranking}}" wx:key="id" wx:for-item="rankPlayer" wx:for-index="rIndex">
       <view class="rank-row">
-        <text>{{medals[index] || ('第' + (index+1) + '名')}} {{item.name}}</text>
-        <text>{{item.score}} 分</text>
+        <text>{{medals[rIndex] || ('第' + (rIndex+1) + '名')}} {{rankPlayer.name}}</text>
+        <text>{{rankPlayer.score}} 分</text>
       </view>
     </block>
   </view>
 
   <view class="card detail-card">
     <view class="title">📒 每轮得分详情</view>
-    <block wx:for="{{roundList}}" wx:key="round">
+    <block wx:for="{{roundList}}" wx:key="round" wx:for-item="roundItem">
       <view class="round-block">
-        <view class="round-title">第{{item.round}}回合</view>
-        <block wx:for="{{item.scores}}" wx:key="playerName">
+        <view class="round-title">第{{roundItem.round}}回合</view>
+        <block wx:for="{{roundItem.scores}}" wx:key="at" wx:for-item="scoreItem">
           <view class="log-row">
-            <text>{{item.playerEmoji}} {{item.playerName}}</text>
-            <text class="delta">{{item.delta > 0 ? '+' : ''}}{{item.delta}}</text>
+            <text>{{scoreItem.playerEmoji}} {{scoreItem.playerName}}</text>
+            <text class="delta">{{scoreItem.delta > 0 ? '+' : ''}}{{scoreItem.delta}}</text>
           </view>
         </block>
       </view>

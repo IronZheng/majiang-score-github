@@ -2,11 +2,11 @@
   <view class="card header-card">
     <view class="round">当前回合：第 {{game.currentRound}} 回合</view>
     <view class="players-grid">
-      <block wx:for="{{game.players}}" wx:key="id">
-        <view class="player-chip {{activeIndex===index?'active':''}}" data-index="{{index}}" bindtap="selectPlayer">
-          <view class="avatar">{{avatars[index % avatars.length]}}</view>
-          <text class="name">{{item.name}}</text>
-          <text class="score">{{item.score}}分</text>
+      <block wx:for="{{game.players}}" wx:key="id" wx:for-item="player" wx:for-index="pIndex">
+        <view class="player-chip {{activeIndex===pIndex?'active':''}}" data-index="{{pIndex}}" bindtap="selectPlayer">
+          <view class="avatar">{{avatars[pIndex % avatars.length]}}</view>
+          <text class="name">{{player.name}}</text>
+          <text class="score">{{player.score}}分</text>
         </view>
       </block>
     </view>
@@ -26,18 +26,19 @@
     </view>
   </view>
 
-  <view class="action-row">
+  <view class="action-row action-row-3">
     <button class="secondary-btn" bindtap="nextRound">下一回合</button>
-    <button class="primary-btn" bindtap="endGame">结束计分</button>
+    <button class="warn-btn" bindtap="resetGame">重置</button>
+    <button class="danger-btn" bindtap="endGame">结束计分</button>
   </view>
 
   <view class="card log-card" wx:if="{{roundList.length}}">
     <view class="title2">历史回合得分</view>
-    <block wx:for="{{roundList}}" wx:key="round">
+    <block wx:for="{{roundList}}" wx:key="round" wx:for-item="roundItem">
       <view class="round-item">
-        <view class="round-tag">第{{item.round}}回合</view>
-        <block wx:for="{{item.scores}}" wx:key="at">
-          <view class="log-line"><text>{{item.playerName}}</text><text>{{item.delta>0?'+':''}}{{item.delta}}</text></view>
+        <view class="round-tag">第{{roundItem.round}}回合</view>
+        <block wx:for="{{roundItem.scores}}" wx:key="at" wx:for-item="scoreItem">
+          <view class="log-line"><text>{{scoreItem.playerName}}</text><text>{{scoreItem.delta>0?'+':''}}{{scoreItem.delta}}</text></view>
         </block>
       </view>
     </block>

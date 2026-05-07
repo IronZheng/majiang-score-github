@@ -17,7 +17,9 @@
 .custom-input { flex:1; background:#fff; border:1rpx solid #f1d6be; border-radius: 10rpx; padding: 14rpx; }
 .confirm-btn { width: 180rpx; }
 .action-row { display:flex; gap: 16rpx; }
-.action-row button { flex:1; }
+.action-row-3 button { flex:1; }
+.warn-btn{background:#ffe999;color:#7a5c00;border:1rpx solid #f3d96a;border-radius:14rpx}
+.danger-btn{background:#ff5d5d;color:#fff;border:1rpx solid #f24c4c;border-radius:14rpx}
 .title2{font-size:28rpx;font-weight:600;color:#28714e;margin-bottom:10rpx}
 .round-item{background:#fff;border:1rpx solid #d3f0dd;border-radius:10rpx;padding:10rpx;margin-bottom:10rpx}
 .round-tag{color:#4b8f6b;font-weight:600;margin-bottom:8rpx}
