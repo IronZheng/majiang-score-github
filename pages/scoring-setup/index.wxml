@@ -1,0 +1,27 @@
+<view class="container">
+  <view class="card">
+    <view class="title">选择玩家人数</view>
+    <view class="count-grid">
+      <block wx:for="{{presetCounts}}" wx:key="*this">
+        <button class="count-btn {{playerCount===item?'active':''}}" data-count="{{item}}" bindtap="setPresetCount">{{item}}人</button>
+      </block>
+    </view>
+    <view class="count-actions">
+      <button class="secondary-btn mini" bindtap="decreaseCount">-1</button>
+      <text class="count-value">当前 {{playerCount}} 人</text>
+      <button class="secondary-btn mini" bindtap="increaseCount">+1</button>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="title">玩家昵称</view>
+    <block wx:for="{{players}}" wx:key="id">
+      <view class="player-row">
+        <text class="player-label">玩家{{index + 1}}</text>
+        <input class="name-input" value="{{item.name}}" data-index="{{index}}" bindinput="onNameChange" placeholder="请输入名字" />
+      </view>
+    </block>
+  </view>
+
+  <button class="primary-btn" bindtap="startGame">开始计分</button>
+</view>

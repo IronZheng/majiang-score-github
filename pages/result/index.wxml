@@ -1,0 +1,21 @@
+<view class="container" wx:if="{{record}}">
+  <view class="card">
+    <view class="title">最终排名</view>
+    <block wx:for="{{record.ranking}}" wx:key="id">
+      <view class="rank-row">
+        <text>第{{index+1}}名 {{item.name}}</text><text>{{item.score}} 分</text>
+      </view>
+    </block>
+    <button class="primary-btn" open-type="share">分享并保存战绩图</button>
+  </view>
+  <view class="card">
+    <view class="title">回合得分记录</view>
+    <block wx:for="{{record.rounds}}" wx:key="at">
+      <view class="log-row">
+        <text>第{{item.round}}次：</text>
+        <text>{{item.playerName}}</text>
+        <text class="delta">{{item.delta>0?'+':''}}{{item.delta}}</text>
+      </view>
+    </block>
+  </view>
+</view>

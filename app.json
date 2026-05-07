@@ -1,0 +1,33 @@
+{
+  "pages": [
+    "pages/scoring-setup/index",
+    "pages/score-board/index",
+    "pages/result/index",
+    "pages/profile/index"
+  ],
+  "window": {
+    "navigationBarTitleText": "麻将计分器",
+    "navigationBarBackgroundColor": "#e8f4ff",
+    "navigationBarTextStyle": "black",
+    "backgroundTextStyle": "light",
+    "backgroundColor": "#f4f9ff"
+  },
+  "tabBar": {
+    "color": "#7696b2",
+    "selectedColor": "#2f7ac9",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/scoring-setup/index",
+        "text": "计分"
+      },
+      {
+        "pagePath": "pages/profile/index",
+        "text": "我的"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}
