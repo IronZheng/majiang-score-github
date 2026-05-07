@@ -1,0 +1,4 @@
+{
+  "desc": "仅用于微信小程序索引",
+  "rules": [{"action": "allow", "page": "*"}]
+}

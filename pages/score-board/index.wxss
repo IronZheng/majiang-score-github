@@ -1,0 +1,12 @@
+.players-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16rpx; }
+.player-chip { background: #eef6ff; border: 1rpx solid #d5e9fb; border-radius: 14rpx; padding: 16rpx; text-align: center; }
+.player-chip.active { border-color: #2f7ac9; box-shadow: 0 0 0 2rpx rgba(47,122,201,.2) inset; }
+.avatar { width: 64rpx; height: 64rpx; line-height: 64rpx; border-radius: 50%; background: #cde5fb; margin: 0 auto 8rpx; }
+.name { display:block; color: #2f5d88; }
+.score { color: #2f7ac9; font-weight: 700; }
+.title { font-size: 30rpx; margin-bottom: 12rpx; color: #2f5d88; }
+.ops { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 12rpx; margin-bottom: 16rpx; }
+.custom-row { display:flex; gap: 12rpx; }
+.custom-input { flex:1; background:#f3f9ff; border:1rpx solid #d6e8f8; border-radius: 10rpx; padding: 14rpx; }
+.action-row { display:flex; gap: 16rpx; }
+.action-row button { flex:1; }

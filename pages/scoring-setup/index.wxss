@@ -1,0 +1,10 @@
+.title { font-size: 32rpx; font-weight: 600; margin-bottom: 16rpx; color: #2f5d88; }
+.count-grid { display: flex; gap: 16rpx; margin-bottom: 16rpx; }
+.count-btn { flex: 1; background: #eef6ff; color: #2f7ac9; border: 1rpx solid #d2e8fb; border-radius: 12rpx; }
+.count-btn.active { background: #2f7ac9; color: #fff; }
+.count-actions { display: flex; align-items: center; justify-content: space-between; }
+.count-value { color: #517899; }
+.mini { width: 140rpx; }
+.player-row { display: flex; align-items: center; margin-bottom: 16rpx; }
+.player-label { width: 120rpx; color: #517899; }
+.name-input { flex: 1; background: #f3f9ff; border: 1rpx solid #d6e8f8; border-radius: 10rpx; padding: 14rpx; }

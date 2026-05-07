@@ -1,0 +1,32 @@
+<view class="container" wx:if="{{game}}">
+  <view class="card">
+    <view class="players-grid">
+      <block wx:for="{{game.players}}" wx:key="id">
+        <view class="player-chip {{activeIndex===index?'active':''}}" data-index="{{index}}" bindtap="selectPlayer">
+          <view class="avatar">{{item.name.slice(0,1)}}</view>
+          <text class="name">{{item.name}}</text>
+          <text class="score">{{item.score}}</text>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="title">给 {{game.players[activeIndex].name}} 加减分</view>
+    <view class="ops">
+      <button class="secondary-btn" data-delta="-10" bindtap="applyDelta">-10</button>
+      <button class="secondary-btn" data-delta="-5" bindtap="applyDelta">-5</button>
+      <button class="secondary-btn" data-delta="5" bindtap="applyDelta">+5</button>
+      <button class="secondary-btn" data-delta="10" bindtap="applyDelta">+10</button>
+    </view>
+    <view class="custom-row">
+      <input class="custom-input" type="number" value="{{customDelta}}" bindinput="onCustomInput" placeholder="自定义分值" />
+      <button class="primary-btn" bindtap="applyCustom">应用</button>
+    </view>
+  </view>
+
+  <view class="action-row">
+    <button class="secondary-btn" bindtap="nextRound">下一回合</button>
+    <button class="primary-btn" bindtap="endGame">结束计分</button>
+  </view>
+</view>

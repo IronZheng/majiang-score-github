@@ -1,0 +1,18 @@
+<view class="container">
+  <view class="card profile-card">
+    <button wx:if="{{!userInfo}}" class="primary-btn" bindtap="login">微信登录</button>
+    <view wx:else>
+      <text class="hello">你好，{{userInfo.nickName || '玩家'}}</text>
+    </view>
+  </view>
+  <view class="card">
+    <view class="title">历史计分记录</view>
+    <block wx:if="{{history.length===0}}"><text>暂无记录</text></block>
+    <block wx:for="{{history}}" wx:key="id">
+      <view class="item">
+        <text>{{item.players.length}}人局 · {{item.finishedAtText}}</text>
+        <text>冠军：{{item.ranking[0].name}} {{item.ranking[0].score}}分</text>
+      </view>
+    </block>
+  </view>
+</view>
