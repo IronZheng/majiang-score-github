@@ -27,11 +27,19 @@ Page({
   onNameChange(e) {
     const { index } = e.currentTarget.dataset;
     const players = this.data.players.slice();
-    players[index].name = e.detail.value || `玩家${Number(index) + 1}`;
+    players[index].name = e.detail.value;
+    this.setData({ players });
+  },
+  onNameBlur(e) {
+    const { index } = e.currentTarget.dataset;
+    const players = this.data.players.slice();
+    const name = (players[index].name || '').trim();
+    players[index].name = name || `玩家${Number(index) + 1}`;
     this.setData({ players });
   },
   startGame() {
-    saveCurrentGame({ players: this.data.players.map((p) => ({ ...p, score: 0 })), rounds: [], currentRound: 1, createdAt: Date.now() });
+    const players = this.data.players.map((p, i) => ({ ...p, name: (p.name || '').trim() || `玩家${i + 1}`, score: 0 }));
+    saveCurrentGame({ players, rounds: [], currentRound: 1, createdAt: Date.now() });
     wx.navigateTo({ url: '/pages/score-board/index' });
   }
 });

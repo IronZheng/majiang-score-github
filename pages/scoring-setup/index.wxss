@@ -12,4 +12,4 @@
 .player-row { display: flex; align-items: center; gap: 12rpx; margin-bottom: 16rpx; }
 .player-avatar { width: 68rpx; height: 68rpx; border-radius: 50%; background: #d3e9ff; display: flex; align-items: center; justify-content: center; font-size: 38rpx; }
 .name-input { flex: 1; background: #ffffff; border: 1rpx solid #d6e8f8; border-radius: 10rpx; padding: 14rpx; }
-.del-btn{background:#ffe7ea;color:#c43f56;border:1rpx solid #ffc4cd;border-radius:10rpx;font-size:24rpx;padding:0 18rpx;height:64rpx;line-height:64rpx}
+.del-btn{min-width:92rpx;height:52rpx;line-height:52rpx;padding:0 14rpx;background:#fff2f4;color:#c43f56;border:1rpx solid #ffd1d8;border-radius:26rpx;font-size:22rpx;font-weight:500;box-shadow:0 4rpx 10rpx rgba(196,63,86,.08)}

@@ -19,7 +19,7 @@
     <block wx:for="{{players}}" wx:key="id">
       <view class="player-row">
         <view class="player-avatar">{{avatars[index % avatars.length]}}</view>
-        <input class="name-input" value="{{item.name}}" data-index="{{index}}" bindinput="onNameChange" placeholder="请输入名字" />
+        <input class="name-input" value="{{item.name}}" data-index="{{index}}" bindinput="onNameChange" bindblur="onNameBlur" placeholder="请输入名字" />
         <button class="del-btn" data-index="{{index}}" bindtap="removePlayer">删除</button>
       </view>
     </block>
