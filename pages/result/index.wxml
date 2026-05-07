@@ -1,0 +1,32 @@
+<view class="container" wx:if="{{record}}">
+  <view class="card rank-card">
+    <view class="title">🏆 最终排名（共{{record.totalRounds || 1}}回合）</view>
+    <block wx:for="{{record.ranking}}" wx:key="id">
+      <view class="rank-row">
+        <text>{{medals[index] || ('第' + (index+1) + '名')}} {{item.name}}</text>
+        <text>{{item.score}} 分</text>
+      </view>
+    </block>
+    <view class="btn-row">
+      <button class="primary-btn" open-type="share">分享给好友</button>
+      <button class="secondary-btn" bindtap="previewPoster">预览战绩图</button>
+      <button class="secondary-btn" bindtap="savePoster">保存战绩图</button>
+    </view>
+  </view>
+  <view class="card detail-card">
+    <view class="title">📒 每轮得分详情</view>
+    <block wx:for="{{roundList}}" wx:key="round">
+      <view class="round-block">
+        <view class="round-title">第{{item.round}}回合</view>
+        <block wx:for="{{item.scores}}" wx:key="playerName">
+          <view class="log-row">
+            <text>{{item.playerEmoji}} {{item.playerName}}</text>
+            <text class="delta">{{item.delta > 0 ? '+' : ''}}{{item.delta}}</text>
+          </view>
+        </block>
+      </view>
+    </block>
+  </view>
+
+  <canvas canvas-id="posterCanvas" class="poster-canvas" style="width: 690rpx; height: {{posterHeight}}px;"></canvas>
+</view>

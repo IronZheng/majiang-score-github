@@ -1,0 +1,14 @@
+.title { font-size: 32rpx; font-weight: 600; margin-bottom: 16rpx; color: #2f5d88; }
+.warm { background: #fff7ec; }
+.cool { background: #eef7ff; }
+.count-grid { display: flex; gap: 16rpx; margin-bottom: 16rpx; }
+.count-btn { flex: 1; background: #fff; color: #915a11; border: 1rpx solid #ffd9a5; border-radius: 12rpx; }
+.count-btn.active { background: #ffb347; color: #fff; border-color: #ffb347; }
+.count-actions { display: flex; align-items: center; justify-content: space-between; gap: 12rpx; }
+.count-value { color: #517899; font-weight: 600; }
+.mini { width: 180rpx; font-size: 26rpx; }
+.danger-btn { background: #ffe4e8; color: #d44f61; border: 1rpx solid #ffc0c8; border-radius: 12rpx; }
+.success-btn { background: #e1f7ed; color: #2d9b63; border: 1rpx solid #bcecd3; border-radius: 12rpx; }
+.player-row { display: flex; align-items: center; gap: 14rpx; margin-bottom: 16rpx; }
+.player-avatar { width: 68rpx; height: 68rpx; border-radius: 50%; background: #d3e9ff; display: flex; align-items: center; justify-content: center; font-size: 38rpx; }
+.name-input { flex: 1; background: #ffffff; border: 1rpx solid #d6e8f8; border-radius: 10rpx; padding: 14rpx; }
