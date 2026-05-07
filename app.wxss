@@ -1,0 +1,30 @@
+page {
+  background: #f4f9ff;
+  color: #1f3f5b;
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.container {
+  padding: 24rpx;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 20rpx;
+  box-shadow: 0 10rpx 24rpx rgba(47, 122, 201, 0.08);
+  padding: 24rpx;
+  margin-bottom: 24rpx;
+}
+
+.primary-btn {
+  background: linear-gradient(135deg, #70b7ff, #2f7ac9);
+  color: #fff;
+  border-radius: 14rpx;
+}
+
+.secondary-btn {
+  background: #e8f4ff;
+  color: #2f7ac9;
+  border: 1rpx solid #c9e3fb;
+  border-radius: 14rpx;
+}

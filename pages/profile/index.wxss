@@ -1,0 +1,4 @@
+.profile-card{display:flex;justify-content:center}
+.title{font-size:30rpx;font-weight:600;margin-bottom:12rpx;color:#2f5d88}
+.item{padding:12rpx 0;border-bottom:1rpx solid #edf4fb;display:flex;justify-content:space-between;gap:12rpx}
+.hello{font-size:32rpx;color:#2f5d88}
