@@ -24,6 +24,12 @@ Page({
     players.splice(index, 1);
     this.setData({ players, playerCount: players.length });
   },
+  clearName(e) {
+    const index = Number(e.currentTarget.dataset.index);
+    const players = this.data.players.slice();
+    players[index].name = '';
+    this.setData({ players });
+  },
   onNameChange(e) {
     const { index } = e.currentTarget.dataset;
     const players = this.data.players.slice();

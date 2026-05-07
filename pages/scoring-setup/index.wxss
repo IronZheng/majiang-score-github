@@ -1,15 +1,18 @@
+.setup-page,.setup-page *{font-size:30rpx}
 .header-card{background:linear-gradient(135deg,#eaf4ff,#d8eafe);display:flex;align-items:center;justify-content:space-between}
-.count-title{font-size:30rpx;color:#436b93}
-.count-badge{font-size:40rpx;font-weight:700;color:#1e5fa3}
-.title { font-size: 32rpx; font-weight: 600; margin-bottom: 16rpx; color: #2f5d88; }
+.count-title{font-size:34rpx;color:#436b93}
+.count-badge{font-size:44rpx;font-weight:700;color:#1e5fa3}
+.title { font-size: 34rpx; font-weight: 700; margin-bottom: 18rpx; color: #2f5d88; }
 .warm { background: #fff8ef; }
 .cool { background: #f2f8ff; }
 .count-grid { display: flex; gap: 16rpx; margin-bottom: 16rpx; }
-.count-btn { flex: 1; background: #fff; color: #915a11; border: 1rpx solid #ffd9a5; border-radius: 12rpx; }
+.count-btn { flex: 1; background: #fff; color: #915a11; border: 1rpx solid #ffd9a5; border-radius: 12rpx; font-size:30rpx }
 .count-btn.active { background: #ffb347; color: #fff; border-color: #ffb347; }
 .add-btn{width:100%}
 .success-btn { background: #e1f7ed; color: #2d9b63; border: 1rpx solid #bcecd3; border-radius: 12rpx; }
 .player-row { display: flex; align-items: center; gap: 12rpx; margin-bottom: 16rpx; }
-.player-avatar { width: 68rpx; height: 68rpx; border-radius: 50%; background: #d3e9ff; display: flex; align-items: center; justify-content: center; font-size: 38rpx; }
-.name-input { flex: 1; background: #ffffff; border: 1rpx solid #d6e8f8; border-radius: 10rpx; padding: 14rpx; }
-.del-btn{min-width:92rpx;height:52rpx;line-height:52rpx;padding:0 14rpx;background:#fff2f4;color:#c43f56;border:1rpx solid #ffd1d8;border-radius:26rpx;font-size:22rpx;font-weight:500;box-shadow:0 4rpx 10rpx rgba(196,63,86,.08)}
+.player-avatar { width: 70rpx; height: 70rpx; border-radius: 50%; background: #d3e9ff; display: flex; align-items: center; justify-content: center; font-size: 40rpx; }
+.input-wrap{flex:1;position:relative}
+.name-input { width:100%; background: #ffffff; border: 1rpx solid #d6e8f8; border-radius: 12rpx; padding: 16rpx 54rpx 16rpx 16rpx; font-size:30rpx }
+.clear-icon{position:absolute;right:16rpx;top:50%;transform:translateY(-50%);color:#9ab0c7;font-size:26rpx}
+.del-btn{width:56rpx;height:56rpx;line-height:56rpx;padding:0;background:#fff2f4;color:#c43f56;border:1rpx solid #ffd1d8;border-radius:50%;font-size:34rpx;font-weight:700;box-shadow:0 4rpx 10rpx rgba(196,63,86,.08)}
