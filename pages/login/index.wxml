@@ -1,0 +1,78 @@
+<view class="login-page">
+
+  <!-- 顶部装饰区域 -->
+  <view class="hero-area">
+    <view class="majiang-icon">🀄</view>
+    <text class="app-title">麻将计分器</text>
+    <text class="app-subtitle">登录后可保存游戏记录到云端</text>
+  </view>
+
+  <!-- 登录卡片 -->
+  <view class="login-card">
+    <view class="card-bg"></view>
+    <view class="card-content">
+
+      <!-- 模式一：微信一键登录按钮 -->
+      <block wx:if="{{!showManualInput}}">
+        <text class="feature-title">一键登录，畅享所有功能</text>
+        <view class="feature-list">
+          <view class="feature-item">
+            <text class="feature-icon">✓</text>
+            <text class="feature-text">游戏记录云端保存</text>
+          </view>
+          <view class="feature-item">
+            <text class="feature-icon">✓</text>
+            <text class="feature-text">多设备数据同步</text>
+          </view>
+          <view class="feature-item">
+            <text class="feature-icon">✓</text>
+            <text class="feature-text">查看历史战绩</text>
+          </view>
+        </view>
+        <button
+          class="login-btn"
+          open-type="getPhoneNumber"
+          bindgetphonenumber="onGetPhoneNumber"
+          disabled="{{loading}}"
+          loading="{{loading}}"
+          hover-class="login-btn-hover"
+        >
+          <text wx:if="{{!loading}}">微信手机号一键登录</text>
+          <text wx:else>登录中...</text>
+        </button>
+      </block>
+
+      <!-- 模式二：手动填写手机号 -->
+      <block wx:else>
+        <text class="feature-title">填写手机号完成登录</text>
+        <view class="manual-hint">当前微信暂不支持一键获取手机号，请手动输入</view>
+        <view class="phone-input-wrap">
+          <input
+            class="phone-input"
+            type="number"
+            maxlength="11"
+            placeholder="输入手机号"
+            placeholder-class="phone-placeholder"
+            value="{{manualPhone}}"
+            bindinput="onPhoneInput"
+            focus="true"
+          />
+        </view>
+        <button
+          class="login-btn submit-btn"
+          bindtap="submitManualPhone"
+          hover-class="login-btn-hover"
+        >确认</button>
+        <view class="manual-skip" bindtap="goBack">跳过，先看看</view>
+      </block>
+
+    </view>
+  </view>
+
+  <!-- 底部提示 -->
+  <view class="footer-tip">
+    <text class="tip-text" wx:if="{{!showManualInput}}">点击登录即表示同意使用微信手机号</text>
+    <text class="tip-text" wx:else>手机号仅用于数据同步，不会泄露</text>
+  </view>
+
+</view>

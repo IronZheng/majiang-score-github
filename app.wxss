@@ -21,6 +21,11 @@ page {
   background: linear-gradient(135deg, #70b7ff, #2f7ac9);
   color: #fff;
   border-radius: 14rpx;
+  box-shadow: 0 6rpx 20rpx rgba(47, 122, 201, 0.35);
+}
+.primary-btn:active {
+  transform: scale(0.96);
+  box-shadow: 0 2rpx 10rpx rgba(47, 122, 201, 0.25);
 }
 
 .secondary-btn {

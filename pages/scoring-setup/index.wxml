@@ -19,11 +19,9 @@
     <block wx:for="{{players}}" wx:key="id">
       <view class="player-row">
         <view class="player-avatar">{{avatars[index % avatars.length]}}</view>
-        <view class="input-wrap">
-          <input class="name-input" value="{{item.name}}" data-index="{{index}}" bindinput="onNameChange" bindblur="onNameBlur" placeholder="请输入名字" />
-          <text class="clear-icon" data-index="{{index}}" bindtap="clearName">✕</text>
-        </view>
-        <button class="del-btn" data-index="{{index}}" bindtap="removePlayer">−</button>
+        <input class="name-input" value="{{item.name}}" data-index="{{index}}" bindinput="onNameChange" mut-bind:blur="onNameBlur" placeholder="请输入名字" />
+        <text class="btn-clear" data-index="{{index}}" catchtap="clearName">清空</text>
+        <text class="btn-del" data-index="{{index}}" catchtap="removePlayer">删除</text>
       </view>
     </block>
   </view>

@@ -1,26 +1,69 @@
 <view class="container">
-  <view class="card profile-card">
-    <button wx:if="{{!userInfo}}" class="primary-btn" bindtap="login">微信登录</button>
-    <view wx:else>
-      <text class="hello">你好，{{userInfo.nickName || '玩家'}}</text>
-      <text class="sub">查看你的历史战绩与冠军记录</text>
+
+  <!-- 未登录：引导登录 -->
+  <view class="profile-header" wx:if="{{!userInfo}}">
+    <view class="avatar-placeholder">?</view>
+    <text class="hint-text">登录后可查看更多功能</text>
+    <button class="go-login-btn" bindtap="goLogin">去登录</button>
+  </view>
+
+  <!-- 已登录：用户信息（左右排列） -->
+  <view class="profile-header logined" wx:else>
+    <view class="user-info-row">
+      <!-- 左侧：头像 -->
+      <view class="avatar-lg" style="background:{{avatarBg}}">
+        <button
+          class="avatar-btn"
+          open-type="chooseAvatar"
+          bindchooseavatar="onChooseAvatar"
+        >
+          <image
+            src="{{userInfo.avatarUrl || '/assets/default-avatar.png'}}"
+            mode="aspectFill"
+          ></image>
+        </button>
+      </view>
+      <!-- 右侧：昵称 + 手机号 + 更多 -->
+      <view class="info-col">
+        <view class="nickname-row">
+          <input
+            class="nickname-input"
+            type="nickname"
+            value="{{userInfo.nickName || '玩家'}}"
+            placeholder="输入微信昵称"
+            placeholder-class="nickname-placeholder"
+            bindinput="onNicknameInput"
+            bindconfirm="onNicknameConfirm"
+            bindblur="onNicknameBlur"
+          />
+          <text class="edit-hint">✎</text>
+        </view>
+        <text class="phone" wx:if="{{userInfo.phoneNumber}}">{{userInfo.phoneNumber}}</text>
+        <view class="logout-row">
+          <text class="logout-btn" bindtap="onLogout">退出登录</text>
+        </view>
+      </view>
     </view>
   </view>
 
+  <!-- 历史记录 -->
   <view class="card history-card">
-    <view class="title">历史计分记录（点击查看详情）</view>
-    <block wx:if="{{history.length===0}}"><text class="empty">暂无记录</text></block>
-    <block wx:for="{{history}}" wx:key="id" wx:for-item="record">
-      <view class="item" data-id="{{record.id}}" bindtap="openRecord">
+    <view class="title">历史计分记录</view>
+    <block wx:if="{{history.length === 0}}">
+      <text class="empty">暂无记录</text>
+    </block>
+    <block wx:for="{{history}}" wx:key="id">
+      <view class="item" data-id="{{item.id}}" bindtap="openRecord">
         <view class="line1">
-          <text class="badge">{{record.players.length}}人局</text>
-          <text class="time">{{record.finishedAtText}}</text>
+          <text class="badge">{{item.players.length}}人局</text>
+          <text class="time">{{item.finishedAtText}}</text>
         </view>
         <view class="line2">
-          <text class="champion">🏆 冠军：{{record.ranking[0].name}}</text>
-          <text class="score">{{record.ranking[0].score}}分 ></text>
+          <text class="champion">冠军：{{item.ranking[0].name}}</text>
+          <text class="score">{{item.ranking[0].score}}分 ></text>
         </view>
       </view>
     </block>
   </view>
+
 </view>

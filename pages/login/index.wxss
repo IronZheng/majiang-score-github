@@ -1,0 +1,210 @@
+page {
+  background: linear-gradient(180deg, #eef5ff 0%, #f7fbff 100%);
+  height: 100vh;
+  overflow: hidden;
+}
+
+.login-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  padding: 0 48rpx;
+  box-sizing: border-box;
+}
+
+/* ===== 顶部区域 ===== */
+.hero-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 120rpx;
+  padding-bottom: 60rpx;
+}
+
+.majiang-icon {
+  font-size: 120rpx;
+  line-height: 1;
+  margin-bottom: 24rpx;
+  filter: drop-shadow(0 8rpx 16rpx rgba(47, 122, 201, 0.15));
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12rpx); }
+}
+
+.app-title {
+  font-size: 48rpx;
+  font-weight: 700;
+  color: #2f5d88;
+  letter-spacing: 4rpx;
+  margin-bottom: 16rpx;
+}
+
+.app-subtitle {
+  font-size: 28rpx;
+  color: #8faabe;
+}
+
+/* ===== 登录卡片 ===== */
+.login-card {
+  width: 100%;
+  position: relative;
+  border-radius: 32rpx;
+  overflow: visible;
+  max-width: 560rpx;
+}
+
+.card-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  border-radius: 32rpx;
+  box-shadow: 0 16rpx 40rpx rgba(47, 122, 201, 0.1);
+  border: 1rpx solid rgba(255, 255, 255, 0.6);
+}
+
+.card-content {
+  position: relative;
+  padding: 48rpx 40rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1;
+}
+
+.feature-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #2f5d88;
+  margin-bottom: 32rpx;
+}
+
+.feature-list {
+  width: 100%;
+  margin-bottom: 40rpx;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 18rpx;
+}
+
+.feature-item:last-child {
+  margin-bottom: 0;
+}
+
+.feature-icon {
+  width: 44rpx;
+  height: 44rpx;
+  background: linear-gradient(135deg, #70b7ff, #2f7ac9);
+  color: #fff;
+  border-radius: 50%;
+  font-size: 24rpx;
+  line-height: 44rpx;
+  text-align: center;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+}
+
+.feature-text {
+  font-size: 28rpx;
+  color: #3b6e9f;
+}
+
+/* ===== 登录按钮 ===== */
+.login-btn {
+  width: 100%;
+  height: 96rpx;
+  line-height: 96rpx;
+  background: linear-gradient(135deg, #70b7ff, #2f7ac9);
+  color: #fff;
+  font-size: 32rpx;
+  font-weight: 600;
+  border-radius: 48rpx;
+  box-shadow: 0 8rpx 24rpx rgba(47, 122, 201, 0.35);
+  border: none;
+  text-align: center;
+  padding: 0;
+  margin: 0;
+}
+
+.login-btn::after {
+  border: none;
+}
+
+.login-btn-hover {
+  opacity: 0.85;
+  transform: scale(0.97);
+}
+
+.login-btn[disabled] {
+  opacity: 0.65;
+}
+
+/* ===== 底部提示 ===== */
+.footer-tip {
+  margin-top: auto;
+  padding-bottom: 60rpx;
+}
+
+.tip-text {
+  font-size: 22rpx;
+  color: #b8ccdf;
+}
+
+/* ===== 手动输入模式 ===== */
+.manual-hint {
+  font-size: 24rpx;
+  color: #9ab0c7;
+  text-align: center;
+  margin-bottom: 32rpx;
+  line-height: 1.6;
+  padding: 0 20rpx;
+}
+
+.phone-input-wrap {
+  width: 100%;
+  margin-bottom: 32rpx;
+}
+
+.phone-input {
+  width: 100%;
+  height: 88rpx;
+  background: #f0f6ff;
+  border-radius: 16rpx;
+  border: 2rpx solid #d0e5fb;
+  font-size: 32rpx;
+  color: #1f3f5b;
+  text-align: center;
+  letter-spacing: 4rpx;
+  box-sizing: border-box;
+}
+
+.phone-input:focus {
+  border-color: #70b7ff;
+  background: #fff;
+}
+
+.phone-placeholder {
+  color: #c0d4e8;
+  font-size: 30rpx;
+}
+
+.submit-btn {
+  margin-bottom: 24rpx;
+}
+
+.manual-skip {
+  font-size: 26rpx;
+  color: #9ab0c7;
+  text-decoration: underline;
+  padding: 12rpx 24rpx;
+}

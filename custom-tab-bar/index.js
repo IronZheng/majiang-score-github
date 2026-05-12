@@ -2,7 +2,7 @@ Component({
   data: {
     selected: 0,
     list: [
-      { pagePath: '/pages/scoring-setup/index', text: '计分', icon: '🀄', activeIcon: '🀄' },
+      { pagePath: '/pages/scoring-setup/index', text: '计分', icon: '📊', activeIcon: '📊' },
       { pagePath: '/pages/profile/index', text: '我的', icon: '👤', activeIcon: '👤' }
     ]
   },

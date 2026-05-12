@@ -3,6 +3,7 @@
     "pages/scoring-setup/index",
     "pages/score-board/index",
     "pages/result/index",
+    "pages/login/index",
     "pages/profile/index"
   ],
   "window": {
