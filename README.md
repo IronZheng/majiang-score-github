@@ -58,6 +58,18 @@
 
 清理开发者工具缓存或卸载小程序会清空上述数据。
 
+## 上传代码时 ENOENT（`.git/cursor` / `postings.bin`）
+
+若使用 **Cursor** 等编辑器，可能在仓库的 `.git/cursor/` 下生成索引文件；微信开发者工具在上传、预览或结合本地 Git 扫描时，偶尔会访问已不存在的临时路径（例如带 `staging` 字样的目录），从而报错：
+
+`ENOENT: no such file or directory, open '.../.git/cursor/crepe/...postings.bin'`
+
+**处理方式（任选或组合）：**
+
+1. 本项目已在 `project.config.json` 的 `packOptions.ignore` 中排除 `.git`、`node_modules`、`.idea`、`.cursor`，避免把无关目录打进上传包。
+2. 上传前**关闭 Cursor**（或完全退出），再在微信开发者工具中重新「上传」。
+3. 若仍失败，在终端执行（需先退出 Cursor）：`rm -rf .git/cursor`，然后重新打开项目；Cursor 会按需重建索引。
+
 ## 反馈与贡献
 
 欢迎通过 Issue 或 Pull Request 提出建议与改进。提交前请确保在微信开发者工具中已自测主要流程（开局 → 记分 → 结束 → 结果/历史）。

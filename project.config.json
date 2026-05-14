@@ -26,7 +26,12 @@
   "compileType": "miniprogram",
   "simulatorPluginLibVersion": {},
   "packOptions": {
-    "ignore": [],
+    "ignore": [
+      { "type": "folder", "value": ".git" },
+      { "type": "folder", "value": "node_modules" },
+      { "type": "folder", "value": ".idea" },
+      { "type": "folder", "value": ".cursor" }
+    ],
     "include": []
   },
   "appid": "wx4f22ffac4a5d9464",
