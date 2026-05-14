@@ -15,21 +15,21 @@
   <view class="card action-card">
     <view class="title">给 {{game.players[activeIndex].name}} 加减分</view>
     <view class="ops">
-      <button class="minus" data-delta="-10" bindtap="applyDelta">-10</button>
-      <button class="minus" data-delta="-5" bindtap="applyDelta">-5</button>
-      <button class="plus" data-delta="5" bindtap="applyDelta">+5</button>
-      <button class="plus" data-delta="10" bindtap="applyDelta">+10</button>
+      <view class="score-btn plus" data-delta="5" bindtap="applyDelta">+5</view>
+      <view class="score-btn plus" data-delta="10" bindtap="applyDelta">+10</view>
+      <view class="score-btn minus" data-delta="-5" bindtap="applyDelta">-5</view>
+      <view class="score-btn minus" data-delta="-10" bindtap="applyDelta">-10</view>
     </view>
     <view class="custom-row">
-      <input class="custom-input" type="number" value="{{customDelta}}" bindinput="onCustomInput" placeholder="自定义分值" />
-      <button class="primary-btn confirm-btn" bindtap="applyCustom">确认</button>
+      <input class="custom-input" type="text" value="{{customDelta}}" bindinput="onCustomInput" placeholder="自定义分值，如 -20" />
+      <view class="primary-btn confirm-btn" bindtap="applyCustom">确认</view>
     </view>
   </view>
 
   <view class="action-row action-row-3">
-    <button class="secondary-btn" bindtap="nextRound">下一回合</button>
-    <button class="warn-btn" bindtap="resetGame">重置</button>
-    <button class="danger-btn" bindtap="endGame">结束计分</button>
+    <view class="secondary-btn action-btn" bindtap="nextRound">下一回合</view>
+    <view class="warn-btn action-btn" bindtap="resetGame">重置</view>
+    <view class="danger-btn action-btn" bindtap="endGame">结束计分</view>
   </view>
 
   <view class="card log-card" wx:if="{{roundList.length}}">

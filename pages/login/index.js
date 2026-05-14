@@ -1,4 +1,5 @@
 const auth = require('../../utils/auth');
+const share = require('../../utils/share');
 
 Page({
   data: {
@@ -9,6 +10,8 @@ Page({
   },
 
   onLoad() {
+    share.enableShareMenu();
+
     console.log('[login] 页面加载，当前登录状态:', auth.isLoggedIn());
     if (auth.isLoggedIn()) {
       const user = auth.getUserInfo();
@@ -33,8 +36,8 @@ Page({
 
         const app = getApp();
         const user = app.globalData.userInfo || {};
-        user.nickName = nickName;
-        user.avatarUrl = avatarUrl || user.avatarUrl;
+        if (!user.nickNameCustomized) user.nickName = nickName;
+        if (!user.avatarCustomized && avatarUrl) user.avatarUrl = avatarUrl;
         wx.setStorageSync('mj_user', user);
         app.globalData.userInfo = user;
         console.log('[login] 已获取微信头像和昵称:', nickName);
@@ -124,5 +127,17 @@ Page({
 
   goHome() {
     wx.switchTab({ url: '/pages/scoring-setup/index' });
+  },
+
+  onShareAppMessage() {
+    return share.appMessage({
+      title: '麻将计分器，聚会计分更省心'
+    });
+  },
+
+  onShareTimeline() {
+    return share.timeline({
+      title: '麻将计分器，聚会计分更省心'
+    });
   }
 });

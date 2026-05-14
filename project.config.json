@@ -12,7 +12,16 @@
       "outputPath": ""
     },
     "useCompilerPlugins": false,
-    "minifyWXML": true
+    "minifyWXML": true,
+    "compileWorklet": false,
+    "uploadWithSourceMap": true,
+    "packNpmManually": false,
+    "minifyWXSS": true,
+    "localPlugins": false,
+    "disableUseStrict": false,
+    "condition": false,
+    "swc": false,
+    "disableSWC": true
   },
   "compileType": "miniprogram",
   "simulatorPluginLibVersion": {},
@@ -22,5 +31,5 @@
   },
   "appid": "wx4f22ffac4a5d9464",
   "editorSetting": {},
-  "cloudfunctionRoot": "cloudfunctions"
+  "cloudfunctionRoot": "cloudfunctions/"
 }

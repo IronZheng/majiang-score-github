@@ -62,12 +62,26 @@ function login(phoneCode, nickName, avatarUrl) {
       throw new Error(result.error || '登录失败，请重试');
     }
 
-    const userInfo = result.userInfo || {
+    const returnedUser = result.userInfo || {
       openid: result.openid || '',
       phoneNumber: result.phoneNumber || '',
       nickName: nickName || '玩家',
       avatarUrl: avatarUrl || ''
     };
+
+    const cached = wx.getStorageSync(CACHE_KEY) || {};
+    const sameCachedUser = !cached.openid || cached.openid === returnedUser.openid;
+    const userInfo = {
+      ...returnedUser,
+      nickName: sameCachedUser && cached.nickNameCustomized && cached.nickName ? cached.nickName : returnedUser.nickName,
+      avatarUrl: sameCachedUser && cached.avatarCustomized && cached.avatarUrl ? cached.avatarUrl : returnedUser.avatarUrl,
+      nickNameCustomized: !!(sameCachedUser && cached.nickNameCustomized),
+      avatarCustomized: !!(sameCachedUser && cached.avatarCustomized)
+    };
+
+    if (cached.phoneNumber && !userInfo.phoneNumber) {
+      userInfo.phoneNumber = cached.phoneNumber;
+    }
 
     console.log('[auth] 登录成功, userInfo:', JSON.stringify(userInfo));
 

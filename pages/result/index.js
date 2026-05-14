@@ -1,10 +1,13 @@
 const { getHistory } = require('../../utils/storage');
+const share = require('../../utils/share');
 
 const AVATARS = ['😀', '😎', '🀄', '🐯', '🐼', '🦊', '🐬', '🦁'];
 
 Page({
   data: { record: null, roundList: [], posterHeight: 980, medals: ['🥇', '🥈', '🥉'] },
   onLoad(options) {
+    share.enableShareMenu();
+
     const history = getHistory();
     const record = history.find((item) => item.id === options.id) || history[0] || null;
     const emojiMap = {};
@@ -20,7 +23,14 @@ Page({
     this.setData({ record, roundList, posterHeight });
   },
   onShareAppMessage() {
-    return { title: '我刚完成一局麻将计分，来看看战绩！', path: '/pages/scoring-setup/index' };
+    return share.appMessage({
+      title: '我刚完成一局麻将计分，来看看战绩！'
+    });
+  },
+  onShareTimeline() {
+    return share.timeline({
+      title: '我刚完成一局麻将计分，来看看战绩！'
+    });
   },
   previewPoster() {
     this.buildPoster((tempFilePath) => wx.previewImage({ current: tempFilePath, urls: [tempFilePath] }));
@@ -46,10 +56,10 @@ Page({
   drawPoster(done) {
     const { record, roundList, posterHeight, medals } = this.data;
     const ctx = wx.createCanvasContext('posterCanvas', this);
-    ctx.setFillStyle('#f3f8ff');
+    ctx.setFillStyle('#fffaf6');
     ctx.fillRect(0, 0, 690, posterHeight);
 
-    ctx.setFillStyle('#2d6fb6');
+    ctx.setFillStyle('#e49b73');
     ctx.fillRect(0, 0, 690, 130);
     ctx.setFillStyle('#ffffff');
     ctx.setFontSize(36);
@@ -60,41 +70,41 @@ Page({
     let y = 160;
     ctx.setFillStyle('#ffffff');
     ctx.fillRect(20, y, 650, 110);
-    ctx.setFillStyle('#295884');
+    ctx.setFillStyle('#1f2937');
     ctx.setFontSize(24);
     ctx.fillText(`本局 ${record.players.length} 人 · 共 ${record.totalRounds || 1} 回合`, 40, y + 42);
-    ctx.setFillStyle('#4b83bd');
+    ctx.setFillStyle('#6b7280');
     ctx.fillText('TOP 3 冠军榜', 40, y + 82);
 
     y += 132;
     record.ranking.slice(0, 3).forEach((p, i) => {
-      const bg = ['#fff4db', '#edf4ff', '#fff1e8'][i] || '#f6f9ff';
+      const bg = ['#fff7ed', '#f3f4f6', '#fff1f2'][i] || '#fffaf6';
       ctx.setFillStyle(bg);
       ctx.fillRect(20, y, 650, 72);
-      ctx.setFillStyle('#1f3f5b');
+      ctx.setFillStyle('#1f2937');
       ctx.setFontSize(30);
       ctx.fillText(`${medals[i]}  ${p.name}`, 36, y + 46);
-      ctx.setFillStyle('#2f7ac9');
+      ctx.setFillStyle('#e49b73');
       ctx.setFontSize(34);
       ctx.fillText(`${p.score}分`, 530, y + 46);
       y += 84;
     });
 
     y += 8;
-    ctx.setFillStyle('#2f5d88');
+    ctx.setFillStyle('#1f2937');
     ctx.setFontSize(26);
     ctx.fillText('每回合得分明细', 24, y);
     y += 20;
 
     roundList.forEach((r) => {
-      ctx.setFillStyle('#e8f2ff');
+      ctx.setFillStyle('#eef0f3');
       ctx.fillRect(20, y, 650, 34);
-      ctx.setFillStyle('#3b6e9f');
+      ctx.setFillStyle('#6b7280');
       ctx.setFontSize(20);
       ctx.fillText(`第 ${r.round} 回合`, 34, y + 24);
       y += 40;
       r.scores.forEach((s) => {
-        ctx.setFillStyle('#1f3f5b');
+        ctx.setFillStyle('#1f2937');
         ctx.setFontSize(22);
         ctx.fillText(`${s.playerEmoji} ${s.playerName}`, 40, y + 22);
         ctx.setFillStyle(s.delta >= 0 ? '#1f9d62' : '#d24b5b');

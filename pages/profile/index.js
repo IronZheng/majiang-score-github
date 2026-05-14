@@ -1,5 +1,6 @@
 const { getHistory } = require('../../utils/storage');
 const auth = require('../../utils/auth');
+const share = require('../../utils/share');
 const app = getApp();
 
 const CACHE_KEY = 'mj_user';
@@ -8,22 +9,42 @@ Page({
   data: {
     userInfo: null,
     history: [],
-    avatarBg: '#e8f4ff'
+    avatarBg: 'rgba(255,255,255,0.12)'
   },
 
   onShow() {
+    share.enableShareMenu();
+
     const tabBar = this.getTabBar && this.getTabBar();
     if (tabBar) tabBar.setData({ selected: 1 });
 
-    // 从全局状态同步（全局状态在 app.onLaunch 时已从缓存恢复）
+    const cachedUser = this._getCachedUser();
+    const userInfo = app.globalData.loggedIn
+      ? app.globalData.userInfo
+      : cachedUser;
+
+    if (cachedUser && cachedUser.openid && !app.globalData.loggedIn) {
+      app.globalData.userInfo = cachedUser;
+      app.globalData.loggedIn = true;
+    }
+
     this.setData({
-      userInfo: app.globalData.loggedIn ? app.globalData.userInfo : null,
+      userInfo: userInfo || null,
       history: this.formatHistory()
     });
 
     // 已登录但缺少昵称/头像 → 尝试从微信静默拉取
-    if (app.globalData.loggedIn) {
+    if (userInfo) {
       this.tryFetchUserProfile();
+    }
+  },
+
+  _getCachedUser() {
+    try {
+      return wx.getStorageSync(CACHE_KEY) || null;
+    } catch (e) {
+      console.warn('[profile] 读取用户缓存失败:', e);
+      return null;
     }
   },
 
@@ -37,8 +58,8 @@ Page({
     if (!user) return;
 
     // 用户已经手动设过自定义头像或非默认昵称，就不覆盖
-    const hasCustomAvatar = user.avatarUrl && !user.avatarUrl.startsWith('wxfile://');
-    const hasCustomName = user.nickName && user.nickName !== '玩家' && user.nickName !== '微信用户';
+    const hasCustomAvatar = !!(user.avatarUrl && (user.avatarCustomized || user.avatarUrl.startsWith('wxfile://') || user.avatarUrl.startsWith('http')));
+    const hasCustomName = !!(user.nickNameCustomized || (user.nickName && user.nickName !== '玩家' && user.nickName !== '微信用户'));
     if (hasCustomAvatar && hasCustomName) return;
 
     wx.getUserInfo({
@@ -74,16 +95,18 @@ Page({
         const savedPath = res.savedFilePath;
         console.log('[profile] 头像已持久化:', savedPath);
 
-        const user = app.globalData.userInfo || {};
+        const user = app.globalData.userInfo || this._getCachedUser() || {};
         user.avatarUrl = savedPath;
+        user.avatarCustomized = true;
         this._saveUserInfo(user);
         wx.hideLoading();
       },
       fail: () => {
         // saveFile 失败时降级用临时路径（至少当前会话能用）
         console.warn('[profile] 头像持久化失败，使用临时路径');
-        const user = app.globalData.userInfo || {};
+        const user = app.globalData.userInfo || this._getCachedUser() || {};
         user.avatarUrl = tempPath;
+        user.avatarCustomized = true;
         this._saveUserInfo(user);
         wx.hideLoading();
       }
@@ -109,10 +132,11 @@ Page({
   },
 
   _doSaveNickname(nickName) {
-    const user = app.globalData.userInfo || {};
+    const user = app.globalData.userInfo || this._getCachedUser() || {};
     if (user.nickName === nickName) return; // 没变化就不写
 
     user.nickName = nickName;
+    user.nickNameCustomized = true;
     this._saveUserInfo(user);
     console.log('[profile] 昵称已保存:', nickName);
   },
@@ -120,12 +144,17 @@ Page({
   // ==================== 统一保存 ====================
 
   _saveUserInfo(userInfo) {
+    const normalized = {
+      ...(this._getCachedUser() || {}),
+      ...(userInfo || {})
+    };
     // 存到缓存
-    wx.setStorageSync(CACHE_KEY, userInfo);
+    wx.setStorageSync(CACHE_KEY, normalized);
     // 同步到全局状态
-    app.globalData.userInfo = userInfo;
+    app.globalData.userInfo = normalized;
+    app.globalData.loggedIn = !!normalized.openid;
     // 渲染
-    this.setData({ userInfo: { ...userInfo } });
+    this.setData({ userInfo: { ...normalized } });
   },
 
   // ==================== 导航 ====================
@@ -150,6 +179,36 @@ Page({
   openRecord(e) {
     const { id } = e.currentTarget.dataset;
     wx.navigateTo({ url: `/pages/result/index?id=${id}` });
+  },
+
+  showAbout() {
+    wx.showModal({
+      title: '小程序说明',
+      content: '麻将计分器是一款轻量的本地计分工具，支持多人开局、回合加减分、历史记录查看和战绩海报生成，方便朋友聚会时快速记录每局得分。',
+      showCancel: false,
+      confirmText: '知道了'
+    });
+  },
+
+  showFeedback() {
+    wx.showModal({
+      title: '意见反馈',
+      content: '如有问题或建议，欢迎添加微信：dreamnev',
+      showCancel: false,
+      confirmText: '知道了'
+    });
+  },
+
+  onShareAppMessage() {
+    return share.appMessage({
+      title: '麻将计分器，聚会计分更省心'
+    });
+  },
+
+  onShareTimeline() {
+    return share.timeline({
+      title: '麻将计分器，聚会计分更省心'
+    });
   },
 
   formatHistory() {

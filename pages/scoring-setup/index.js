@@ -1,4 +1,5 @@
 const { saveCurrentGame } = require('../../utils/storage');
+const share = require('../../utils/share');
 
 function createPlayers(count) {
   return Array.from({ length: count }).map((_, i) => ({ id: `${Date.now()}_${i}`, name: `玩家${i + 1}`, score: 0 }));
@@ -6,6 +7,8 @@ function createPlayers(count) {
 
 Page({
   onShow() {
+    share.enableShareMenu();
+
     const tabBar = this.getTabBar && this.getTabBar();
     if (tabBar) tabBar.setData({ selected: 0 });
   },
@@ -47,5 +50,15 @@ Page({
     const players = this.data.players.map((p, i) => ({ ...p, name: (p.name || '').trim() || `玩家${i + 1}`, score: 0 }));
     saveCurrentGame({ players, rounds: [], currentRound: 1, createdAt: Date.now() });
     wx.navigateTo({ url: '/pages/score-board/index' });
+  },
+  onShareAppMessage() {
+    return share.appMessage({
+      title: '麻将计分器，开局计分不费劲'
+    });
+  },
+  onShareTimeline() {
+    return share.timeline({
+      title: '麻将计分器，开局计分不费劲'
+    });
   }
 });

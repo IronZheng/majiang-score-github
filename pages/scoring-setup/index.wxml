@@ -8,10 +8,10 @@
     <view class="title">预设人数</view>
     <view class="count-grid">
       <block wx:for="{{presetCounts}}" wx:key="*this">
-        <button class="count-btn {{playerCount===item?'active':''}}" data-count="{{item}}" bindtap="setPresetCount">{{item}}人</button>
+        <view class="count-btn {{playerCount===item?'active':''}}" data-count="{{item}}" bindtap="setPresetCount">{{item}}人</view>
       </block>
     </view>
-    <button class="success-btn add-btn" bindtap="addPlayer">+ 添加玩家</button>
+    <view class="success-btn add-btn" bindtap="addPlayer">+ 添加玩家</view>
   </view>
 
   <view class="card cool">
@@ -26,5 +26,5 @@
     </block>
   </view>
 
-  <button class="primary-btn" bindtap="startGame">开始计分</button>
+  <view class="primary-btn start-btn" bindtap="startGame">开始计分</view>
 </view>

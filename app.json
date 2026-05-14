@@ -8,10 +8,10 @@
   ],
   "window": {
     "navigationBarTitleText": "麻将计分器",
-    "navigationBarBackgroundColor": "#f0f6ff",
+    "navigationBarBackgroundColor": "#fffaf6",
     "navigationBarTextStyle": "black",
     "backgroundTextStyle": "light",
-    "backgroundColor": "#f7fbff"
+    "backgroundColor": "#fffaf6"
   },
   "tabBar": {
     "custom": true,

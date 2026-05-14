@@ -1,8 +1,11 @@
 const { getCurrentGame, saveCurrentGame, addHistory, clearCurrentGame } = require('../../utils/storage');
+const share = require('../../utils/share');
 
 Page({
   data: { game: null, activeIndex: 0, customDelta: '', roundList: [], avatars: ['😀', '😎', '🀄', '🐯', '🐼', '🦊', '🐬', '🦁'] },
   onShow() {
+    share.enableShareMenu();
+
     const game = getCurrentGame();
     if (!game) return wx.navigateBack();
     if (!game.currentRound) game.currentRound = 1;
@@ -18,9 +21,22 @@ Page({
     this.setData({ game, roundList });
   },
   selectPlayer(e) { this.setData({ activeIndex: Number(e.currentTarget.dataset.index) }); },
-  onCustomInput(e) { this.setData({ customDelta: e.detail.value }); },
+  onCustomInput(e) {
+    const value = String(e.detail.value || '').replace(/[^\d-]/g, '');
+    const normalized = value.startsWith('-')
+      ? `-${value.slice(1).replace(/-/g, '')}`
+      : value.replace(/-/g, '');
+    this.setData({ customDelta: normalized });
+  },
   applyDelta(e) { this.applyScore(Number(e.currentTarget.dataset.delta)); },
-  applyCustom() { this.applyScore(Number(this.data.customDelta || 0)); },
+  applyCustom() {
+    const raw = String(this.data.customDelta || '').trim();
+    if (!/^-?\d+$/.test(raw)) {
+      wx.showToast({ title: '请输入有效分值', icon: 'none' });
+      return;
+    }
+    this.applyScore(Number(raw));
+  },
   applyScore(delta) {
     if (!delta) return;
     const game = this.data.game;
@@ -62,5 +78,15 @@ Page({
     addHistory(record);
     clearCurrentGame();
     wx.navigateTo({ url: `/pages/result/index?id=${record.id}` });
+  },
+  onShareAppMessage() {
+    return share.appMessage({
+      title: '我正在用麻将计分器记分'
+    });
+  },
+  onShareTimeline() {
+    return share.timeline({
+      title: '麻将计分器，聚会计分更省心'
+    });
   }
 });

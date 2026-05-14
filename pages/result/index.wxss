@@ -1,11 +1,95 @@
-.title{font-size:30rpx;font-weight:600;margin-bottom:12rpx;color:#2f5d88}
-.rank-card{background:#ecf5ff}
-.detail-card{background:#fff9f1}
-.share-card{background:#f3fff8}
-.rank-row,.log-row{display:flex;justify-content:space-between;padding:10rpx 0;border-bottom:1rpx solid #edf4fb}
-.delta{color:#2f7ac9}
-.round-block{background:#ffffff;border:1rpx solid #f5e3d3;border-radius:12rpx;padding:12rpx;margin-bottom:12rpx}
-.round-title{color:#9c6b3b;font-weight:600;margin-bottom:6rpx}
-.btn-row{display:flex;flex-direction:column;gap:12rpx}
-.btn-row button{font-size:28rpx}
-.poster-canvas{position:fixed;left:-9999rpx;top:-9999rpx;opacity:0}
+.title {
+  font-size: 32rpx;
+  font-weight: 800;
+  margin-bottom: 18rpx;
+  color: #1f2937;
+}
+
+.rank-card {
+  background: #e49b73;
+  color: #ffffff;
+  border: none;
+  box-shadow: 0 18rpx 40rpx rgba(228, 155, 115, 0.20);
+}
+
+.rank-card .title {
+  color: #ffffff;
+}
+
+.detail-card,
+.share-card {
+  background: #ffffff;
+}
+
+.rank-row,
+.log-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18rpx 0;
+  border-bottom: 1rpx solid rgba(255, 255, 255, 0.1);
+  gap: 20rpx;
+}
+
+.rank-row:last-child,
+.log-row:last-child {
+  border-bottom: none;
+}
+
+.rank-row text:first-child,
+.log-row text:first-child {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rank-row text:last-child {
+  font-size: 36rpx;
+  font-weight: 800;
+}
+
+.detail-card .log-row {
+  border-bottom-color: #eef0f3;
+}
+
+.delta {
+  flex: none;
+  color: #1f2937;
+  font-weight: 800;
+}
+
+.round-block {
+  background: #fffaf6;
+  border-radius: 16rpx;
+  padding: 16rpx 18rpx;
+  margin-bottom: 12rpx;
+}
+
+.round-title {
+  color: #6b7280;
+  font-size: 26rpx;
+  font-weight: 700;
+  margin-bottom: 8rpx;
+}
+
+.btn-row {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.btn-row button {
+  height: 88rpx;
+  line-height: 88rpx;
+  font-size: 30rpx;
+  padding: 0;
+}
+
+.poster-canvas {
+  position: fixed;
+  left: -9999rpx;
+  top: -9999rpx;
+  opacity: 0;
+}
