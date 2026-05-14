@@ -4,7 +4,9 @@
     <view class="players-grid">
       <block wx:for="{{game.players}}" wx:key="id" wx:for-item="player" wx:for-index="pIndex">
         <view class="player-chip {{activeIndex===pIndex?'active':''}}" data-index="{{pIndex}}" bindtap="selectPlayer">
-          <view class="avatar">{{avatars[pIndex % avatars.length]}}</view>
+          <view class="avatar">
+            <image class="avatar-img" src="{{avatars[pIndex % avatars.length]}}" mode="aspectFill"></image>
+          </view>
           <text class="name">{{player.name}}</text>
           <text class="score">{{player.score}}分</text>
         </view>

@@ -1,5 +1,6 @@
 const { saveCurrentGame } = require('../../utils/storage');
 const share = require('../../utils/share');
+const playerAvatars = require('../../utils/player-avatars');
 
 function createPlayers(count) {
   return Array.from({ length: count }).map((_, i) => ({ id: `${Date.now()}_${i}`, name: `玩家${i + 1}`, score: 0 }));
@@ -12,7 +13,7 @@ Page({
     const tabBar = this.getTabBar && this.getTabBar();
     if (tabBar) tabBar.setData({ selected: 0 });
   },
-  data: { presetCounts: [2, 3, 4], playerCount: 4, players: createPlayers(4), avatars: ['😀', '😎', '🀄', '🐯', '🐼', '🦊', '🐬', '🦁'] },
+  data: { presetCounts: [2, 3, 4], playerCount: 4, players: createPlayers(4), avatars: playerAvatars },
   syncPlayers(count) {
     const players = this.data.players.slice(0, count);
     while (players.length < count) players.push({ id: `${Date.now()}_${players.length}`, name: `玩家${players.length + 1}`, score: 0 });

@@ -1,7 +1,8 @@
 const { getHistory } = require('../../utils/storage');
 const share = require('../../utils/share');
+const playerAvatars = require('../../utils/player-avatars');
 
-const AVATARS = ['😀', '😎', '🀄', '🐯', '🐼', '🦊', '🐬', '🦁'];
+const AVATARS = playerAvatars;
 
 Page({
   data: { record: null, roundList: [], posterHeight: 980, medals: ['🥇', '🥈', '🥉'] },
@@ -16,7 +17,7 @@ Page({
     const map = {};
     (record?.rounds || []).forEach((r) => {
       if (!map[r.round]) map[r.round] = [];
-      map[r.round].push({ ...r, playerEmoji: emojiMap[r.playerId] || '🙂' });
+      map[r.round].push({ ...r, playerAvatar: emojiMap[r.playerId] || AVATARS[0] });
     });
     const roundList = Object.keys(map).map((round) => ({ round: Number(round), scores: map[round] })).sort((a, b) => a.round - b.round);
     const posterHeight = 520 + (record?.ranking?.length || 0) * 82 + roundList.length * 30 + (record?.rounds?.length || 0) * 40;
@@ -106,7 +107,7 @@ Page({
       r.scores.forEach((s) => {
         ctx.setFillStyle('#1f2937');
         ctx.setFontSize(22);
-        ctx.fillText(`${s.playerEmoji} ${s.playerName}`, 40, y + 22);
+        ctx.fillText(`${s.playerName}`, 40, y + 22);
         ctx.setFillStyle(s.delta >= 0 ? '#1f9d62' : '#d24b5b');
         ctx.fillText(`${s.delta > 0 ? '+' : ''}${s.delta}`, 560, y + 22);
         y += 34;

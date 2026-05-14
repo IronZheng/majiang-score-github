@@ -16,7 +16,10 @@
         <view class="round-title">第{{roundItem.round}}回合</view>
         <block wx:for="{{roundItem.scores}}" wx:key="at" wx:for-item="scoreItem">
           <view class="log-row">
-            <text>{{scoreItem.playerEmoji}} {{scoreItem.playerName}}</text>
+            <view class="log-user">
+              <image class="log-avatar" src="{{scoreItem.playerAvatar}}" mode="aspectFill"></image>
+              <text class="log-name">{{scoreItem.playerName}}</text>
+            </view>
             <text class="delta">{{scoreItem.delta > 0 ? '+' : ''}}{{scoreItem.delta}}</text>
           </view>
         </block>

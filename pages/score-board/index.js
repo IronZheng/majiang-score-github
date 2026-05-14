@@ -1,8 +1,9 @@
 const { getCurrentGame, saveCurrentGame, addHistory, clearCurrentGame } = require('../../utils/storage');
 const share = require('../../utils/share');
+const playerAvatars = require('../../utils/player-avatars');
 
 Page({
-  data: { game: null, activeIndex: 0, customDelta: '', roundList: [], avatars: ['😀', '😎', '🀄', '🐯', '🐼', '🦊', '🐬', '🦁'] },
+  data: { game: null, activeIndex: 0, customDelta: '', roundList: [], avatars: playerAvatars },
   onShow() {
     share.enableShareMenu();
 
