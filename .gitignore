@@ -1,4 +1,5 @@
 # Tool-specific
+.idea/
 .agents/
 .workbuddy/
 *.private.config.json
