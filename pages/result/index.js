@@ -11,7 +11,7 @@ const POSTER_RANK_HEADER = 72;
 const POSTER_RANK_ROW = 54;
 const POSTER_ROUND_HEADER = 62;
 const POSTER_ROUND_SCORE_ROW = 40;
-const POSTER_QR_HEIGHT = 370;
+const POSTER_QR_HEIGHT = 450;
 const POSTER_MIN_HEIGHT = 1180;
 const POSTER_GAP = 16;
 
@@ -223,7 +223,9 @@ Page({
     drawText(winner.name, heroX + 34, heroY + 280, 50, '#ffffff', heroW - 98 - winnerScoreWidth);
     drawRightText(winnerScoreText, heroX + heroW - 34, heroY + 282, 56, '#ffffff', 220);
 
-    drawRoundRect(heroX + 30, heroY + 306, heroW - 60, 58, 22, 'rgba(255,255,255,0.22)');
+    const heroStatsH = 56;
+    const heroStatsY = heroY + POSTER_HERO_HEIGHT - 18 - heroStatsH - 4;
+    drawRoundRect(heroX + 30, heroStatsY, heroW - 60, heroStatsH, 22, 'rgba(255,255,255,0.22)');
     const heroStats = [
       { label: '人数', value: `${record.players.length}人` },
       { label: '回合', value: `${record.totalRounds || 1}轮` },
@@ -232,8 +234,8 @@ Page({
     const heroStatW = (heroW - 60) / 3;
     heroStats.forEach((item, index) => {
       const statX = heroX + 30 + index * heroStatW;
-      drawCenteredText(item.label, statX + heroStatW / 2, heroY + 330, 18, '#fff2ea', heroStatW - 20);
-      drawCenteredText(item.value, statX + heroStatW / 2, heroY + 356, 26, '#ffffff', heroStatW - 20);
+      drawCenteredText(item.label, statX + heroStatW / 2, heroStatsY + 22, 18, '#fff2ea', heroStatW - 20);
+      drawCenteredText(item.value, statX + heroStatW / 2, heroStatsY + 47, 26, '#ffffff', heroStatW - 20);
     });
 
     let y = heroY + POSTER_HERO_HEIGHT + POSTER_GAP;
@@ -296,7 +298,7 @@ Page({
 
     const qrSize = 224;
     const qrX = (CANVAS_WIDTH - qrSize) / 2;
-    const qrY = y + 112;
+    const qrY = y + 132;
     drawRoundRect(qrX - 20, qrY - 20, qrSize + 40, qrSize + 40, 36, palette.accentSoft, palette.border);
     drawRoundRect(qrX - 7, qrY - 7, qrSize + 14, qrSize + 14, 24, '#ffffff');
     try {
@@ -307,7 +309,7 @@ Page({
       ctx.fillText('二维码加载中', qrX + 38, qrY + 118);
     }
 
-    drawCenteredText('麻将计分器', CANVAS_WIDTH / 2, y + 354, 21, palette.accentDeep, heroW - 80);
+    drawCenteredText('麻将计分器', CANVAS_WIDTH / 2, y + 416, 21, palette.accentDeep, heroW - 80);
 
     ctx.draw(false, () => setTimeout(done, 200));
   }
