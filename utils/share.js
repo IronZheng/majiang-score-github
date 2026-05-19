@@ -1,5 +1,5 @@
 const DEFAULT_SHARE = {
-  title: '麻将计分器',
+  title: '麻将计分器：朋友聚会记分、战绩分享',
   path: '/pages/scoring-setup/index'
 };
 

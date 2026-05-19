@@ -54,12 +54,12 @@ Page({
   },
   onShareAppMessage() {
     return share.appMessage({
-      title: '麻将计分器，开局计分不费劲'
+      title: '麻将计分器：开局就能记分'
     });
   },
   onShareTimeline() {
     return share.timeline({
-      title: '麻将计分器，开局计分不费劲'
+      title: '麻将计分器：开局就能记分'
     });
   }
 });

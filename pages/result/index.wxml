@@ -35,5 +35,11 @@
     </view>
   </view>
 
-  <canvas canvas-id="posterCanvas" class="poster-canvas" style="width: 690rpx; height: {{posterHeight}}px;"></canvas>
+  <canvas
+    canvas-id="posterCanvas"
+    class="poster-canvas"
+    width="690"
+    height="{{posterHeight}}"
+    style="width: 690px; height: {{posterHeight}}px;"
+  ></canvas>
 </view>

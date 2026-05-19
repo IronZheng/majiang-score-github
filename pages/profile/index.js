@@ -201,13 +201,13 @@ Page({
 
   onShareAppMessage() {
     return share.appMessage({
-      title: '麻将计分器，聚会计分更省心'
+      title: '麻将计分器：我的历史战绩'
     });
   },
 
   onShareTimeline() {
     return share.timeline({
-      title: '麻将计分器，聚会计分更省心'
+      title: '麻将计分器：我的历史战绩'
     });
   },
 

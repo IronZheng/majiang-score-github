@@ -82,12 +82,12 @@ Page({
   },
   onShareAppMessage() {
     return share.appMessage({
-      title: '我正在用麻将计分器记分'
+      title: '麻将计分器：正在记录这一局得分'
     });
   },
   onShareTimeline() {
     return share.timeline({
-      title: '麻将计分器，聚会计分更省心'
+      title: '麻将计分器：正在记录这一局得分'
     });
   }
 });
