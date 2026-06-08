@@ -2,6 +2,8 @@
   "lazyCodeLoading": "requiredComponents",
   "pages": [
     "pages/scoring-setup/index",
+    "pages/rules/index",
+    "pages/rules-detail/index",
     "pages/score-board/index",
     "pages/result/index",
     "pages/login/index",
@@ -24,6 +26,10 @@
       {
         "pagePath": "pages/scoring-setup/index",
         "text": "计分"
+      },
+      {
+        "pagePath": "pages/rules/index",
+        "text": "玩法"
       },
       {
         "pagePath": "pages/profile/index",

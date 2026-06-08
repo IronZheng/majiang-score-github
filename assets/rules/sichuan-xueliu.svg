@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 220">
+  <rect width="640" height="220" rx="28" fill="#fff6ef"/>
+  <g transform="translate(70 48)">
+    <rect width="66" height="94" rx="10" fill="#fff" stroke="#e8d6ca" stroke-width="4"/>
+    <text x="33" y="60" text-anchor="middle" font-size="33" font-weight="800" fill="#c66d61">一</text>
+  </g>
+  <g transform="translate(144 48)">
+    <rect width="66" height="94" rx="10" fill="#fff" stroke="#e8d6ca" stroke-width="4"/>
+    <text x="33" y="60" text-anchor="middle" font-size="33" font-weight="800" fill="#c66d61">二</text>
+  </g>
+  <g transform="translate(218 48)">
+    <rect width="66" height="94" rx="10" fill="#fff" stroke="#e8d6ca" stroke-width="4"/>
+    <text x="33" y="60" text-anchor="middle" font-size="33" font-weight="800" fill="#c66d61">三</text>
+  </g>
+  <rect x="350" y="58" width="178" height="58" rx="29" fill="#e49b73"/>
+  <text x="439" y="96" text-anchor="middle" font-size="26" font-weight="800" fill="#fff">定缺一门</text>
+  <path d="M356 146c48 30 116 30 164 0" fill="none" stroke="#b86142" stroke-width="10" stroke-linecap="round"/>
+  <path d="M504 130l28 17-28 17" fill="none" stroke="#b86142" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

@@ -1,16 +1,19 @@
 const auth = require('../../utils/auth');
 const share = require('../../utils/share');
+const defaultProfiles = require('../../utils/default-profiles');
 
 Page({
   data: {
     loading: false,
     showManualInput: false,
     manualPhone: '',
-    loginDone: false
+    loginDone: false,
+    defaultProfile: defaultProfiles.pickProfile()
   },
 
   onLoad() {
     share.enableShareMenu();
+    this.setData({ defaultProfile: defaultProfiles.pickProfile() });
 
     console.log('[login] 页面加载，当前登录状态:', auth.isLoggedIn());
     if (auth.isLoggedIn()) {

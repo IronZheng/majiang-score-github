@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 220">
+  <rect width="640" height="220" rx="28" fill="#fff6ef"/>
+  <path d="M468 58l24-30 24 30 34-18-10 68H448l-10-68z" fill="#f3bd68"/>
+  <rect x="432" y="104" width="124" height="26" rx="13" fill="#d9943c"/>
+  <g transform="translate(72 36)">
+    <rect width="90" height="128" rx="12" fill="#fff" stroke="#e8d6ca" stroke-width="4"/>
+    <text x="17" y="38" font-size="30" font-weight="800" fill="#c66d61">K</text>
+    <text x="52" y="100" font-size="34" fill="#c66d61">♥</text>
+  </g>
+  <g transform="translate(143 36)">
+    <rect width="90" height="128" rx="12" fill="#fff" stroke="#e8d6ca" stroke-width="4"/>
+    <text x="17" y="38" font-size="30" font-weight="800" fill="#1f2937">K</text>
+    <text x="52" y="100" font-size="34" fill="#1f2937">♣</text>
+  </g>
+  <g transform="translate(214 36)">
+    <rect width="90" height="128" rx="12" fill="#fff" stroke="#e8d6ca" stroke-width="4"/>
+    <text x="17" y="38" font-size="30" font-weight="800" fill="#c66d61">K</text>
+    <text x="52" y="100" font-size="34" fill="#c66d61">♦</text>
+  </g>
+  <g transform="translate(285 36)">
+    <rect width="90" height="128" rx="12" fill="#fff" stroke="#e8d6ca" stroke-width="4"/>
+    <text x="17" y="38" font-size="30" font-weight="800" fill="#1f2937">K</text>
+    <text x="52" y="100" font-size="34" fill="#1f2937">♠</text>
+  </g>
+  <text x="494" y="166" text-anchor="middle" font-size="28" font-weight="800" fill="#b86142">地主</text>
+</svg>

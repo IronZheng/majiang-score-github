@@ -23,10 +23,16 @@ function getHistory() {
   return wx.getStorageSync(HISTORY_KEY) || [];
 }
 
+function removeHistory(id) {
+  const list = wx.getStorageSync(HISTORY_KEY) || [];
+  wx.setStorageSync(HISTORY_KEY, list.filter((item) => item.id !== id));
+}
+
 module.exports = {
   saveCurrentGame,
   getCurrentGame,
   clearCurrentGame,
   addHistory,
-  getHistory
+  getHistory,
+  removeHistory
 };

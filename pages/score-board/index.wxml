@@ -5,7 +5,7 @@
       <block wx:for="{{game.players}}" wx:key="id" wx:for-item="player" wx:for-index="pIndex">
         <view class="player-chip {{activeIndex===pIndex?'active':''}}" data-index="{{pIndex}}" bindtap="selectPlayer">
           <view class="avatar">
-            <image class="avatar-img" src="{{avatars[pIndex % avatars.length]}}" mode="aspectFill"></image>
+            <image class="avatar-img" src="{{player.avatarUrl || avatars[pIndex % avatars.length]}}" mode="aspectFill"></image>
           </view>
           <text class="name">{{player.name}}</text>
           <text class="score">{{player.score}}分</text>
@@ -16,14 +16,28 @@
 
   <view class="card action-card">
     <view class="title">给 {{game.players[activeIndex].name}} 加减分</view>
-    <view class="ops">
-      <view class="score-btn plus" data-delta="5" bindtap="applyDelta">+5</view>
-      <view class="score-btn plus" data-delta="10" bindtap="applyDelta">+10</view>
-      <view class="score-btn minus" data-delta="-5" bindtap="applyDelta">-5</view>
-      <view class="score-btn minus" data-delta="-10" bindtap="applyDelta">-10</view>
+    <view class="score-section">
+      <view class="section-label plus-label">加分</view>
+      <view class="ops">
+        <block wx:for="{{plusDeltas}}" wx:key="*this">
+          <view class="score-btn plus" data-delta="{{item}}" bindtap="applyDelta">+{{item}}</view>
+        </block>
+      </view>
+    </view>
+    <view class="score-section">
+      <view class="section-label minus-label">减分</view>
+      <view class="ops">
+        <block wx:for="{{minusDeltas}}" wx:key="*this">
+          <view class="score-btn minus" data-delta="{{item}}" bindtap="applyDelta">{{item}}</view>
+        </block>
+      </view>
     </view>
     <view class="custom-row">
-      <input class="custom-input" type="text" value="{{customDelta}}" bindinput="onCustomInput" placeholder="自定义分值，如 -20" />
+      <view class="sign-switch">
+        <view class="sign-btn {{customSign===1?'active plus-active':''}}" data-sign="1" bindtap="switchCustomSign">+</view>
+        <view class="sign-btn {{customSign===-1?'active minus-active':''}}" data-sign="-1" bindtap="switchCustomSign">-</view>
+      </view>
+      <input class="custom-input" type="number" value="{{customDelta}}" bindinput="onCustomInput" placeholder="输入分值" />
       <view class="primary-btn confirm-btn" bindtap="applyCustom">确认</view>
     </view>
   </view>

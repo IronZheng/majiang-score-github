@@ -83,20 +83,37 @@
   font-weight: 700;
 }
 
+.score-section {
+  margin-bottom: 20rpx;
+}
+
+.section-label {
+  font-size: 26rpx;
+  font-weight: 800;
+  margin-bottom: 12rpx;
+}
+
+.plus-label {
+  color: #c66d61;
+}
+
+.minus-label {
+  color: #5f8f6a;
+}
+
 .ops {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18rpx;
-  margin-bottom: 22rpx;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12rpx;
 }
 
 .score-btn {
   width: 100%;
   min-width: 0;
-  height: 128rpx;
-  border-radius: 22rpx;
+  height: 82rpx;
+  border-radius: 16rpx;
   font-weight: 800;
-  font-size: 46rpx;
+  font-size: 32rpx;
   box-sizing: border-box;
   display: flex;
   align-items: center;
@@ -118,6 +135,44 @@
   display: flex;
   gap: 12rpx;
   align-items: center;
+}
+
+.sign-switch {
+  width: 128rpx;
+  height: 84rpx;
+  padding: 6rpx;
+  border-radius: 18rpx;
+  background: #f6f7f9;
+  border: 1rpx solid #eef0f3;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6rpx;
+  flex-shrink: 0;
+}
+
+.sign-btn {
+  min-width: 0;
+  border-radius: 14rpx;
+  color: #8a94a6;
+  font-size: 34rpx;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sign-btn.active {
+  color: #ffffff;
+  box-shadow: 0 8rpx 18rpx rgba(31, 41, 55, 0.10);
+}
+
+.plus-active {
+  background: #c66d61;
+}
+
+.minus-active {
+  background: #5f8f6a;
 }
 
 .custom-input {

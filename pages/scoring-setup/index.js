@@ -1,9 +1,21 @@
 const { saveCurrentGame } = require('../../utils/storage');
 const share = require('../../utils/share');
 const playerAvatars = require('../../utils/player-avatars');
+const defaultProfiles = require('../../utils/default-profiles');
 
-function createPlayers(count) {
-  return Array.from({ length: count }).map((_, i) => ({ id: `${Date.now()}_${i}`, name: `玩家${i + 1}`, score: 0 }));
+function createPlayer(index, seed) {
+  const profile = defaultProfiles.createPlayerProfile(seed, index);
+  return {
+    id: `${Date.now()}_${index}`,
+    name: profile.name,
+    avatarUrl: profile.avatarUrl,
+    defaultProfileKey: profile.defaultProfileKey,
+    score: 0
+  };
+}
+
+function createPlayers(count, seed) {
+  return Array.from({ length: count }).map((_, i) => createPlayer(i, seed));
 }
 
 Page({
@@ -13,10 +25,16 @@ Page({
     const tabBar = this.getTabBar && this.getTabBar();
     if (tabBar) tabBar.setData({ selected: 0 });
   },
-  data: { presetCounts: [2, 3, 4], playerCount: 4, players: createPlayers(4), avatars: playerAvatars },
+  data: {
+    presetCounts: [2, 3, 4],
+    playerCount: 4,
+    setupSeed: defaultProfiles.getLocalProfileSeed(),
+    players: createPlayers(4, defaultProfiles.getLocalProfileSeed()),
+    avatars: playerAvatars
+  },
   syncPlayers(count) {
     const players = this.data.players.slice(0, count);
-    while (players.length < count) players.push({ id: `${Date.now()}_${players.length}`, name: `玩家${players.length + 1}`, score: 0 });
+    while (players.length < count) players.push(createPlayer(players.length, this.data.setupSeed));
     this.setData({ playerCount: players.length, players });
   },
   setPresetCount(e) { this.syncPlayers(Number(e.currentTarget.dataset.count)); },
@@ -44,11 +62,19 @@ Page({
     const { index } = e.currentTarget.dataset;
     const players = this.data.players.slice();
     const name = (players[index].name || '').trim();
-    players[index].name = name || `玩家${Number(index) + 1}`;
+    players[index].name = name || defaultProfiles.createPlayerProfile(this.data.setupSeed, Number(index)).name;
     this.setData({ players });
   },
   startGame() {
-    const players = this.data.players.map((p, i) => ({ ...p, name: (p.name || '').trim() || `玩家${i + 1}`, score: 0 }));
+    const players = this.data.players.map((p, i) => {
+      const profile = defaultProfiles.createPlayerProfile(this.data.setupSeed, i);
+      return {
+        ...p,
+        name: (p.name || '').trim() || profile.name,
+        avatarUrl: p.avatarUrl || profile.avatarUrl || playerAvatars[i % playerAvatars.length],
+        score: 0
+      };
+    });
     saveCurrentGame({ players, rounds: [], currentRound: 1, createdAt: Date.now() });
     wx.navigateTo({ url: '/pages/score-board/index' });
   },

@@ -1,0 +1,134 @@
+<view class="container detail-page" wx:if="{{rule}}">
+  <view class="detail-card {{rule.featured ? 'featured' : ''}}">
+    <image class="detail-visual" src="{{rule.image}}" mode="aspectFit"></image>
+    <view class="detail-meta">
+      <text class="rule-category">{{rule.category}}</text>
+    </view>
+    <view class="detail-title">{{rule.title}}</view>
+    <view class="detail-tagline">{{rule.tagline}}</view>
+  </view>
+
+  <view class="section-card win-card" wx:if="{{rule.win}}">
+    <view class="section-title">{{rule.win.title}}</view>
+    <block wx:for="{{rule.win.items}}" wx:key="*this" wx:for-item="line">
+      <view class="rule-line">{{line}}</view>
+    </block>
+  </view>
+
+  <view class="section-card" wx:if="{{rule.flow && rule.flow.length}}">
+    <view class="section-title">一局怎么玩</view>
+    <view class="flow-list">
+      <block wx:for="{{rule.flow}}" wx:key="*this" wx:for-item="step" wx:for-index="stepIndex">
+        <view class="flow-item">
+          <text class="flow-index">{{stepIndex + 1}}</text>
+          <text class="flow-text">{{step}}</text>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <block wx:for="{{rule.sections}}" wx:key="title" wx:for-item="section">
+    <view class="section-card">
+      <view class="section-title">{{section.title}}</view>
+      <block wx:for="{{section.items}}" wx:key="*this" wx:for-item="line">
+        <view class="rule-line">{{line}}</view>
+      </block>
+    </view>
+  </block>
+
+  <view class="section-card" wx:if="{{rule.boardExample}}">
+    <view class="section-title">{{rule.boardExample.title}}</view>
+    <view class="example-desc">{{rule.boardExample.desc}}</view>
+    <view class="texas-board">
+      <view class="board-group">
+        <text class="board-label">手牌</text>
+        <view class="card-row">
+          <block wx:for="{{rule.boardExample.hole}}" wx:key="*this" wx:for-item="cardItem">
+            <view class="mini-card {{cardItem.red ? 'red-card' : ''}}">
+              <text class="card-rank">{{cardItem.rank}}</text>
+              <text class="card-suit">{{cardItem.suit}}</text>
+            </view>
+          </block>
+        </view>
+      </view>
+      <view class="board-group">
+        <text class="board-label">公共牌</text>
+        <view class="card-row">
+          <block wx:for="{{rule.boardExample.board}}" wx:key="*this" wx:for-item="cardItem">
+            <view class="mini-card {{cardItem.red ? 'red-card' : ''}}">
+              <text class="card-rank">{{cardItem.rank}}</text>
+              <text class="card-suit">{{cardItem.suit}}</text>
+            </view>
+          </block>
+        </view>
+      </view>
+      <view class="board-group best-group">
+        <text class="board-label">最佳五张</text>
+        <view class="card-row">
+          <block wx:for="{{rule.boardExample.best}}" wx:key="*this" wx:for-item="cardItem">
+            <view class="mini-card best-card {{cardItem.red ? 'red-card' : ''}}">
+              <text class="card-rank">{{cardItem.rank}}</text>
+              <text class="card-suit">{{cardItem.suit}}</text>
+            </view>
+          </block>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="section-card" wx:if="{{rule.handRanks && rule.handRanks.length}}">
+    <view class="section-title">牌型强弱</view>
+    <block wx:for="{{rule.handRanks}}" wx:key="name" wx:for-item="rankItem" wx:for-index="rankIndex">
+      <view class="rank-item">
+        <view class="rank-head">
+          <text class="rank-order">{{rankIndex + 1}}</text>
+          <view class="rank-copy">
+            <text class="rank-name">{{rankItem.name}}</text>
+            <text class="rank-desc">{{rankItem.desc}}</text>
+          </view>
+        </view>
+        <view class="card-row">
+          <block wx:for="{{rankItem.cards}}" wx:key="*this" wx:for-item="cardItem">
+            <view class="mini-card {{cardItem.red ? 'red-card' : ''}}">
+              <text class="card-rank">{{cardItem.rank}}</text>
+              <text class="card-suit">{{cardItem.suit}}</text>
+            </view>
+          </block>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <view class="section-card" wx:if="{{rule.examples && rule.examples.length}}">
+    <view class="section-title">牌型图示</view>
+    <block wx:for="{{rule.examples}}" wx:key="title" wx:for-item="example">
+      <view class="example-item">
+        <view class="example-title">{{example.title}}</view>
+        <view class="example-desc">{{example.desc}}</view>
+        <view class="card-row" wx:if="{{example.kind === 'poker'}}">
+          <block wx:for="{{example.cards}}" wx:key="*this" wx:for-item="cardItem">
+            <view class="mini-card {{cardItem.red ? 'red-card' : ''}}">
+              <text class="card-rank">{{cardItem.rank}}</text>
+              <text class="card-suit">{{cardItem.suit}}</text>
+            </view>
+          </block>
+        </view>
+        <view class="tile-row" wx:if="{{example.kind === 'mahjong'}}">
+          <block wx:for="{{example.tiles}}" wx:key="*this" wx:for-item="tileItem">
+            <image
+              wx:if="{{tileItem.image}}"
+              class="mahjong-tile-img"
+              src="{{tileItem.image}}"
+              mode="aspectFit"
+            ></image>
+            <view wx:else class="mini-tile tile-{{tileItem.tone}}">
+              <text>{{tileItem.label}}</text>
+            </view>
+          </block>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <view class="note-card">各地桌规会有差异，开局前建议先确认番型、杠分、结算和特殊牌约定。</view>
+</view>

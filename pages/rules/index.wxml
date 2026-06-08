@@ -1,0 +1,22 @@
+<view class="container rules-page">
+  <view class="rules-head">
+    <view class="title">玩法</view>
+    <view class="subtitle">选择一种玩法，进入后查看基础入门、牌型打法和常见规则。</view>
+  </view>
+
+  <view class="rule-menu">
+    <block wx:for="{{rules}}" wx:key="id" wx:for-item="rule">
+      <view class="menu-card {{rule.featured ? 'featured' : ''}}" data-id="{{rule.id}}" bindtap="openRule">
+        <image class="menu-visual" src="{{rule.image}}" mode="aspectFit"></image>
+        <view class="menu-body">
+          <view class="menu-top">
+            <text class="rule-category">{{rule.category}}</text>
+            <text class="menu-arrow">›</text>
+          </view>
+          <view class="menu-title">{{rule.title}}</view>
+          <view class="menu-tagline">{{rule.tagline}}</view>
+        </view>
+      </view>
+    </block>
+  </view>
+</view>

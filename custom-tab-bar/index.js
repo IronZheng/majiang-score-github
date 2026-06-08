@@ -9,6 +9,12 @@ Component({
         activeIcon: '/assets/icons/score-active.svg'
       },
       {
+        pagePath: '/pages/rules/index',
+        text: '玩法',
+        icon: '/assets/icons/rules.svg',
+        activeIcon: '/assets/icons/rules-active.svg'
+      },
+      {
         pagePath: '/pages/profile/index',
         text: '我的',
         icon: '/assets/icons/profile.svg',

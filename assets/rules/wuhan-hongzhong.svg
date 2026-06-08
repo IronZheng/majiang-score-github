@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 220">
+  <rect width="640" height="220" rx="28" fill="#fff6ef"/>
+  <g transform="translate(88 44)">
+    <rect width="78" height="112" rx="12" fill="#fff" stroke="#e8d6ca" stroke-width="4"/>
+    <text x="39" y="70" text-anchor="middle" font-size="45" font-weight="900" fill="#c9473f">中</text>
+  </g>
+  <g transform="translate(184 44)">
+    <rect width="78" height="112" rx="12" fill="#fff" stroke="#e8d6ca" stroke-width="4"/>
+    <text x="39" y="70" text-anchor="middle" font-size="35" font-weight="800" fill="#5f8f6a">5</text>
+    <circle cx="30" cy="90" r="5" fill="#5f8f6a"/>
+    <circle cx="48" cy="90" r="5" fill="#5f8f6a"/>
+  </g>
+  <g transform="translate(280 44)">
+    <rect width="78" height="112" rx="12" fill="#fff" stroke="#e8d6ca" stroke-width="4"/>
+    <text x="39" y="70" text-anchor="middle" font-size="35" font-weight="800" fill="#5f8f6a">6</text>
+    <circle cx="24" cy="90" r="5" fill="#5f8f6a"/>
+    <circle cx="39" cy="90" r="5" fill="#5f8f6a"/>
+    <circle cx="54" cy="90" r="5" fill="#5f8f6a"/>
+  </g>
+  <rect x="408" y="66" width="126" height="52" rx="26" fill="#fff0ee"/>
+  <text x="471" y="100" text-anchor="middle" font-size="24" font-weight="800" fill="#c66d61">红中</text>
+  <path d="M424 144h96" stroke="#d7b9a7" stroke-width="10" stroke-linecap="round"/>
+</svg>

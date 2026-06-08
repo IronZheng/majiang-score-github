@@ -6,5 +6,21 @@ module.exports = [
   '/assets/avatars/player-5.svg',
   '/assets/avatars/player-6.svg',
   '/assets/avatars/player-7.svg',
-  '/assets/avatars/player-8.svg'
+  '/assets/avatars/player-8.svg',
+  '/assets/avatars/player-9.svg',
+  '/assets/avatars/player-10.svg',
+  '/assets/avatars/player-11.svg',
+  '/assets/avatars/player-12.svg',
+  '/assets/avatars/player-13.svg',
+  '/assets/avatars/player-14.svg',
+  '/assets/avatars/player-15.svg',
+  '/assets/avatars/player-16.svg',
+  '/assets/avatars/player-17.svg',
+  '/assets/avatars/player-18.svg',
+  '/assets/avatars/player-19.svg',
+  '/assets/avatars/player-20.svg',
+  '/assets/avatars/player-21.svg',
+  '/assets/avatars/player-22.svg',
+  '/assets/avatars/player-23.svg',
+  '/assets/avatars/player-24.svg'
 ];

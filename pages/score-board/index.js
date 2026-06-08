@@ -3,7 +3,16 @@ const share = require('../../utils/share');
 const playerAvatars = require('../../utils/player-avatars');
 
 Page({
-  data: { game: null, activeIndex: 0, customDelta: '', roundList: [], avatars: playerAvatars },
+  data: {
+    game: null,
+    activeIndex: 0,
+    customDelta: '',
+    customSign: 1,
+    roundList: [],
+    avatars: playerAvatars,
+    plusDeltas: [1, 2, 3, 4, 5, 8, 10, 20],
+    minusDeltas: [-1, -2, -3, -4, -5, -8, -10, -20]
+  },
   onShow() {
     share.enableShareMenu();
 
@@ -23,30 +32,36 @@ Page({
   },
   selectPlayer(e) { this.setData({ activeIndex: Number(e.currentTarget.dataset.index) }); },
   onCustomInput(e) {
-    const value = String(e.detail.value || '').replace(/[^\d-]/g, '');
-    const normalized = value.startsWith('-')
-      ? `-${value.slice(1).replace(/-/g, '')}`
-      : value.replace(/-/g, '');
-    this.setData({ customDelta: normalized });
+    const value = String(e.detail.value || '').replace(/\D/g, '');
+    this.setData({ customDelta: value });
+  },
+  switchCustomSign(e) {
+    const sign = Number(e.currentTarget.dataset.sign) === -1 ? -1 : 1;
+    this.setData({ customSign: sign });
   },
   applyDelta(e) { this.applyScore(Number(e.currentTarget.dataset.delta)); },
   applyCustom() {
     const raw = String(this.data.customDelta || '').trim();
-    if (!/^-?\d+$/.test(raw)) {
+    if (!/^\d+$/.test(raw) || Number(raw) === 0) {
       wx.showToast({ title: '请输入有效分值', icon: 'none' });
       return;
     }
-    this.applyScore(Number(raw));
+    this.applyScore(Number(raw) * this.data.customSign);
   },
   applyScore(delta) {
     if (!delta) return;
     const game = this.data.game;
     const p = game.players[this.data.activeIndex];
     p.score += delta;
-    game.rounds.push({ playerId: p.id, playerName: p.name, delta, round: game.currentRound, at: Date.now() });
+    game.rounds.push({ playerId: p.id, playerName: p.name, playerAvatar: p.avatarUrl, delta, round: game.currentRound, at: Date.now() });
     saveCurrentGame(game);
     this.setData({ customDelta: '' });
     this.refreshView(game);
+    wx.showToast({
+      title: delta > 0 ? '加分成功' : '减分成功',
+      icon: 'success',
+      duration: 900
+    });
   },
   nextRound() {
     const game = this.data.game;

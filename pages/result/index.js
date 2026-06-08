@@ -46,12 +46,12 @@ Page({
     const history = getHistory();
     const record = history.find((item) => item.id === options.id) || history[0] || null;
     const avatarMap = {};
-    (record?.players || []).forEach((p, i) => { avatarMap[p.id] = AVATARS[i % AVATARS.length]; });
+    (record?.players || []).forEach((p, i) => { avatarMap[p.id] = p.avatarUrl || AVATARS[i % AVATARS.length]; });
 
     const map = {};
     (record?.rounds || []).forEach((r) => {
       if (!map[r.round]) map[r.round] = [];
-      map[r.round].push({ ...r, playerAvatar: avatarMap[r.playerId] || AVATARS[0] });
+      map[r.round].push({ ...r, playerAvatar: r.playerAvatar || avatarMap[r.playerId] || AVATARS[0] });
     });
     const roundList = Object.keys(map).map((round) => ({ round: Number(round), scores: map[round] })).sort((a, b) => a.round - b.round);
     const posterHeight = calcPosterHeight(roundList);

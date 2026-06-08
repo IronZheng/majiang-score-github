@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 220">
+  <rect width="640" height="220" rx="28" fill="#fff6ef"/>
+  <g transform="translate(80 48)">
+    <rect width="72" height="104" rx="12" fill="#fff" stroke="#e8d6ca" stroke-width="4"/>
+    <text x="36" y="64" text-anchor="middle" font-size="40" font-weight="900" fill="#e49b73">财</text>
+  </g>
+  <g transform="translate(166 48)">
+    <rect width="72" height="104" rx="12" fill="#fff" stroke="#e8d6ca" stroke-width="4"/>
+    <text x="36" y="64" text-anchor="middle" font-size="34" font-weight="800" fill="#c66d61">七</text>
+  </g>
+  <g transform="translate(252 48)">
+    <rect width="72" height="104" rx="12" fill="#fff" stroke="#e8d6ca" stroke-width="4"/>
+    <text x="36" y="64" text-anchor="middle" font-size="34" font-weight="800" fill="#c66d61">八</text>
+  </g>
+  <g transform="translate(338 48)">
+    <rect width="72" height="104" rx="12" fill="#fff" stroke="#e8d6ca" stroke-width="4"/>
+    <text x="36" y="64" text-anchor="middle" font-size="34" font-weight="800" fill="#c66d61">九</text>
+  </g>
+  <circle cx="506" cy="100" r="48" fill="#f3bd68"/>
+  <text x="506" y="109" text-anchor="middle" font-size="24" font-weight="900" fill="#fffaf6">杠开</text>
+  <path d="M470 158h72" stroke="#d9943c" stroke-width="10" stroke-linecap="round"/>
+</svg>

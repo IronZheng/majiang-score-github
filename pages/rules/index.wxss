@@ -1,0 +1,99 @@
+.rules-page {
+  padding-bottom: 156rpx;
+}
+
+.rules-head {
+  padding: 6rpx 4rpx 18rpx;
+}
+
+.title {
+  font-size: 38rpx;
+  font-weight: 800;
+  color: #1f2937;
+  margin-bottom: 10rpx;
+}
+
+.subtitle {
+  color: #6b7280;
+  font-size: 26rpx;
+  line-height: 1.55;
+}
+
+.rule-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 18rpx;
+}
+
+.menu-card {
+  display: flex;
+  align-items: stretch;
+  gap: 18rpx;
+  background: #ffffff;
+  border: 1rpx solid rgba(228, 155, 115, 0.13);
+  border-radius: 16rpx;
+  box-shadow: 0 12rpx 30rpx rgba(120, 88, 64, 0.07);
+  padding: 18rpx;
+  box-sizing: border-box;
+}
+
+.menu-card.featured {
+  border-color: rgba(184, 97, 66, 0.26);
+  box-shadow: 0 16rpx 34rpx rgba(184, 97, 66, 0.10);
+}
+
+.menu-card:active {
+  transform: scale(0.99);
+  opacity: 0.88;
+}
+
+.menu-visual {
+  width: 188rpx;
+  height: 136rpx;
+  flex: none;
+  display: block;
+  background: #fffaf6;
+  border-radius: 14rpx;
+}
+
+.menu-body {
+  min-width: 0;
+  flex: 1;
+}
+
+.menu-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8rpx;
+}
+
+.rule-category {
+  height: 34rpx;
+  line-height: 34rpx;
+  padding: 0 14rpx;
+  border-radius: 999rpx;
+  background: #fff1e8;
+  color: #b86142;
+  font-size: 21rpx;
+  font-weight: 800;
+}
+
+.menu-arrow {
+  color: #c9b8ac;
+  font-size: 42rpx;
+  line-height: 34rpx;
+}
+
+.menu-title {
+  color: #1f2937;
+  font-size: 31rpx;
+  font-weight: 800;
+  margin-bottom: 8rpx;
+}
+
+.menu-tagline {
+  color: #6b7280;
+  font-size: 24rpx;
+  line-height: 1.45;
+}
