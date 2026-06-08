@@ -1,16 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 128">
   <defs>
-    <linearGradient id="body" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#eef8f1"/></linearGradient>
-    <linearGradient id="face" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fffdf7"/><stop offset="1" stop-color="#fff5e9"/></linearGradient>
-    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#9ab3a0" flood-opacity="0.32"/></filter>
+    <linearGradient id="body" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="0.6" stop-color="#f7fbf8"/><stop offset="1" stop-color="#dceee3"/></linearGradient>
+    <linearGradient id="face" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fffdf7"/><stop offset="1" stop-color="#f7efe2"/></linearGradient>
+    <filter id="shadow" x="-15%" y="-15%" width="130%" height="140%"><feDropShadow dx="0" dy="3" stdDeviation="2.2" flood-color="#5b6f61" flood-opacity="0.22"/></filter>
   </defs>
-  <rect x="10" y="9" width="76" height="112" rx="18" fill="#cfe8d9" opacity="0.9"/>
-  <rect x="8" y="5" width="76" height="112" rx="18" fill="url(#body)" stroke="#b9d9c9" stroke-width="2.4" filter="url(#softShadow)"/>
-  <rect x="16" y="15" width="60" height="88" rx="14" fill="url(#face)" stroke="#f1dfc9" stroke-width="1.8"/>
-  <path d="M24 18c10 5 36 5 46 0" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" opacity="0.8"/>
-  <circle cx="23" cy="107" r="4" fill="#ffb4aa" opacity="0.65"/>
-  <circle cx="70" cy="26" r="3" fill="#ffb4aa" opacity="0.5"/>
-  <text x="46" y="48" text-anchor="middle" font-family="serif" font-size="27" font-weight="900" fill="#ef6b68">七</text>
-  <text x="46" y="82" text-anchor="middle" font-family="serif" font-size="31" font-weight="900" fill="#d74f54">萬</text>
-  <path d="M31 88c8 6 22 6 30 0" fill="none" stroke="#f7b0a6" stroke-width="4" stroke-linecap="round"/>
+  <rect x="11" y="10" width="76" height="112" rx="16" fill="#b8d9c7"/>
+  <rect x="8" y="5" width="76" height="112" rx="16" fill="url(#body)" stroke="#9ec4af" stroke-width="2.6" filter="url(#shadow)"/>
+  <rect x="15" y="13" width="62" height="92" rx="10" fill="url(#face)" stroke="#dccbb5" stroke-width="1.8"/>
+  <path d="M24 18h44" stroke="#ffffff" stroke-width="4" stroke-linecap="round" opacity="0.78"/>
+  <text x="46" y="47" text-anchor="middle" font-family="serif" font-size="30" font-weight="900" fill="#24313d">七</text>
+  <text x="46" y="83" text-anchor="middle" font-family="serif" font-size="34" font-weight="900" fill="#c93f3b">萬</text>
 </svg>
