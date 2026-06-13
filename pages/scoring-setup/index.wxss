@@ -153,3 +153,41 @@
   background: #fff1f2;
   color: #e11d48;
 }
+
+.fee-card {
+  background: #ffffff;
+  transition: opacity 0.2s ease;
+}
+
+.fee-card.fee-disabled {
+  background: #f8f9fb;
+}
+
+.fee-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18rpx;
+}
+
+.fee-title {
+  margin-bottom: 8rpx;
+}
+
+.fee-subtitle {
+  color: #6b7280;
+  font-size: 25rpx;
+  line-height: 1.45;
+}
+
+.fee-check-group {
+  flex-shrink: 0;
+}
+
+.fee-check {
+  width: 64rpx;
+  height: 64rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

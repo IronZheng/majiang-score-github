@@ -197,6 +197,79 @@
   justify-content: center;
 }
 
+.table-fee-card {
+  background: #ffffff;
+}
+
+.fee-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20rpx;
+  margin-bottom: 16rpx;
+}
+
+.fee-card-title {
+  margin-bottom: 6rpx;
+}
+
+.fee-card-subtitle {
+  color: #6b7280;
+  font-size: 25rpx;
+}
+
+.fee-amount {
+  min-width: 136rpx;
+  height: 70rpx;
+  padding: 0 18rpx;
+  border-radius: 20rpx;
+  background: #fff1e8;
+  color: #b86142;
+  font-size: 38rpx;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.fee-score-section {
+  margin-bottom: 16rpx;
+}
+
+.fee-ops {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 8rpx;
+}
+
+.fee-ops .score-btn {
+  height: 66rpx;
+  border-radius: 14rpx;
+  font-size: 26rpx;
+}
+
+.fee-record-list {
+  margin-top: 18rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.fee-record-row {
+  min-height: 58rpx;
+  padding: 8rpx 16rpx;
+  border-radius: 14rpx;
+  background: #fffaf6;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16rpx;
+  color: #374151;
+  font-size: 26rpx;
+  font-weight: 700;
+  box-sizing: border-box;
+}
+
 .action-row {
   display: flex;
   gap: 14rpx;

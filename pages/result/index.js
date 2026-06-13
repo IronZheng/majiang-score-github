@@ -45,6 +45,13 @@ Page({
 
     const history = getHistory();
     const record = history.find((item) => item.id === options.id) || history[0] || null;
+    if (record?.tableFee) {
+      record.tableFee = {
+        enabled: Boolean(record.tableFee.enabled),
+        score: Number(record.tableFee.score) || 0,
+        records: Array.isArray(record.tableFee.records) ? record.tableFee.records : []
+      };
+    }
     const avatarMap = {};
     (record?.players || []).forEach((p, i) => { avatarMap[p.id] = p.avatarUrl || AVATARS[i % AVATARS.length]; });
 

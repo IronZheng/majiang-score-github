@@ -28,5 +28,19 @@
     </block>
   </view>
 
+  <view class="card fee-card {{tableFeeEnabled ? '' : 'fee-disabled'}}">
+    <view class="fee-top">
+      <view>
+        <view class="title fee-title">台费</view>
+        <view class="fee-subtitle">勾选后计分页会显示独立台费栏目</view>
+      </view>
+      <checkbox-group class="fee-check-group" bindchange="onTableFeeChange">
+        <label class="fee-check">
+          <checkbox value="enabled" checked="{{tableFeeEnabled}}" color="#e49b73" />
+        </label>
+      </checkbox-group>
+    </view>
+  </view>
+
   <view class="primary-btn start-btn" bindtap="startGame">开始计分</view>
 </view>

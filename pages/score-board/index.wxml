@@ -42,6 +42,40 @@
     </view>
   </view>
 
+  <view class="card table-fee-card" wx:if="{{game.tableFee.enabled}}">
+    <view class="fee-card-head">
+      <view>
+        <view class="title fee-card-title">台费</view>
+        <view class="fee-card-subtitle">独立统计，不计入玩家分数</view>
+      </view>
+      <view class="fee-amount">{{game.tableFee.score}}</view>
+    </view>
+    <view class="score-section fee-score-section">
+      <view class="section-label plus-label">台费加分</view>
+      <view class="ops fee-ops">
+        <block wx:for="{{tableFeePlusDeltas}}" wx:key="*this">
+          <view class="score-btn plus" data-delta="{{item}}" bindtap="applyTableFeeDelta">+{{item}}</view>
+        </block>
+      </view>
+    </view>
+    <view class="score-section fee-score-section">
+      <view class="section-label minus-label">台费减分</view>
+      <view class="ops fee-ops">
+        <block wx:for="{{tableFeeMinusDeltas}}" wx:key="*this">
+          <view class="score-btn minus" data-delta="{{item}}" bindtap="applyTableFeeDelta">{{item}}</view>
+        </block>
+      </view>
+    </view>
+    <view class="fee-record-list" wx:if="{{game.tableFee.records.length}}">
+      <block wx:for="{{game.tableFee.records}}" wx:key="at" wx:for-item="feeRecord">
+        <view class="fee-record-row">
+          <text>第{{feeRecord.round}}回合</text>
+          <text>{{feeRecord.delta > 0 ? '+' : ''}}{{feeRecord.delta}}</text>
+        </view>
+      </block>
+    </view>
+  </view>
+
   <view class="action-row action-row-3">
     <view class="secondary-btn action-btn" bindtap="nextRound">下一回合</view>
     <view class="warn-btn action-btn" bindtap="resetGame">重置</view>

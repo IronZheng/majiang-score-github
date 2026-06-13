@@ -11,7 +11,9 @@ Page({
     roundList: [],
     avatars: playerAvatars,
     plusDeltas: [1, 2, 3, 4, 5, 8, 10, 20],
-    minusDeltas: [-1, -2, -3, -4, -5, -8, -10, -20]
+    minusDeltas: [-1, -2, -3, -4, -5, -8, -10, -20],
+    tableFeePlusDeltas: [1, 2, 3, 4, 5, 10],
+    tableFeeMinusDeltas: [-1, -2, -3, -4, -5, -10]
   },
   onShow() {
     share.enableShareMenu();
@@ -19,6 +21,12 @@ Page({
     const game = getCurrentGame();
     if (!game) return wx.navigateBack();
     if (!game.currentRound) game.currentRound = 1;
+    if (!game.tableFee) game.tableFee = { enabled: false, score: 0, records: [] };
+    game.tableFee = {
+      enabled: Boolean(game.tableFee.enabled),
+      score: Number(game.tableFee.score) || 0,
+      records: Array.isArray(game.tableFee.records) ? game.tableFee.records : []
+    };
     this.refreshView(game);
   },
   refreshView(game) {
@@ -40,6 +48,7 @@ Page({
     this.setData({ customSign: sign });
   },
   applyDelta(e) { this.applyScore(Number(e.currentTarget.dataset.delta)); },
+  applyTableFeeDelta(e) { this.applyTableFeeScore(Number(e.currentTarget.dataset.delta)); },
   applyCustom() {
     const raw = String(this.data.customDelta || '').trim();
     if (!/^\d+$/.test(raw) || Number(raw) === 0) {
@@ -63,6 +72,21 @@ Page({
       duration: 900
     });
   },
+  applyTableFeeScore(delta) {
+    if (!delta) return;
+    const game = this.data.game;
+    if (!game.tableFee || !game.tableFee.enabled) return;
+    game.tableFee.score = (Number(game.tableFee.score) || 0) + delta;
+    if (!Array.isArray(game.tableFee.records)) game.tableFee.records = [];
+    game.tableFee.records.push({ delta, round: game.currentRound, at: Date.now() });
+    saveCurrentGame(game);
+    this.refreshView(game);
+    wx.showToast({
+      title: delta > 0 ? '台费加分成功' : '台费减分成功',
+      icon: 'success',
+      duration: 900
+    });
+  },
   nextRound() {
     const game = this.data.game;
     game.currentRound += 1;
@@ -80,6 +104,10 @@ Page({
         const game = this.data.game;
         game.players = game.players.map((p) => ({ ...p, score: 0 }));
         game.rounds = [];
+        if (game.tableFee) {
+          game.tableFee.score = 0;
+          game.tableFee.records = [];
+        }
         game.currentRound = 1;
         saveCurrentGame(game);
         this.setData({ activeIndex: 0, customDelta: '' });
@@ -90,7 +118,15 @@ Page({
   endGame() {
     const game = this.data.game;
     const ranking = game.players.slice().sort((a, b) => b.score - a.score);
-    const record = { id: `${Date.now()}`, finishedAt: Date.now(), players: game.players, ranking, rounds: game.rounds, totalRounds: game.currentRound };
+    const record = {
+      id: `${Date.now()}`,
+      finishedAt: Date.now(),
+      players: game.players,
+      ranking,
+      rounds: game.rounds,
+      totalRounds: game.currentRound,
+      tableFee: game.tableFee || { enabled: false, score: 0, records: [] }
+    };
     addHistory(record);
     clearCurrentGame();
     wx.navigateTo({ url: `/pages/result/index?id=${record.id}` });

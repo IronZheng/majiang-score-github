@@ -9,6 +9,14 @@
     </block>
   </view>
 
+  <view class="card table-fee-card" wx:if="{{record.tableFee && record.tableFee.enabled}}">
+    <view class="title">台费统计</view>
+    <view class="table-fee-total">
+      <text>累计台费</text>
+      <text>{{record.tableFee.score}} 分</text>
+    </view>
+  </view>
+
   <view class="card detail-card">
     <view class="title">📒 每轮得分详情</view>
     <block wx:for="{{roundList}}" wx:key="round" wx:for-item="roundItem">

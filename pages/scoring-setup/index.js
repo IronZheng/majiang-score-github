@@ -30,7 +30,8 @@ Page({
     playerCount: 4,
     setupSeed: defaultProfiles.getLocalProfileSeed(),
     players: createPlayers(4, defaultProfiles.getLocalProfileSeed()),
-    avatars: playerAvatars
+    avatars: playerAvatars,
+    tableFeeEnabled: false
   },
   syncPlayers(count) {
     const players = this.data.players.slice(0, count);
@@ -65,6 +66,9 @@ Page({
     players[index].name = name || defaultProfiles.createPlayerProfile(this.data.setupSeed, Number(index)).name;
     this.setData({ players });
   },
+  onTableFeeChange(e) {
+    this.setData({ tableFeeEnabled: (e.detail.value || []).includes('enabled') });
+  },
   startGame() {
     const players = this.data.players.map((p, i) => {
       const profile = defaultProfiles.createPlayerProfile(this.data.setupSeed, i);
@@ -75,7 +79,17 @@ Page({
         score: 0
       };
     });
-    saveCurrentGame({ players, rounds: [], currentRound: 1, createdAt: Date.now() });
+    saveCurrentGame({
+      players,
+      rounds: [],
+      currentRound: 1,
+      createdAt: Date.now(),
+      tableFee: {
+        enabled: Boolean(this.data.tableFeeEnabled),
+        score: 0,
+        records: []
+      }
+    });
     wx.navigateTo({ url: '/pages/score-board/index' });
   },
   onShareAppMessage() {
