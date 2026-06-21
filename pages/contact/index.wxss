@@ -1,0 +1,397 @@
+page {
+  padding-bottom: 0;
+  background: #fffaf6;
+}
+
+.contact-page {
+  padding: 28rpx 28rpx calc(56rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+}
+
+.hero-card {
+  position: relative;
+  overflow: hidden;
+  min-height: 330rpx;
+  padding: 38rpx 34rpx;
+  border-radius: 30rpx;
+  background: linear-gradient(145deg, #b95f3a 0%, #d87e53 48%, #e9a17b 100%);
+  color: #ffffff;
+  box-shadow: 0 22rpx 48rpx rgba(185, 95, 58, 0.24);
+  box-sizing: border-box;
+}
+
+.hero-orbit {
+  position: absolute;
+  border: 2rpx solid rgba(255, 255, 255, 0.12);
+  border-radius: 999rpx;
+}
+
+.hero-orbit-one {
+  width: 310rpx;
+  height: 310rpx;
+  right: -148rpx;
+  top: -130rpx;
+}
+
+.hero-orbit-two {
+  width: 168rpx;
+  height: 168rpx;
+  right: 38rpx;
+  bottom: -92rpx;
+}
+
+.hero-badge {
+  position: relative;
+  z-index: 1;
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 21rpx;
+  font-weight: 800;
+  letter-spacing: 3rpx;
+}
+
+.hero-title {
+  position: relative;
+  z-index: 1;
+  margin-top: 26rpx;
+  font-size: 44rpx;
+  font-weight: 900;
+  line-height: 1.25;
+}
+
+.hero-desc {
+  position: relative;
+  z-index: 1;
+  max-width: 600rpx;
+  margin-top: 18rpx;
+  color: rgba(255, 255, 255, 0.84);
+  font-size: 27rpx;
+  line-height: 1.7;
+}
+
+.online-pill {
+  position: relative;
+  z-index: 1;
+  max-width: 100%;
+  min-height: 52rpx;
+  margin-top: 24rpx;
+  padding: 0 18rpx;
+  border-radius: 999rpx;
+  background: rgba(255, 255, 255, 0.14);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 23rpx;
+  display: inline-flex;
+  align-items: center;
+  gap: 10rpx;
+  box-sizing: border-box;
+}
+
+.online-dot {
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: 999rpx;
+  background: #c8f7d2;
+  box-shadow: 0 0 0 6rpx rgba(200, 247, 210, 0.13);
+  flex-shrink: 0;
+}
+
+.section-heading {
+  margin: 34rpx 4rpx 18rpx;
+}
+
+.section-title {
+  color: #1f2937;
+  font-size: 32rpx;
+  font-weight: 900;
+}
+
+.section-desc {
+  margin-top: 6rpx;
+  color: #969ca6;
+  font-size: 24rpx;
+}
+
+.native-contact-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14rpx;
+  margin-bottom: 24rpx;
+}
+
+.native-contact-button {
+  min-width: 0;
+  min-height: 214rpx;
+  margin: 0;
+  padding: 24rpx;
+  border: none;
+  border-radius: 24rpx;
+  text-align: left;
+  line-height: 1.3;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  box-sizing: border-box;
+}
+
+.native-contact-button::after {
+  border: none;
+}
+
+.native-contact-button:active {
+  transform: scale(0.98);
+  opacity: 0.86;
+}
+
+.feedback-button {
+  background: #fff0e8;
+  color: #9b4f31;
+}
+
+.cooperation-button {
+  background: #eef5ff;
+  color: #456f9b;
+}
+
+.button-icon {
+  width: 58rpx;
+  height: 58rpx;
+  border-radius: 19rpx;
+  background: rgba(255, 255, 255, 0.72);
+  font-size: 27rpx;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button-copy {
+  margin-top: 20rpx;
+  min-width: 0;
+}
+
+.button-title {
+  font-size: 29rpx;
+  font-weight: 900;
+}
+
+.button-desc {
+  margin-top: 8rpx;
+  color: rgba(55, 65, 81, 0.58);
+  font-size: 22rpx;
+  line-height: 1.5;
+}
+
+.button-arrow {
+  margin-top: auto;
+  align-self: flex-end;
+  font-size: 38rpx;
+  font-weight: 300;
+}
+
+.card {
+  padding: 28rpx;
+  border: 1rpx solid rgba(228, 155, 115, 0.11);
+  border-radius: 26rpx;
+  background: #ffffff;
+  box-shadow: 0 14rpx 36rpx rgba(228, 155, 115, 0.08);
+  box-sizing: border-box;
+}
+
+.direct-card {
+  margin-bottom: 24rpx;
+}
+
+.card-head {
+  margin-bottom: 22rpx;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18rpx;
+}
+
+.card-title {
+  color: #1f2937;
+  font-size: 31rpx;
+  font-weight: 900;
+}
+
+.card-subtitle {
+  margin-top: 6rpx;
+  color: #969ca6;
+  font-size: 23rpx;
+  line-height: 1.45;
+}
+
+.service-status,
+.placeholder-badge {
+  padding: 7rpx 14rpx;
+  border-radius: 999rpx;
+  background: #edf8f1;
+  color: #4f8766;
+  font-size: 21rpx;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.contact-row {
+  min-height: 100rpx;
+  padding: 14rpx 0;
+  border-bottom: 1rpx solid #f1eee9;
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  box-sizing: border-box;
+}
+
+.row-icon {
+  width: 58rpx;
+  height: 58rpx;
+  border-radius: 18rpx;
+  font-size: 23rpx;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.wechat-icon {
+  background: #edf8f1;
+  color: #4f8766;
+}
+
+.phone-icon {
+  background: #eef5ff;
+  color: #527aa5;
+}
+
+.row-copy {
+  flex: 1;
+  min-width: 0;
+}
+
+.row-label {
+  color: #9aa0aa;
+  font-size: 22rpx;
+}
+
+.row-value {
+  margin-top: 3rpx;
+  color: #303743;
+  font-size: 29rpx;
+  font-weight: 800;
+  word-break: break-all;
+}
+
+.row-action {
+  min-width: 86rpx;
+  height: 54rpx;
+  padding: 0 14rpx;
+  border-radius: 16rpx;
+  background: #fff2ea;
+  color: #b86640;
+  font-size: 23rpx;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.phone-action {
+  background: #eef5ff;
+  color: #527aa5;
+}
+
+.row-action:active {
+  opacity: 0.68;
+}
+
+.contact-note {
+  margin-top: 22rpx;
+  padding: 18rpx 20rpx;
+  border-radius: 18rpx;
+  background: #fffaf6;
+  color: #8b7569;
+  font-size: 23rpx;
+  line-height: 1.55;
+}
+
+.qr-card {
+  margin-bottom: 24rpx;
+}
+
+.qr-head {
+  align-items: center;
+}
+
+.placeholder-badge {
+  background: #fff4df;
+  color: #9b7130;
+}
+
+.qr-frame {
+  width: 380rpx;
+  height: 380rpx;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 16rpx;
+  border: 1rpx dashed #e1d4cb;
+  border-radius: 28rpx;
+  background: #fffdfb;
+  box-sizing: border-box;
+}
+
+.qr-frame:active {
+  opacity: 0.78;
+}
+
+.qr-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: 18rpx;
+}
+
+.qr-placeholder-tip {
+  margin-top: 20rpx;
+  color: #a18b7e;
+  font-size: 22rpx;
+  line-height: 1.55;
+  text-align: center;
+}
+
+.studio-note {
+  padding: 10rpx 8rpx 0;
+  color: #9b918a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14rpx;
+}
+
+.studio-note-mark {
+  width: 52rpx;
+  height: 52rpx;
+  border-radius: 17rpx;
+  background: #f3e8e1;
+  color: #b86640;
+  font-size: 26rpx;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.studio-note-title {
+  color: #746a64;
+  font-size: 24rpx;
+  font-weight: 800;
+}
+
+.studio-note-desc {
+  margin-top: 3rpx;
+  font-size: 20rpx;
+  line-height: 1.4;
+}

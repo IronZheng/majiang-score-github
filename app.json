@@ -3,11 +3,14 @@
   "pages": [
     "pages/scoring-setup/index",
     "pages/rules/index",
+    "pages/ai/index",
     "pages/rules-detail/index",
     "pages/score-board/index",
     "pages/result/index",
     "pages/login/index",
-    "pages/profile/index"
+    "pages/profile/index",
+    "pages/studio/index",
+    "pages/contact/index"
   ],
   "window": {
     "navigationBarTitleText": "麻将计分器",
@@ -30,6 +33,10 @@
       {
         "pagePath": "pages/rules/index",
         "text": "玩法"
+      },
+      {
+        "pagePath": "pages/ai/index",
+        "text": "AI"
       },
       {
         "pagePath": "pages/profile/index",

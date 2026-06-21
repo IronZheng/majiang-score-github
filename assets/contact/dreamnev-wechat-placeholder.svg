@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
+  <rect width="600" height="600" rx="44" fill="#fffaf6"/>
+  <rect x="26" y="26" width="548" height="548" rx="34" fill="none" stroke="#e7d8cf" stroke-width="4" stroke-dasharray="14 12"/>
+  <circle cx="300" cy="220" r="82" fill="#fff0e8"/>
+  <path d="M250 218c0-35 30-63 68-63s68 28 68 63-30 63-68 63c-9 0-18-2-26-5l-31 16 8-32c-12-11-19-26-19-42z" fill="#e49b73"/>
+  <circle cx="294" cy="215" r="7" fill="#fff"/>
+  <circle cx="340" cy="215" r="7" fill="#fff"/>
+  <text x="300" y="345" text-anchor="middle" fill="#8f5d45" font-size="36" font-weight="700" font-family="Arial, sans-serif">客服微信二维码</text>
+  <text x="300" y="395" text-anchor="middle" fill="#b08c79" font-size="27" font-family="Arial, sans-serif">正式发布前替换</text>
+  <rect x="192" y="435" width="216" height="58" rx="29" fill="#fff0e8"/>
+  <text x="300" y="474" text-anchor="middle" fill="#b86640" font-size="28" font-weight="700" font-family="Arial, sans-serif">dreamnev</text>
+</svg>

@@ -301,18 +301,43 @@
 
 .menu-card {
   padding: 8rpx 26rpx;
-  margin-top: 22rpx;
+  margin-top: 24rpx;
   margin-bottom: 0;
 }
 
 .menu-item {
   width: 100%;
   min-height: 96rpx;
+  padding: 18rpx 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-bottom: 1rpx solid #f1eee9;
   box-sizing: border-box;
+}
+
+.contact-menu-item {
+  position: relative;
+}
+
+.contact-hit-button {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+  opacity: 0;
+}
+
+.contact-hit-button::after {
+  border: 0;
 }
 
 .menu-item:last-child {
@@ -323,6 +348,8 @@
   display: flex;
   align-items: center;
   gap: 18rpx;
+  min-width: 0;
+  flex: 1;
 }
 
 .menu-symbol {
@@ -343,12 +370,31 @@
   color: #1f2937;
   font-size: 30rpx;
   font-weight: 700;
+  line-height: 1.35;
+}
+
+.menu-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+  min-width: 0;
+}
+
+.menu-subtitle {
+  color: #9da3ad;
+  font-size: 23rpx;
+  line-height: 1.35;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .menu-arrow {
   color: #c9b8ac;
   font-size: 32rpx;
   font-weight: 700;
+  margin-left: 16rpx;
+  flex-shrink: 0;
 }
 
 .container {

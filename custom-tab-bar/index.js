@@ -15,6 +15,12 @@ Component({
         activeIcon: '/assets/icons/rules-active.svg'
       },
       {
+        pagePath: '/pages/ai/index',
+        text: 'AI',
+        icon: '/assets/icons/ai.svg',
+        activeIcon: '/assets/icons/ai-active.svg'
+      },
+      {
         pagePath: '/pages/profile/index',
         text: '我的',
         icon: '/assets/icons/profile.svg',

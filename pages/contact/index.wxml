@@ -1,0 +1,115 @@
+<view class="contact-page">
+  <view class="hero-card">
+    <view class="hero-orbit hero-orbit-one"></view>
+    <view class="hero-orbit hero-orbit-two"></view>
+    <view class="hero-badge">BIT LIGHTYEAR STUDIO</view>
+    <view class="hero-title">你好，需要我们帮什么？</view>
+    <view class="hero-desc">
+      无论是使用中遇到问题，还是希望为企业定制 AI 与软件能力，都欢迎直接联系我们。
+    </view>
+    <view class="online-pill">
+      <view class="online-dot"></view>
+      <text>客服微信 dreamnev · 全天在线</text>
+    </view>
+  </view>
+
+  <view class="section-heading">
+    <view class="section-title">选择联系事项</view>
+    <view class="section-desc">使用微信原生客服，沟通更直接</view>
+  </view>
+
+  <view class="native-contact-grid">
+    <button
+      class="native-contact-button feedback-button"
+      open-type="contact"
+      session-from="source=profile_feedback"
+      show-message-card="true"
+      send-message-title="麻将计分器问题反馈"
+      send-message-path="/pages/contact/index"
+    >
+      <view class="button-icon">?</view>
+      <view class="button-copy">
+        <view class="button-title">反馈问题</view>
+        <view class="button-desc">功能异常、建议与体验反馈</view>
+      </view>
+      <view class="button-arrow">›</view>
+    </button>
+
+    <button
+      class="native-contact-button cooperation-button"
+      open-type="contact"
+      session-from="source=profile_cooperation"
+      show-message-card="true"
+      send-message-title="联系比特光年工作室"
+      send-message-path="/pages/contact/index"
+    >
+      <view class="button-icon">合</view>
+      <view class="button-copy">
+        <view class="button-title">联系合作</view>
+        <view class="button-desc">软件开发与企业 AI 定制</view>
+      </view>
+      <view class="button-arrow">›</view>
+    </button>
+  </view>
+
+  <view class="card direct-card">
+    <view class="card-head">
+      <view>
+        <view class="card-title">直接联系我们</view>
+        <view class="card-subtitle">原生客服不可用时，可通过以下方式联系</view>
+      </view>
+      <view class="service-status">全天在线</view>
+    </view>
+
+    <view class="contact-row">
+      <view class="row-icon wechat-icon">微</view>
+      <view class="row-copy">
+        <view class="row-label">客服微信</view>
+        <view class="row-value">{{wechat}}</view>
+      </view>
+      <view class="row-action" bindtap="copyWechat">复制</view>
+    </view>
+
+    <view class="contact-row">
+      <view class="row-icon phone-icon">电</view>
+      <view class="row-copy">
+        <view class="row-label">联系电话</view>
+        <view class="row-value">{{phone}}</view>
+      </view>
+      <view class="row-action phone-action" bindtap="callPhone">拨打</view>
+    </view>
+
+    <view class="contact-note">
+      添加微信时请备注“问题反馈”或“商务合作”，方便我们更快响应。
+    </view>
+  </view>
+
+  <view class="card qr-card">
+    <view class="card-head qr-head">
+      <view>
+        <view class="card-title">扫码添加微信</view>
+        <view class="card-subtitle">点击二维码可放大预览</view>
+      </view>
+      <view class="placeholder-badge" wx:if="{{qrIsPlaceholder}}">待替换</view>
+    </view>
+    <view class="qr-frame" bindtap="previewContactQr">
+      <image
+        class="qr-image"
+        src="{{qrImageSrc}}"
+        mode="aspectFit"
+        binderror="onQrError"
+      ></image>
+    </view>
+    <view class="qr-placeholder-tip" wx:if="{{qrIsPlaceholder}}">
+      当前为二维码占位图，正式发布前请替换为客服微信 dreamnev 的个人二维码。
+    </view>
+  </view>
+
+  <view class="studio-note">
+    <view class="studio-note-mark">B</view>
+    <view>
+      <view class="studio-note-title">比特光年工作室</view>
+      <view class="studio-note-desc">10 年以上互联网经验团队 · 软件开发与企业 AI 定制</view>
+    </view>
+  </view>
+</view>

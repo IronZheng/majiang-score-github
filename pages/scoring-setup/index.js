@@ -3,6 +3,8 @@ const share = require('../../utils/share');
 const playerAvatars = require('../../utils/player-avatars');
 const defaultProfiles = require('../../utils/default-profiles');
 
+const ADD_MY_GUIDE_DISMISSED_KEY = 'mj_add_my_guide_dismissed_v1';
+
 function createPlayer(index, seed) {
   const profile = defaultProfiles.createPlayerProfile(seed, index);
   return {
@@ -24,14 +26,23 @@ Page({
 
     const tabBar = this.getTabBar && this.getTabBar();
     if (tabBar) tabBar.setData({ selected: 0 });
+
+    this.setData({
+      showAddMyGuide: !wx.getStorageSync(ADD_MY_GUIDE_DISMISSED_KEY)
+    });
   },
   data: {
+    showAddMyGuide: false,
     presetCounts: [2, 3, 4],
     playerCount: 4,
     setupSeed: defaultProfiles.getLocalProfileSeed(),
     players: createPlayers(4, defaultProfiles.getLocalProfileSeed()),
     avatars: playerAvatars,
     tableFeeEnabled: false
+  },
+  dismissAddMyGuide() {
+    wx.setStorageSync(ADD_MY_GUIDE_DISMISSED_KEY, true);
+    this.setData({ showAddMyGuide: false });
   },
   syncPlayers(count) {
     const players = this.data.players.slice(0, count);

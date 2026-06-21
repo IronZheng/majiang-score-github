@@ -2,6 +2,88 @@
   font-size: 30rpx;
 }
 
+.add-my-guide {
+  position: relative;
+  min-height: 116rpx;
+  margin: 0 0 24rpx;
+  padding: 22rpx 72rpx 22rpx 22rpx;
+  border: 1rpx solid rgba(228, 155, 115, 0.18);
+  border-radius: 22rpx;
+  background: #fff4ed;
+  box-shadow: 0 12rpx 30rpx rgba(228, 155, 115, 0.12);
+  display: flex;
+  align-items: center;
+  gap: 18rpx;
+  box-sizing: border-box;
+}
+
+.guide-arrow {
+  position: absolute;
+  top: -14rpx;
+  right: 78rpx;
+  width: 26rpx;
+  height: 26rpx;
+  background: #fff4ed;
+  border-top: 1rpx solid rgba(228, 155, 115, 0.18);
+  border-left: 1rpx solid rgba(228, 155, 115, 0.18);
+  transform: rotate(45deg);
+}
+
+.guide-icon {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 18rpx;
+  background: #e49b73;
+  color: #ffffff;
+  font-size: 38rpx;
+  font-weight: 500;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 8rpx 18rpx rgba(228, 155, 115, 0.22);
+}
+
+.guide-copy {
+  flex: 1;
+  min-width: 0;
+}
+
+.guide-title {
+  color: #8f4f31;
+  font-size: 28rpx;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.guide-desc {
+  margin-top: 6rpx;
+  color: #9a6a54;
+  font-size: 24rpx;
+  line-height: 1.5;
+}
+
+.guide-close {
+  position: absolute;
+  top: 12rpx;
+  right: 14rpx;
+  width: 52rpx;
+  height: 52rpx;
+  border-radius: 999rpx;
+  color: #b98b74;
+  font-size: 38rpx;
+  font-weight: 300;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.guide-close:active {
+  background: rgba(228, 155, 115, 0.12);
+}
+
 .header-card {
   min-height: 168rpx;
   display: flex;

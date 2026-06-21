@@ -1,0 +1,124 @@
+<view class="studio-page">
+  <view class="studio-hero">
+    <view class="studio-head">
+      <view class="studio-logo">B</view>
+      <view class="studio-heading">
+        <view class="studio-kicker">比特光年工作室出品</view>
+        <view class="studio-title">软件开发与企业 AI 定制</view>
+      </view>
+    </view>
+    <view class="studio-summary">
+      团队成员均拥有 10 年以上互联网产品与工程经验，为企业提供从需求梳理、方案设计到开发落地和长期维护的完整服务。
+    </view>
+    <view class="studio-tags">
+      <text class="studio-tag">10+ 年经验</text>
+      <text class="studio-tag">企业级交付</text>
+      <text class="studio-tag">AI 定制开发</text>
+    </view>
+
+    <view class="studio-contact">
+      <view class="studio-contact-head">
+        <view class="studio-contact-dot"></view>
+        <text class="studio-contact-label">联系我们</text>
+      </view>
+      <view class="studio-contact-grid">
+        <view class="studio-contact-card wechat-card" bindtap="copyWechat">
+          <view class="studio-contact-icon wechat-icon">
+            <image class="studio-contact-icon-img" src="/assets/studio/icon-wechat.svg" mode="aspectFit"></image>
+          </view>
+          <view class="studio-contact-body">
+            <view class="studio-contact-type">微信</view>
+            <view class="studio-contact-value">{{wechat}}</view>
+          </view>
+          <view class="studio-contact-chip">复制</view>
+        </view>
+        <view class="studio-contact-card phone-card" bindtap="callPhone">
+          <view class="studio-contact-icon phone-icon">
+            <image class="studio-contact-icon-img" src="/assets/studio/icon-phone.svg" mode="aspectFit"></image>
+          </view>
+          <view class="studio-contact-body">
+            <view class="studio-contact-type">电话</view>
+            <view class="studio-contact-value">{{phone}}</view>
+          </view>
+          <view class="studio-contact-chip">拨打</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="content-card service-card-wrap">
+    <view class="section-head">
+      <view>
+        <view class="section-title">技术服务</view>
+        <view class="section-desc">AI 工作流 · 软件定制 · 企业系统</view>
+      </view>
+    </view>
+    <view class="service-grid">
+      <block wx:for="{{studioServices}}" wx:key="key" wx:for-item="service">
+        <view class="service-card">
+          <view class="service-card-top">
+            <view class="service-card-icon">
+              <image class="service-card-icon-img" src="{{service.icon}}" mode="aspectFit"></image>
+            </view>
+            <view class="service-card-title">{{service.title}}</view>
+          </view>
+          <view class="service-card-tags">
+            <text
+              wx:for="{{service.tags}}"
+              wx:key="*this"
+              wx:for-item="tag"
+              class="service-card-tag"
+            >{{tag}}</text>
+          </view>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <view class="content-card">
+    <view class="section-head">
+      <view>
+        <view class="section-title">我们的产品</view>
+        <view class="section-desc">从真实需求出发，持续打磨实用产品</view>
+      </view>
+    </view>
+    <view class="product-list">
+      <block wx:for="{{studioProducts}}" wx:key="id" wx:for-item="product">
+        <view
+          class="product-row {{product.placeholder ? 'product-placeholder' : ''}}"
+          data-index="{{index}}"
+          bindtap="openProduct"
+        >
+          <view class="product-icon">{{product.icon}}</view>
+          <view class="product-copy">
+            <view class="product-name-row">
+              <text class="product-name">{{product.name}}</text>
+              <text class="product-status">{{product.status}}</text>
+            </view>
+            <view class="product-desc">{{product.desc}}</view>
+          </view>
+          <text class="product-arrow">›</text>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <view class="contact-entry">
+    <view class="contact-icon">聊</view>
+    <view class="contact-copy">
+      <view class="contact-title">联系客服</view>
+      <view class="contact-desc">问题反馈、商务合作，点击直接开始聊天</view>
+    </view>
+    <text class="contact-arrow">›</text>
+    <button
+      class="contact-hit-button"
+      open-type="contact"
+      session-from="source=studio_contact"
+      show-message-card="true"
+      send-message-title="联系比特光年工作室"
+      send-message-path="/pages/contact/index"
+    ></button>
+  </view>
+
+  <view class="studio-footer">比特光年工作室出品</view>
+</view>

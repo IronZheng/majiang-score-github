@@ -1,0 +1,66 @@
+<view class="container">
+  <view class="hero">
+    <view class="eyebrow">AI 出牌</view>
+    <view class="title">拍下手牌，帮你判断打哪张</view>
+    <view class="subtitle">只识别麻将手牌、牌桌和副露信息，其他图片不会分析。</view>
+  </view>
+
+  <view class="upload-panel">
+    <view class="panel-head">
+      <view class="section-title">上传手牌</view>
+      <view class="section-note">横向拍清楚手牌，碰杠吃的牌也尽量拍进去</view>
+    </view>
+
+    <view class="upload-area" wx:if="{{!imageUrl}}" bindtap="chooseImage">
+      <view class="camera-mark">拍</view>
+      <view class="upload-text">选择照片或拍照</view>
+      <view class="upload-hint">只支持麻将牌面分析</view>
+    </view>
+
+    <view class="image-preview" wx:else>
+      <image src="{{imageUrl}}" mode="aspectFit" class="preview-image"></image>
+      <button class="remove-image" bindtap="deleteImage">删除</button>
+    </view>
+  </view>
+
+  <view class="input-panel">
+    <view class="panel-head">
+      <view class="section-title">补充说明</view>
+      <view class="section-note">写玩法、缺门、已碰杠、别人打过的关键牌</view>
+    </view>
+    <textarea
+      class="input-box"
+      placeholder="例如：四川血流，缺筒；碰过红中，想知道现在打哪张更稳。"
+      value="{{userInput}}"
+      bindinput="onInputChange"
+      maxlength="500"
+      auto-height
+    ></textarea>
+  </view>
+
+  <view class="actions">
+    <button class="analyze-btn {{loading ? 'is-disabled' : ''}}" bindtap="callAI" loading="{{loading}}" disabled="{{loading}}">
+      {{loading ? '正在分析' : '分析出牌'}}
+    </button>
+    <button class="clear-btn {{loading ? 'is-disabled' : ''}}" bindtap="clearChat" disabled="{{loading}}">清空</button>
+  </view>
+
+  <view class="loading-section" wx:if="{{loading && !aiResponse}}">
+    <view class="loading-dot"></view>
+    <view class="loading-text">正在识别牌面和听牌方向</view>
+  </view>
+
+  <view class="response-section" wx:if="{{aiResponse}}">
+    <view class="section-title">分析建议</view>
+    <view class="response-box">
+      <text class="response-text">{{aiResponse}}</text>
+    </view>
+  </view>
+
+  <view class="tips-section">
+    <view class="tips-title">拍照建议</view>
+    <view class="tip-item">手牌从左到右排开，别遮住数字、花色和字牌。</view>
+    <view class="tip-item">如果有本地规则，写在补充说明里，建议会更准。</view>
+    <view class="tip-item">这里只做麻将出牌辅助，不能识别人物、证件或其他照片。</view>
+  </view>
+</view>

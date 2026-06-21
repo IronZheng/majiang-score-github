@@ -17,8 +17,29 @@
 }
 
 .detail-card,
+.table-fee-card,
 .share-card {
   background: #ffffff;
+}
+
+.table-fee-total {
+  min-height: 82rpx;
+  padding: 0 18rpx;
+  border-radius: 18rpx;
+  background: #fffaf6;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20rpx;
+  color: #374151;
+  font-size: 30rpx;
+  font-weight: 700;
+}
+
+.table-fee-total text:last-child {
+  color: #b86142;
+  font-size: 36rpx;
+  font-weight: 900;
 }
 
 .rank-row,

@@ -1,4 +1,14 @@
 <view class="container setup-page">
+  <view class="add-my-guide" wx:if="{{showAddMyGuide}}">
+    <view class="guide-arrow"></view>
+    <view class="guide-icon">+</view>
+    <view class="guide-copy">
+      <view class="guide-title">喜欢这个小程序？把它留下吧</view>
+      <view class="guide-desc">点右上角「···」，选择「添加到我的小程序」，下次开局不迷路</view>
+    </view>
+    <view class="guide-close" catchtap="dismissAddMyGuide" role="button" aria-label="关闭提示">×</view>
+  </view>
+
   <view class="card header-card">
     <view class="count-title">当前人数</view>
     <view class="count-badge">{{playerCount}} 人局</view>

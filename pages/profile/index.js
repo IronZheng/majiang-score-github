@@ -16,7 +16,7 @@ Page({
     share.enableShareMenu();
 
     const tabBar = this.getTabBar && this.getTabBar();
-    if (tabBar) tabBar.setData({ selected: 2 });
+    if (tabBar) tabBar.setData({ selected: 3 });
 
     const userInfo = this._getOrCreateUser();
 
@@ -178,19 +178,24 @@ Page({
   showAbout() {
     wx.showModal({
       title: '小程序说明',
-      content: '麻将计分器是一款轻量的本地计分工具，支持多人开局、回合加减分、历史记录查看和战绩海报生成，方便朋友聚会时快速记录每局得分。',
+      content: '麻将计分器适合朋友聚会、家庭牌局等场景使用。你可以快速设置玩家，记录每局加减分，按需单独统计台费，并在历史记录中回看每次结果。数据主要保存在本机，轻量、简单，不需要复杂登录。',
       showCancel: false,
       confirmText: '知道了'
     });
   },
 
-  showFeedback() {
+  showAddMyGuide() {
     wx.showModal({
-      title: '意见反馈',
-      content: '如有问题或建议，欢迎添加微信：dreamnev',
+      title: '添加到我的小程序',
+      content: '点击页面右上角「···」，选择「添加到我的小程序」。以后在微信首页下拉，就能快速找到麻将计分器。',
       showCancel: false,
-      confirmText: '知道了'
+      confirmText: '知道了',
+      confirmColor: '#e49b73'
     });
+  },
+
+  openStudio() {
+    wx.navigateTo({ url: '/pages/studio/index' });
   },
 
   onShareAppMessage() {
