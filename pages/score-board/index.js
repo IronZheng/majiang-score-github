@@ -13,7 +13,8 @@ Page({
     plusDeltas: [1, 2, 3, 4, 5, 8, 10, 20],
     minusDeltas: [-1, -2, -3, -4, -5, -8, -10, -20],
     tableFeePlusDeltas: [1, 2, 3, 4, 5, 10],
-    tableFeeMinusDeltas: [-1, -2, -3, -4, -5, -10]
+    tableFeeMinusDeltas: [-1, -2, -3, -4, -5, -10],
+    undoStack: []
   },
   onShow() {
     share.enableShareMenu();
@@ -63,9 +64,14 @@ Page({
     const p = game.players[this.data.activeIndex];
     p.score += delta;
     game.rounds.push({ playerId: p.id, playerName: p.name, playerAvatar: p.avatarUrl, delta, round: game.currentRound, at: Date.now() });
+    // 撤销栈：记录操作类型、玩家index、分值
+    const undoStack = this.data.undoStack;
+    undoStack.push({ type: 'player', index: this.data.activeIndex, delta, round: game.currentRound });
+    if (undoStack.length > 30) undoStack.shift();
     saveCurrentGame(game);
-    this.setData({ customDelta: '' });
+    this.setData({ customDelta: '', undoStack });
     this.refreshView(game);
+    wx.vibrateShort({ type: 'medium' });
     wx.showToast({
       title: delta > 0 ? '加分成功' : '减分成功',
       icon: 'success',
@@ -79,8 +85,13 @@ Page({
     game.tableFee.score = (Number(game.tableFee.score) || 0) + delta;
     if (!Array.isArray(game.tableFee.records)) game.tableFee.records = [];
     game.tableFee.records.push({ delta, round: game.currentRound, at: Date.now() });
+    const undoStack = this.data.undoStack;
+    undoStack.push({ type: 'tableFee', delta, round: game.currentRound });
+    if (undoStack.length > 30) undoStack.shift();
     saveCurrentGame(game);
+    this.setData({ undoStack });
     this.refreshView(game);
+    wx.vibrateShort({ type: 'medium' });
     wx.showToast({
       title: delta > 0 ? '台费加分成功' : '台费减分成功',
       icon: 'success',
@@ -92,7 +103,44 @@ Page({
     game.currentRound += 1;
     saveCurrentGame(game);
     this.refreshView(game);
+    wx.vibrateShort({ type: 'heavy' });
     wx.showToast({ title: `进入第${game.currentRound}回合`, icon: 'none' });
+  },
+  undoLast() {
+    const undoStack = this.data.undoStack;
+    if (!undoStack.length) {
+      wx.showToast({ title: '没有可撤销的操作', icon: 'none' });
+      return;
+    }
+    const game = this.data.game;
+    const action = undoStack.pop();
+    if (action.type === 'player') {
+      const p = game.players[action.index];
+      p.score -= action.delta;
+      // 移除对应的 rounds 记录（从后往前找最近的匹配）
+      for (let i = game.rounds.length - 1; i >= 0; i--) {
+        const r = game.rounds[i];
+        if (r.playerId === p.id && r.delta === action.delta && r.round === action.round) {
+          game.rounds.splice(i, 1);
+          break;
+        }
+      }
+    } else if (action.type === 'tableFee') {
+      game.tableFee.score = (Number(game.tableFee.score) || 0) - action.delta;
+      // 移除对应的台费记录
+      const records = game.tableFee.records;
+      for (let i = records.length - 1; i >= 0; i--) {
+        if (records[i].delta === action.delta && records[i].round === action.round) {
+          records.splice(i, 1);
+          break;
+        }
+      }
+    }
+    saveCurrentGame(game);
+    this.setData({ undoStack });
+    this.refreshView(game);
+    wx.vibrateShort({ type: 'medium' });
+    wx.showToast({ title: '已撤销', icon: 'success', duration: 900 });
   },
   resetGame() {
     wx.showModal({
@@ -110,8 +158,9 @@ Page({
         }
         game.currentRound = 1;
         saveCurrentGame(game);
-        this.setData({ activeIndex: 0, customDelta: '' });
+        this.setData({ activeIndex: 0, customDelta: '', undoStack: [] });
         this.refreshView(game);
+        wx.vibrateShort({ type: 'heavy' });
       }
     });
   },

@@ -78,6 +78,7 @@
 
   <view class="action-row action-row-3">
     <view class="secondary-btn action-btn" bindtap="nextRound">下一回合</view>
+    <view class="undo-btn action-btn {{undoStack.length ? '' : 'undo-disabled'}}" bindtap="undoLast">撤销</view>
     <view class="warn-btn action-btn" bindtap="resetGame">重置</view>
     <view class="danger-btn action-btn" bindtap="endGame">结束计分</view>
   </view>

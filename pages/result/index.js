@@ -62,7 +62,16 @@ Page({
     });
     const roundList = Object.keys(map).map((round) => ({ round: Number(round), scores: map[round] })).sort((a, b) => a.round - b.round);
     const posterHeight = calcPosterHeight(roundList);
-    this.setData({ record, roundList, posterHeight });
+
+    // 计算对局统计
+    const stats = this.calcStats(record, roundList);
+    const chartHeight = 400 + Math.max(roundList.length, 1) * 36;
+
+    this.setData({ record, roundList, posterHeight, stats, chartHeight });
+    // 统计图延迟绘制（等待 canvas 渲染）
+    if (stats) {
+      setTimeout(() => this.drawStatsChart(stats), 300);
+    }
   },
   onShareAppMessage() {
     return share.appMessage({
@@ -319,5 +328,179 @@ Page({
     drawCenteredText('麻将计分器', CANVAS_WIDTH / 2, y + 416, 21, palette.accentDeep, heroW - 80);
 
     ctx.draw(false, () => setTimeout(done, 200));
+  },
+  calcStats(record, roundList) {
+    const players = record.players || [];
+    const rounds = record.rounds || [];
+    if (!players.length || !roundList.length) return null;
+
+    // 胜负差
+    const ranking = record.ranking || players.slice().sort((a, b) => b.score - a.score);
+    const gap = (ranking[0]?.score || 0) - (ranking[ranking.length - 1]?.score || 0);
+
+    // 每位玩家每回合的分数变化，用于计算稳定度和走势
+    const playerScoresPerRound = {};
+    players.forEach((p) => { playerScoresPerRound[p.id] = { name: p.name, avatarUrl: p.avatarUrl, totals: [], deltas: [] }; });
+
+    // 按回合顺序累计分数
+    roundList.forEach((roundItem) => {
+      players.forEach((p) => {
+        const prev = playerScoresPerRound[p.id].totals.length
+          ? playerScoresPerRound[p.id].totals[playerScoresPerRound[p.id].totals.length - 1]
+          : 0;
+        const delta = roundItem.scores
+          .filter((s) => s.playerId === p.id)
+          .reduce((sum, s) => sum + s.delta, 0);
+        playerScoresPerRound[p.id].totals.push(prev + delta);
+        playerScoresPerRound[p.id].deltas.push(delta);
+      });
+    });
+
+    // 走势数据
+    const trendLabels = roundList.map((r) => `R${r.round}`);
+    const trendSeries = players.map((p) => ({
+      name: p.name,
+      data: playerScoresPerRound[p.id].totals
+    }));
+
+    // 手气最佳：单回合 delta 最大的玩家
+    let bestRound = null;
+    let bestRoundDelta = -Infinity;
+    rounds.forEach((r) => {
+      if (r.delta > bestRoundDelta) {
+        bestRoundDelta = r.delta;
+        bestRound = { ...r, round: r.round };
+      }
+    });
+
+    // 最稳选手：每回合delta的方差最小
+    let mostStable = null;
+    let minVariance = Infinity;
+    players.forEach((p) => {
+      const deltas = playerScoresPerRound[p.id].deltas;
+      if (!deltas.length) return;
+      const mean = deltas.reduce((a, b) => a + b, 0) / deltas.length;
+      const variance = deltas.reduce((a, b) => a + (b - mean) * (b - mean), 0) / deltas.length;
+      if (variance < minVariance) {
+        minVariance = variance;
+        mostStable = { name: p.name, variance: Math.round(variance * 10) / 10 };
+      }
+    });
+
+    return {
+      gap,
+      bestRound,
+      mostStable,
+      trendLabels,
+      trendSeries,
+      playerCount: players.length,
+      totalRounds: record.totalRounds || roundList.length
+    };
+  },
+  drawStatsChart(stats) {
+    if (!stats || !stats.trendSeries.length) return;
+
+    const ctx = wx.createCanvasContext('statsCanvas', this);
+    const width = 670;
+    const margin = { top: 60, right: 30, bottom: 50, left: 60 };
+    const chartW = width - margin.left - margin.right;
+    const chartH = 320;
+    const height = margin.top + chartH + margin.bottom;
+
+    const colors = ['#e49b73', '#5f8f6a', '#6b8fcf', '#c66d61', '#8a7bd6', '#d4a900', '#4dacb8', '#c98fba'];
+
+    // 背景
+    ctx.setFillStyle('#ffffff');
+    ctx.fillRect(0, 0, width, height);
+
+    // 计算Y轴范围
+    let yMin = Infinity, yMax = -Infinity;
+    stats.trendSeries.forEach((s) => {
+      s.data.forEach((v) => {
+        if (v < yMin) yMin = v;
+        if (v > yMax) yMax = v;
+      });
+    });
+    if (yMin === yMax) { yMin -= 10; yMax += 10; }
+    const yRange = yMax - yMin || 1;
+    const yTickCount = 5;
+    const xStep = stats.trendLabels.length > 1 ? chartW / (stats.trendLabels.length - 1) : chartW;
+
+    // Y轴刻度和网格线
+    ctx.setStrokeStyle('#f0e8e2');
+    ctx.setLineWidth(1);
+    ctx.setFontSize(18);
+    ctx.setFillStyle('#9ca3af');
+    for (let i = 0; i <= yTickCount; i++) {
+      const val = yMin + (yRange / yTickCount) * i;
+      const y = margin.top + chartH - (chartH / yTickCount) * i;
+      ctx.beginPath();
+      ctx.moveTo(margin.left, y);
+      ctx.lineTo(margin.left + chartW, y);
+      ctx.stroke();
+      ctx.setTextAlign('right');
+      ctx.fillText(Math.round(val).toString(), margin.left - 12, y + 6);
+    }
+
+    // X轴标签
+    ctx.setTextAlign('center');
+    ctx.setFillStyle('#9ca3af');
+    stats.trendLabels.forEach((label, i) => {
+      const x = margin.left + xStep * i;
+      ctx.fillText(label, x, margin.top + chartH + 32);
+    });
+
+    // 绘制折线
+    stats.trendSeries.forEach((series, si) => {
+      const color = colors[si % colors.length];
+      ctx.setStrokeStyle(color);
+      ctx.setLineWidth(3);
+      ctx.setLineCap('round');
+      ctx.setLineJoin('round');
+
+      ctx.beginPath();
+      series.data.forEach((val, i) => {
+        const x = margin.left + xStep * i;
+        const y = margin.top + chartH - ((val - yMin) / yRange) * chartH;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.stroke();
+
+      // 数据点
+      series.data.forEach((val, i) => {
+        const x = margin.left + xStep * i;
+        const y = margin.top + chartH - ((val - yMin) / yRange) * chartH;
+        ctx.setFillStyle(color);
+        ctx.beginPath();
+        ctx.arc(x, y, 5, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.setFillStyle('#ffffff');
+        ctx.beginPath();
+        ctx.arc(x, y, 2.5, 0, 2 * Math.PI);
+        ctx.fill();
+      });
+    });
+
+    ctx.draw();
+
+    // 图例区域
+    const legendY = margin.top + chartH + 50;
+    ctx.setFontSize(20);
+    ctx.setTextAlign('left');
+    const legendW = width / Math.min(stats.trendSeries.length, 4);
+    stats.trendSeries.forEach((series, si) => {
+      const color = colors[si % colors.length];
+      const col = si % 4;
+      const row = Math.floor(si / 4);
+      const lx = col * legendW + 26;
+      const ly = legendY + row * 34;
+      ctx.setFillStyle(color);
+      ctx.fillRect(lx, ly - 12, 18, 18);
+      ctx.setFillStyle('#374151');
+      ctx.fillText(series.name, lx + 28, ly + 4);
+    });
+
+    this.setData({ chartTotalHeight: height + Math.ceil(stats.trendSeries.length / 4) * 34 + 16 });
   }
 });
