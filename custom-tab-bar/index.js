@@ -15,10 +15,10 @@ Component({
         activeIcon: '/assets/icons/rules-active.svg'
       },
       {
-        pagePath: '/pages/ai/index',
-        text: 'AI',
-        icon: '/assets/icons/ai.svg',
-        activeIcon: '/assets/icons/ai-active.svg'
+        pagePath: '/pages/game-quiz/index',
+        text: '牌技',
+        icon: '/assets/icons/quiz.svg',
+        activeIcon: '/assets/icons/quiz-active.svg'
       },
       {
         pagePath: '/pages/profile/index',

@@ -34,20 +34,6 @@
         <text class="stat-value">{{stats.mostStable.name}}</text>
       </view>
     </view>
-    <!-- 折线图 -->
-    <view class="chart-section" wx:if="{{stats.trendSeries.length}}">
-      <view class="chart-title">分数走势</view>
-      <canvas
-        canvas-id="statsCanvas"
-        class="stats-chart-canvas"
-        style="width: 670rpx; height: {{chartTotalHeight || 420}}rpx;"
-      ></canvas>
-      <view class="chart-legend" wx:if="{{stats.trendSeries.length > 4}}">
-        <block wx:for="{{stats.trendSeries}}" wx:key="name" wx:for-item="series" wx:for-index="si">
-          <view class="legend-item legend-color-{{si % 8}}">{{series.name}}</view>
-        </block>
-      </view>
-    </view>
   </view>
 
   <view class="card detail-card">

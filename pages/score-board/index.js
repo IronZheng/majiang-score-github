@@ -100,6 +100,15 @@ Page({
   },
   nextRound() {
     const game = this.data.game;
+    const curRound = game.currentRound;
+    const hasPlayerScore = (game.rounds || []).some((r) => r.round === curRound);
+    const hasTableFee = game.tableFee && Array.isArray(game.tableFee.records)
+      ? game.tableFee.records.some((r) => r.round === curRound)
+      : false;
+    if (!hasPlayerScore && !hasTableFee) {
+      wx.showToast({ title: '本回合还没有计分', icon: 'none' });
+      return;
+    }
     game.currentRound += 1;
     saveCurrentGame(game);
     this.refreshView(game);

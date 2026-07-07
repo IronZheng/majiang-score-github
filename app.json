@@ -3,7 +3,7 @@
   "pages": [
     "pages/scoring-setup/index",
     "pages/rules/index",
-    "pages/ai/index",
+    "pages/game-quiz/index",
     "pages/rules-detail/index",
     "pages/score-board/index",
     "pages/result/index",
@@ -35,8 +35,8 @@
         "text": "玩法"
       },
       {
-        "pagePath": "pages/ai/index",
-        "text": "AI"
+        "pagePath": "pages/game-quiz/index",
+        "text": "牌技"
       },
       {
         "pagePath": "pages/profile/index",

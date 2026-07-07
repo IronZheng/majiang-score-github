@@ -1,0 +1,141 @@
+<view class="container">
+  <!-- Hero 状态卡片 -->
+  <view class="hero">
+    <view class="hero-top">
+      <view class="rank-badge rank-{{rankKey}} {{rankUpgraded ? 'pulse' : ''}}">
+        <view class="rank-name">{{rank}}</view>
+        <view class="rank-sub">段位</view>
+      </view>
+      <view class="hero-stats">
+        <view class="stat">
+          <view class="stat-num">{{totalScore}}</view>
+          <view class="stat-label">总积分</view>
+        </view>
+        <view class="stat">
+          <view class="stat-num">🔥 {{streak}}</view>
+          <view class="stat-label">连击</view>
+        </view>
+        <view class="stat">
+          <view class="stat-num">{{accuracyRate}}%</view>
+          <view class="stat-label">正确率</view>
+        </view>
+      </view>
+    </view>
+    <view class="hero-bottom">
+      <view class="progress-text">今日进度 {{answered ? activeIndex + 1 : activeIndex}}/{{totalCount}}</view>
+      <view class="progress-dots">
+        <view wx:for="{{dots}}" wx:key="index" class="dot {{item}}"></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 加载态 -->
+  <view wx:if="{{loading}}" class="loading-box">
+    <view class="loading-dot"></view>
+    <text class="loading-text">加载今日题目...</text>
+  </view>
+
+  <!-- 答题卡片 -->
+  <block wx:if="{{!loading && !completed && q.options.length > 0}}">
+    <view class="card q-card">
+      <view class="q-head">
+        <view class="q-type">{{q.typeLabel}}</view>
+        <view class="q-diff">{{q.stars}}</view>
+      </view>
+
+      <view class="q-text">{{q.text}}</view>
+
+      <view class="tile-row" wx:if="{{q.tiles.length > 0}}">
+        <image
+          wx:for="{{q.tiles}}"
+          wx:key="*this"
+          class="quiz-tile"
+          src="/assets/tiles/{{item}}.svg"
+          mode="aspectFit"
+        ></image>
+      </view>
+
+      <view class="q-context" wx:if="{{q.context}}">{{q.context}}</view>
+
+      <view class="options">
+        <view
+          wx:for="{{q.options}}"
+          wx:key="index"
+          class="option {{optionStates[index]}}"
+          data-index="{{index}}"
+          bindtap="onSelect"
+        >
+          <text class="option-letter">{{item.letter}}</text>
+          <text class="option-text">{{item.text}}</text>
+          <text class="option-mark" wx:if="{{answered && index === lastResult.correctIndex}}">✓</text>
+          <text class="option-mark wrong" wx:if="{{answered && index === selectedIndex && !isCorrect}}">✕</text>
+        </view>
+      </view>
+
+      <view class="explain" wx:if="{{answered}}">
+        <view class="explain-head {{isCorrect ? 'ok' : 'no'}}">
+          {{isCorrect ? '回答正确' : '回答错误'}}
+          <text class="explain-score"> {{lastResult.earnedScore}} 分</text>
+          <text wx:if="{{lastResult.streakBonus > 0}}" class="explain-bonus">（连击 +{{lastResult.streakBonus}}）</text>
+        </view>
+        <view class="explain-body">{{lastResult.explanation}}</view>
+        <button class="next-btn" bindtap="onNext">
+          {{lastResult.sessionCompleted ? '查看今日成绩' : '下一题'}}
+        </button>
+      </view>
+    </view>
+  </block>
+
+  <!-- 今日已完成（进入时已是完成态） -->
+  <block wx:if="{{!loading && completed && !showComplete}}">
+    <view class="card done-card">
+      <view class="done-emoji">🎉</view>
+      <view class="done-title">今日挑战已完成</view>
+      <view class="done-sub">你已答对 {{todayCorrect}}/{{totalCount}} 题，明天再来挑战吧！</view>
+      <view class="done-meta">
+        <view class="done-meta-item">
+          <view class="done-meta-num">{{totalScore}}</view>
+          <view class="done-meta-label">总积分</view>
+        </view>
+        <view class="done-meta-item">
+          <view class="done-meta-num">{{rank}}</view>
+          <view class="done-meta-label">当前段位</view>
+        </view>
+        <view class="done-meta-item">
+          <view class="done-meta-num">{{streak}}</view>
+          <view class="done-meta-label">连击</view>
+        </view>
+      </view>
+      <button class="next-btn" bindtap="openComplete">查看今日成绩</button>
+    </view>
+  </block>
+
+  <!-- 完成弹窗 -->
+  <view class="modal-mask" wx:if="{{showComplete}}" bindtap="closeComplete">
+    <view class="modal" catchtap="noop">
+      <view class="modal-rank rank-{{rankKey}}">{{rank}}</view>
+      <view class="modal-title">今日挑战完成！</view>
+      <view class="modal-score">本次答对 <text class="modal-score-num">{{todayCorrect}}/{{totalCount}}</text> 题</view>
+
+      <view class="modal-rows">
+        <view class="modal-row">
+          <text>答对题数</text>
+          <text class="modal-row-strong">{{todayCorrect}}/{{totalCount}}</text>
+        </view>
+        <view class="modal-row">
+          <text>当前连击</text>
+          <text class="modal-row-strong">🔥 {{streak}}</text>
+        </view>
+        <view class="modal-row">
+          <text>总积分</text>
+          <text class="modal-row-strong">{{totalScore}}</text>
+        </view>
+      </view>
+
+      <view class="modal-actions">
+        <button class="modal-share" open-type="share">分享战绩</button>
+        <button class="modal-close" bindtap="closeComplete">明天再来</button>
+      </view>
+    </view>
+  </view>
+</view>
