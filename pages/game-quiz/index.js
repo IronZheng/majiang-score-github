@@ -14,12 +14,11 @@ const RANK_KEYS = {
   '雀神': 'supreme'
 };
 
-const TOTAL_COUNT = 3;
-
 Page({
   data: {
     loading: true,
-    totalCount: TOTAL_COUNT,
+    totalCount: 0,
+    progressPercent: 0,
     activeIndex: 0,
 
     // 当前题目视图模型
@@ -36,8 +35,6 @@ Page({
     rank: '青铜',
     rankKey: 'bronze',
     accuracyRate: 0,
-    dots: ['current', 'todo', 'todo'],
-
     completed: false,
     alreadyDone: false,
     rankUpgraded: false,
@@ -82,8 +79,9 @@ Page({
           var today = res[0] || {};
           var progress = res[1] || {};
           var questions = today.questions || [];
+          var totalCount = questions.length;
           var completed = !!(today.completed);
-          var startIdx = Math.min(today.currentIndex || 0, TOTAL_COUNT - 1);
+          var startIdx = completed ? totalCount : Math.min(today.currentIndex || 0, Math.max(0, totalCount - 1));
           if (startIdx >= questions.length) startIdx = Math.max(0, questions.length - 1);
 
           that.setData({
@@ -91,6 +89,7 @@ Page({
             sessionId: today.sessionId,
             completed: completed,
             alreadyDone: completed,
+            totalCount: totalCount,
             totalScore: today.totalScore || progress.totalScore || 0,
             streak: progress.streak || 0,
             rank: today.rank || progress.rank || '青铜',
@@ -145,14 +144,9 @@ Page({
   },
 
   computeDots(activeIdx) {
-    var dots = [];
-    for (var i = 0; i < TOTAL_COUNT; i++) {
-      if (i < activeIdx) dots.push('done');
-      else if (i === activeIdx && !this.data.completed) dots.push('current');
-      else if (this.data.completed) dots.push('done');
-      else dots.push('todo');
-    }
-    this.setData({ dots: dots });
+    var total = this.data.totalCount || 0;
+    var percent = total > 0 ? Math.round((activeIdx / total) * 100) : 0;
+    this.setData({ progressPercent: percent });
   },
 
   onSelect(e) {
@@ -221,11 +215,16 @@ Page({
     this.setData({ showComplete: false });
   },
 
+  restartChallenge() {
+    this.setData({ showComplete: false, completed: false, alreadyDone: false });
+    this.loadData();
+  },
+
   noop() {},
 
   onShareAppMessage() {
     return {
-      title: '麻将计分器 · 牌技挑战，今日你答对了几题？',
+      title: '麻将计分器 · 牌技挑战，你答对了几题？',
       path: '/pages/game-quiz/index'
     };
   }
