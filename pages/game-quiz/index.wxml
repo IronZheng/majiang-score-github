@@ -46,7 +46,21 @@
       <view class="q-text">{{q.text}}</view>
       <view class="q-multihint" wx:if="{{q.multiSelect}}">本题为多选题，请选出所有正确听牌</view>
 
-      <view class="tile-row" wx:if="{{q.tiles.length > 0}}">
+      <!-- 完整手牌：按面子分组展示（每组间留间隔，体现吃/碰结构） -->
+      <view class="tile-groups" wx:if="{{q.groups.length > 0}}">
+        <view class="tile-group" wx:for="{{q.groups}}" wx:for-item="grp" wx:key="index">
+          <image
+            wx:for="{{grp}}"
+            wx:for-item="t"
+            wx:key="*this"
+            class="quiz-tile"
+            src="/assets/tiles/{{t}}.svg"
+            mode="aspectFit"
+          ></image>
+        </view>
+      </view>
+      <!-- 兜底：无分组时平铺 -->
+      <view class="tile-row" wx:elif="{{q.tiles.length > 0}}">
         <image
           wx:for="{{q.tiles}}"
           wx:key="*this"

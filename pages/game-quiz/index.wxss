@@ -184,7 +184,22 @@
   margin-bottom: 20rpx;
 }
 
-/* 牌面渲染：紧凑叠放，牌间距 -6rpx */
+/* 牌面渲染：按面子分组，组内紧凑叠放，组间留间隔 */
+.tile-groups {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14rpx 18rpx;
+  padding: 6rpx 6rpx 2rpx;
+  margin-bottom: 18rpx;
+  justify-content: center;
+}
+
+.tile-group {
+  display: flex;
+  align-items: center;
+}
+
 .tile-row {
   display: flex;
   flex-wrap: wrap;
@@ -194,11 +209,15 @@
 }
 
 .quiz-tile {
-  width: 56rpx;
-  height: 80rpx;
+  width: 54rpx;
+  height: 78rpx;
   margin-left: -6rpx;
   display: block;
   flex-shrink: 0;
+}
+
+.tile-group .quiz-tile:first-child {
+  margin-left: 0;
 }
 
 .q-context {

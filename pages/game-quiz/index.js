@@ -23,7 +23,7 @@ Page({
     activeIndex: 0,
 
     // 当前题目视图模型
-    q: { typeLabel: '', stars: '', text: '', tiles: [], context: '', options: [], multiSelect: false },
+    q: { typeLabel: '', stars: '', text: '', tiles: [], groups: [], context: '', options: [], multiSelect: false },
     optionStates: [],
     selectedIndices: [],
     answered: false,
@@ -132,6 +132,7 @@ Page({
         stars: '★'.repeat(item.difficulty || 1),
         text: q.text || '',
         tiles: q.tiles || [],
+        groups: q.groups || [],
         context: q.context || '',
         options: options,
         multiSelect: !!item.multiSelect
