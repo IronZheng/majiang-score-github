@@ -44,6 +44,7 @@
       </view>
 
       <view class="q-text">{{q.text}}</view>
+      <view class="q-multihint" wx:if="{{q.multiSelect}}">本题为多选题，请选出所有正确听牌</view>
 
       <view class="tile-row" wx:if="{{q.tiles.length > 0}}">
         <image
@@ -67,10 +68,12 @@
         >
           <text class="option-letter">{{item.letter}}</text>
           <text class="option-text">{{item.text}}</text>
-          <text class="option-mark" wx:if="{{answered && index === lastResult.correctIndex}}">✓</text>
-          <text class="option-mark wrong" wx:if="{{answered && index === selectedIndex && !isCorrect}}">✕</text>
+          <text class="option-mark" wx:if="{{answered && optionStates[index] === 'correct'}}">✓</text>
+          <text class="option-mark wrong" wx:if="{{answered && optionStates[index] === 'wrong'}}">✕</text>
         </view>
       </view>
+
+      <button class="confirm-btn" wx:if="{{q.multiSelect && !answered}}" bindtap="onConfirm">确定（已选 {{selectedIndices.length}} 项）</button>
 
       <view class="explain" wx:if="{{answered}}">
         <view class="explain-head {{isCorrect ? 'ok' : 'no'}}">

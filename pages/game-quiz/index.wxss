@@ -274,6 +274,42 @@
   opacity: 0.45;
 }
 
+.option.selected {
+  background: #fff4ea;
+  border-color: #e49b73;
+}
+
+/* 多选提示 */
+.q-multihint {
+  display: inline-block;
+  margin-bottom: 16rpx;
+  padding: 6rpx 18rpx;
+  border-radius: 12rpx;
+  background: #eaf3ff;
+  color: #2f7ac9;
+  font-size: 22rpx;
+  font-weight: 700;
+}
+
+/* 多选确定按钮 */
+.confirm-btn {
+  margin-top: 22rpx;
+  width: 100%;
+  height: 88rpx;
+  border-radius: 20rpx;
+  background: linear-gradient(145deg, #b95f3a 0%, #d87e53 48%, #e9a17b 100%);
+  color: #fff;
+  font-size: 29rpx;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+}
+
+.confirm-btn::after { border: none; }
+.confirm-btn:active { opacity: 0.86; }
+
 /* ============ 解析 ============ */
 .explain {
   margin-top: 24rpx;

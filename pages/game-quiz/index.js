@@ -3,7 +3,8 @@ const api = require('../../utils/api');
 const TYPE_LABELS = {
   tile_recognition: '牌型识别',
   score_calculation: '算番算分',
-  strategy: '策略选择'
+  strategy: '策略选择',
+  tingpai: '听牌挑战'
 };
 
 const RANK_KEYS = {
@@ -22,9 +23,9 @@ Page({
     activeIndex: 0,
 
     // 当前题目视图模型
-    q: { typeLabel: '', stars: '', text: '', tiles: [], context: '', options: [] },
+    q: { typeLabel: '', stars: '', text: '', tiles: [], context: '', options: [], multiSelect: false },
     optionStates: [],
-    selectedIndex: -1,
+    selectedIndices: [],
     answered: false,
     isCorrect: false,
     lastResult: null,
@@ -127,15 +128,16 @@ Page({
     });
     this.setData({
       q: {
-        typeLabel: TYPE_LABELS[item.type] || '挑战',
+        typeLabel: TYPE_LABELS[item.type] || '听牌挑战',
         stars: '★'.repeat(item.difficulty || 1),
         text: q.text || '',
         tiles: q.tiles || [],
         context: q.context || '',
-        options: options
+        options: options,
+        multiSelect: !!item.multiSelect
       },
       optionStates: options.map(function () { return ''; }),
-      selectedIndex: -1,
+      selectedIndices: [],
       answered: false,
       isCorrect: false,
       lastResult: null
@@ -149,27 +151,58 @@ Page({
     this.setData({ progressPercent: percent });
   },
 
+  // 选择选项：单选立即提交；多选切换选中态，等待"确定"
   onSelect(e) {
     if (this.data.answered || this.data.loading) return;
     var index = parseInt(e.currentTarget.dataset.index, 10);
+    var q = this.data.q;
+
+    if (!q.multiSelect) {
+      this.setData({ selectedIndices: [index] });
+      this.doSubmit([index]);
+      return;
+    }
+
+    var selected = this.data.selectedIndices.slice();
+    var pos = selected.indexOf(index);
+    if (pos >= 0) {
+      selected.splice(pos, 1);
+    } else {
+      selected.push(index);
+    }
+    var states = this.data.optionStates.map(function () { return ''; });
+    selected.forEach(function (i) { states[i] = 'selected'; });
+    this.setData({ selectedIndices: selected, optionStates: states });
+  },
+
+  // 多选模式下点击"确定"提交
+  onConfirm() {
+    if (this.data.answered || this.data.loading) return;
+    if (this.data.selectedIndices.length === 0) {
+      wx.showToast({ title: '请选择听牌', icon: 'none' });
+      return;
+    }
+    this.doSubmit(this.data.selectedIndices.slice());
+  },
+
+  doSubmit(indices) {
     var that = this;
     var questions = this.data.questions || [];
     var item = questions[this.data.activeIndex];
     if (!item) return;
 
-    this.setData({ selectedIndex: index });
-
     api.submitAnswer({
       openid: api.getOpenid(),
       sessionId: this.data.sessionId,
       questionId: item.id,
-      selectedIndex: index
+      selectedIndices: indices
     }).then(function (result) {
-      var states = that.data.optionStates.map(function () { return 'dim'; });
-      states[result.correctIndex] = 'correct';
-      if (index !== result.correctIndex) {
-        states[index] = 'wrong';
-      }
+      var correctArr = (result.correctIndices || '').split(',').map(function (s) { return parseInt(s, 10); }).filter(function (n) { return !isNaN(n); });
+      var states = that.data.optionStates.map(function (_, i) {
+        if (correctArr.indexOf(i) >= 0) return 'correct';
+        if (indices.indexOf(i) >= 0) return 'wrong';
+        return 'dim';
+      });
       that.setData({
         answered: true,
         isCorrect: !!result.correct,
@@ -224,7 +257,7 @@ Page({
 
   onShareAppMessage() {
     return {
-      title: '麻将计分器 · 牌技挑战，你答对了几题？',
+      title: '麻将听牌挑战，你能听对几张牌？',
       path: '/pages/game-quiz/index'
     };
   }
