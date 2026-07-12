@@ -4,6 +4,8 @@
     "pages/scoring-setup/index",
     "pages/rules/index",
     "pages/game-quiz/index",
+    "pages/challenge/index",
+    "pages/leaderboard/index",
     "pages/rules-detail/index",
     "pages/score-board/index",
     "pages/result/index",

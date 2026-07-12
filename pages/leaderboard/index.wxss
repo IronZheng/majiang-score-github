@@ -1,0 +1,284 @@
+.container {
+  min-height: 100vh;
+  padding: 0 28rpx 60rpx;
+  box-sizing: border-box;
+  background: linear-gradient(180deg, #2b1b3a 0%, #4a2a52 38%, #fdeee2 100%);
+}
+
+/* ===== 头部 ===== */
+.hero {
+  padding: 60rpx 0 36rpx;
+  text-align: center;
+  position: relative;
+}
+
+.hero-crown {
+  width: 64rpx;
+  height: 46rpx;
+  margin: 0 auto 18rpx;
+  background:
+    radial-gradient(circle at 16rpx 30rpx, #ffd66b 0 12rpx, transparent 13rpx),
+    radial-gradient(circle at 48rpx 22rpx, #ffd66b 0 14rpx, transparent 15rpx),
+    radial-gradient(circle at 80rpx 30rpx, #ffd66b 0 12rpx, transparent 13rpx),
+    linear-gradient(180deg, #ffe08a 0%, #f2b53c 100%);
+  border-radius: 8rpx 8rpx 6rpx 6rpx;
+  position: relative;
+  box-shadow: 0 6rpx 14rpx rgba(242, 181, 60, 0.4);
+}
+.hero-crown::after {
+  content: "";
+  position: absolute;
+  left: -8rpx;
+  right: -8rpx;
+  bottom: -8rpx;
+  height: 12rpx;
+  background: linear-gradient(180deg, #f2b53c, #d99327);
+  border-radius: 6rpx;
+}
+
+.hero-title {
+  font-size: 50rpx;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: 2rpx;
+  text-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.25);
+}
+
+.hero-sub {
+  margin-top: 14rpx;
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+/* ===== 我的成绩卡 ===== */
+.my-card {
+  display: flex;
+  align-items: center;
+  padding: 26rpx 28rpx;
+  border-radius: 24rpx;
+  background: linear-gradient(145deg, #ff9a5a 0%, #ff6f61 55%, #e2553f 100%);
+  box-shadow: 0 14rpx 32rpx rgba(226, 85, 63, 0.32);
+  position: relative;
+  margin-bottom: 26rpx;
+  animation: popIn 0.4s ease both;
+}
+
+.my-badge {
+  position: absolute;
+  top: -14rpx;
+  left: 24rpx;
+  background: #fff;
+  color: #e2553f;
+  font-size: 20rpx;
+  font-weight: 800;
+  padding: 4rpx 16rpx;
+  border-radius: 20rpx;
+  box-shadow: 0 4rpx 10rpx rgba(0, 0, 0, 0.15);
+}
+
+.my-avatar {
+  width: 92rpx;
+  height: 92rpx;
+  border-radius: 50%;
+  border: 4rpx solid rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.25);
+  font-size: 38rpx;
+  flex-shrink: 0;
+}
+
+.my-mid {
+  flex: 1;
+  margin-left: 22rpx;
+  color: #fff;
+}
+
+.my-name {
+  font-size: 34rpx;
+  font-weight: 900;
+}
+
+.my-meta {
+  margin-top: 6rpx;
+  font-size: 24rpx;
+  opacity: 0.9;
+}
+
+.my-right {
+  text-align: right;
+  color: #fff;
+}
+
+.my-rank {
+  font-size: 26rpx;
+  font-weight: 800;
+  opacity: 0.95;
+}
+
+.my-score {
+  margin-top: 6rpx;
+  font-size: 40rpx;
+  font-weight: 900;
+}
+
+/* ===== 榜单列表 ===== */
+.rank-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.rank-row {
+  display: flex;
+  align-items: center;
+  padding: 22rpx 24rpx;
+  border-radius: 20rpx;
+  background: #ffffff;
+  box-shadow: 0 8rpx 20rpx rgba(74, 42, 82, 0.12);
+  animation: slideUp 0.45s ease both;
+}
+
+.rank-row.top1 {
+  background: linear-gradient(135deg, #fff8e6 0%, #fff1cf 100%);
+  box-shadow: 0 10rpx 24rpx rgba(242, 181, 60, 0.28);
+}
+.rank-row.top2 {
+  background: linear-gradient(135deg, #f4f7fb 0%, #e7edf5 100%);
+}
+.rank-row.top3 {
+  background: linear-gradient(135deg, #fdf1e7 0%, #f6e0cd 100%);
+}
+
+.medal {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+  font-weight: 900;
+  color: #6b4a2a;
+  background: #f0e1d7;
+  flex-shrink: 0;
+  margin-right: 18rpx;
+}
+
+.medal-1 {
+  background: linear-gradient(145deg, #ffe08a 0%, #f2b53c 100%);
+  color: #7a4a00;
+  box-shadow: 0 4rpx 12rpx rgba(242, 181, 60, 0.5);
+}
+.medal-2 {
+  background: linear-gradient(145deg, #eef1f5 0%, #c7ced8 100%);
+  color: #4a4a4a;
+}
+.medal-3 {
+  background: linear-gradient(145deg, #f3c9a0 0%, #d99a63 100%);
+  color: #5a2c00;
+}
+
+.r-avatar {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  margin-right: 18rpx;
+  flex-shrink: 0;
+  background: #f0e1d7;
+  font-size: 30rpx;
+}
+
+.avatar-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8a3f24;
+  font-weight: 900;
+}
+
+.r-mid {
+  flex: 1;
+  min-width: 0;
+}
+
+.r-name {
+  font-size: 32rpx;
+  font-weight: 800;
+  color: #2b1b3a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.r-meta {
+  margin-top: 6rpx;
+  font-size: 24rpx;
+  color: #9a6f58;
+}
+
+.r-score {
+  font-size: 38rpx;
+  font-weight: 900;
+  color: #e2553f;
+  flex-shrink: 0;
+}
+
+.r-score-unit {
+  font-size: 22rpx;
+  font-weight: 700;
+  margin-left: 4rpx;
+}
+
+/* ===== 操作区 ===== */
+.actions {
+  margin-top: 40rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 18rpx;
+}
+
+.act {
+  height: 88rpx;
+  border-radius: 22rpx;
+  font-size: 30rpx;
+  font-weight: 800;
+  line-height: 88rpx;
+}
+
+.act.primary {
+  background: linear-gradient(145deg, #ff9a5a 0%, #e2553f 100%);
+  color: #fff;
+  box-shadow: 0 10rpx 24rpx rgba(226, 85, 63, 0.32);
+}
+
+.act.ghost {
+  background: rgba(255, 255, 255, 0.85);
+  color: #8a3f24;
+}
+
+/* ===== 其他 ===== */
+.empty {
+  margin: 80rpx 0;
+  text-align: center;
+  color: rgba(43, 27, 58, 0.65);
+  font-size: 28rpx;
+  background: rgba(255, 255, 255, 0.7);
+  padding: 50rpx 20rpx;
+  border-radius: 20rpx;
+}
+
+.loading-box {
+  margin-top: 100rpx;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 28rpx;
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.92) translateY(-10rpx); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(24rpx); }
+  to { opacity: 1; transform: translateY(0); }
+}

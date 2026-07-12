@@ -1,0 +1,73 @@
+<view class="container">
+  <!-- 顶部状态栏 -->
+  <view class="topbar">
+    <view class="lv">第 {{levelIndex + 1}}/{{totalLevels}} 关</view>
+    <view class="lives">
+      <text wx:for="{{[0,1,2]}}" wx:key="*this" class="heart {{index < lives ? 'on' : 'off'}}">❤</text>
+    </view>
+    <view class="timer {{timeLeft <= 10 ? 'warn' : ''}}">⏱ {{timeText}}</view>
+    <view class="exit" bindtap="onExit">退出</view>
+  </view>
+
+  <view class="scorebar">积分 {{score}}</view>
+
+  <view wx:if="{{loading}}" class="loading-box">加载中...</view>
+
+  <!-- 答题 -->
+  <block wx:if="{{!loading && !gameOver}}">
+    <view class="card q-card">
+      <view class="q-head">
+        <view class="q-type">{{q.typeLabel}}</view>
+        <view class="q-diff">{{q.stars}}</view>
+      </view>
+
+      <view class="q-text">{{q.text}}</view>
+      <view class="q-laizi" wx:if="{{q.hasLaizi}}">含赖子 · 万能牌可代替任意牌</view>
+      <view class="q-multihint" wx:if="{{q.multiSelect}}">本题为多选，请选出所有正确听牌</view>
+
+      <view class="tile-groups" wx:if="{{q.groups.length > 0}}">
+        <view class="tile-group" wx:for="{{q.groups}}" wx:for-item="grp" wx:key="index">
+          <image wx:for="{{grp}}" wx:for-item="t" wx:key="*this" class="quiz-tile" src="/assets/tiles/{{t}}.svg" mode="aspectFit"></image>
+        </view>
+      </view>
+
+      <view class="q-context" wx:if="{{q.context}}">{{q.context}}</view>
+
+      <view class="options">
+        <view wx:for="{{q.options}}" wx:key="index" class="option {{optionStates[index]}}" data-index="{{index}}" bindtap="onSelect">
+          <text class="option-letter">{{item.letter}}</text>
+          <image class="option-tile" src="/assets/tiles/{{item.tileId}}.svg" mode="aspectFit"></image>
+          <text class="option-mark" wx:if="{{answered && optionStates[index] === 'correct'}}">✓</text>
+          <text class="option-mark wrong" wx:if="{{answered && optionStates[index] === 'wrong'}}">✕</text>
+        </view>
+      </view>
+
+      <button class="confirm-btn" wx:if="{{q.multiSelect && !answered}}" bindtap="onConfirm">确定（已选 {{selectedIndices.length}} 项）</button>
+
+      <view class="explain {{isCorrect ? 'ok' : 'no'}}" wx:if="{{answered}}">
+        <view class="explain-head {{isCorrect ? 'ok' : 'no'}}">
+          {{isCorrect ? '回答正确 +10' : '回答错误 扣 1 命'}}
+        </view>
+        <view class="explain-body">{{lastExplanation}}</view>
+        <button class="next-btn" bindtap="onNext">{{ (isCorrect || lives > 0) ? '下一关' : '查看成绩' }}</button>
+      </view>
+    </view>
+  </block>
+
+  <!-- 结算 -->
+  <view wx:if="{{gameOver}}" class="over-mask">
+    <view class="over-card">
+      <view class="over-title">
+        {{ overInfo.reason === 'clear' ? '🎉 通关啦！' : (overInfo.reason === 'timeout' ? '⏰ 时间到' : (overInfo.reason === 'wrong' ? '💥 挑战结束' : '已退出')) }}
+      </view>
+      <view class="over-score">{{overInfo.score}} 分</view>
+      <view class="over-detail">到达第 {{overInfo.maxLevel}} 关 · 答对得分 {{overInfo.base}} · 时间奖励 {{overInfo.timeBonus}} · 生命奖励 {{overInfo.lifeBonus}}</view>
+      <view class="over-rank" wx:if="{{overInfo.rank}}">本次排名 第 {{overInfo.rank}} 名</view>
+      <view class="over-actions">
+        <button class="over-btn primary" bindtap="restart">再来一局</button>
+        <button class="over-btn" bindtap="goLeaderboard">看排行榜</button>
+        <button class="over-btn ghost" bindtap="goBack">返回</button>
+      </view>
+    </view>
+  </view>
+</view>

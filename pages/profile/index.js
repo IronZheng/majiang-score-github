@@ -1,6 +1,7 @@
 const { getHistory, removeHistory } = require('../../utils/storage');
 const share = require('../../utils/share');
 const defaultProfiles = require('../../utils/default-profiles');
+const api = require('../../utils/api');
 const app = getApp();
 
 const CACHE_KEY = 'mj_user';
@@ -24,6 +25,9 @@ Page({
       userInfo,
       history: this.formatHistory()
     });
+
+    // 进入页面即把已设置的昵称/头像同步到后端（openid 就绪时）
+    this._reportProfile();
   },
 
   _getCachedUser() {
@@ -78,7 +82,33 @@ Page({
       return;
     }
 
-    this._saveAvatarUrl(avatarUrl);
+    this._uploadAvatar(avatarUrl);
+  },
+
+  // 选头像：临时文件先上传到微信云存储，拿到云文件ID后保存并上报后端
+  _uploadAvatar(tempPath) {
+    const that = this;
+    const extMatch = tempPath.match(/\.(png|jpg|jpeg|webp)(?:\?|$)/i);
+    const ext = extMatch ? extMatch[1].toLowerCase() : 'png';
+    const cloudPath = `avatar/${Date.now()}_${Math.floor(Math.random() * 1e6)}.${ext}`;
+    wx.showLoading({ title: '上传头像...' });
+    wx.cloud.uploadFile({
+      cloudPath: cloudPath,
+      filePath: tempPath
+    }).then(function (res) {
+      wx.hideLoading();
+      const fileID = (res && res.fileID) || '';
+      if (!fileID) {
+        wx.showToast({ title: '头像上传失败', icon: 'none' });
+        return;
+      }
+      that._saveAvatarUrl(fileID);
+      that._reportProfile();
+    }).catch(function (err) {
+      wx.hideLoading();
+      console.warn('[profile] 头像云上传失败:', err);
+      wx.showToast({ title: '头像上传失败', icon: 'none' });
+    });
   },
 
   _saveAvatarUrl(avatarUrl) {
@@ -110,6 +140,19 @@ Page({
     });
   },
 
+  // 将当前昵称/头像上报到后端（按 openid 保存），供排行榜展示
+  _reportProfile() {
+    const openid = api.getOpenid();
+    if (!openid) return;
+    const user = app.globalData.userInfo || this._getOrCreateUser() || {};
+    const payload = { openid: openid };
+    if (user.nickName) payload.nickname = user.nickName;
+    if (user.avatarUrl) payload.avatarUrl = user.avatarUrl;
+    api.saveProfile(payload).catch(function (err) {
+      console.warn('[profile] 保存资料失败:', err);
+    });
+  },
+
   // ==================== 昵称（type="nickname"，确认/失焦时保存） ====================
 
   onNicknameInput(e) {
@@ -136,6 +179,7 @@ Page({
     user.nickNameCustomized = true;
     this._saveUserInfo(user);
     console.log('[profile] 昵称已保存:', nickName);
+    this._reportProfile();
   },
 
   // ==================== 统一保存 ====================

@@ -1,0 +1,52 @@
+<view class="container">
+  <view class="hero">
+    <view class="hero-crown"></view>
+    <view class="hero-title">牌技挑战排行榜</view>
+    <view class="hero-sub">按积分排名 · 一人一名，保留你的最高分</view>
+  </view>
+
+  <view wx:if="{{loading}}" class="loading-box">加载中...</view>
+
+  <block wx:else>
+    <!-- 我的成绩卡：仅当“我”不在榜单前50时显示，避免与榜单重复 -->
+    <view class="my-card" wx:if="{{me && !meInTop}}">
+      <view class="my-badge">我的</view>
+      <image wx:if="{{me.avatarUrl}}" class="my-avatar" src="{{me.avatarUrl}}" mode="aspectFill"></image>
+      <view wx:else class="my-avatar avatar-fallback">{{me.initial}}</view>
+      <view class="my-mid">
+        <view class="my-name">{{me.nickname}}</view>
+        <view class="my-meta">第 {{me.maxLevel}} 关</view>
+      </view>
+      <view class="my-right">
+        <view class="my-rank">第 {{myRank}} 名</view>
+        <view class="my-score">{{me.score}} 分</view>
+      </view>
+    </view>
+
+    <view class="empty" wx:if="{{top.length === 0}}">还没有人上榜，快去挑战吧！</view>
+
+    <!-- 榜单 -->
+    <view class="rank-list" wx:if="{{top.length > 0}}">
+      <view class="rank-row top{{index + 1}}" wx:for="{{top}}" wx:key="rank" style="animation-delay: {{index * 0.045}}s">
+        <view class="medal medal-{{index + 1}}">
+          <text wx:if="{{index === 0}}">冠</text>
+          <text wx:elif="{{index === 1}}">亚</text>
+          <text wx:elif="{{index === 2}}">季</text>
+          <text wx:else>{{index + 1}}</text>
+        </view>
+        <image wx:if="{{item.avatarUrl}}" class="r-avatar" src="{{item.avatarUrl}}" mode="aspectFill"></image>
+        <view wx:else class="r-avatar avatar-fallback">{{item.initial}}</view>
+        <view class="r-mid">
+          <view class="r-name">{{item.nickname}}</view>
+          <view class="r-meta">第 {{item.maxLevel}} 关</view>
+        </view>
+        <view class="r-score">{{item.score}}<text class="r-score-unit">分</text></view>
+      </view>
+    </view>
+
+    <view class="actions">
+      <button class="act primary" bindtap="goChallenge">去挑战</button>
+      <button class="act ghost" bindtap="refresh">刷新排行榜</button>
+    </view>
+  </block>
+</view>

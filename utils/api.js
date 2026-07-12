@@ -60,10 +60,34 @@ function getProgress() {
   return request('GET', '/api/game-quiz/progress?openid=' + encodeURIComponent(getOpenid()), null);
 }
 
+// 开始闯关挑战（返回按难度排序的关卡题目）
+function startChallenge() {
+  return request('GET', '/api/game-quiz/challenge/start?openid=' + encodeURIComponent(getOpenid()), null);
+}
+
+// 提交本场成绩到排行榜
+function submitLeaderboard(payload) {
+  return request('POST', '/api/game-quiz/leaderboard/submit', payload);
+}
+
+// 保存用户资料（昵称 + 头像云文件ID），按 openid upsert
+function saveProfile(payload) {
+  return request('POST', '/api/game-quiz/profile', payload);
+}
+
+// 查询排行榜
+function getLeaderboard() {
+  return request('GET', '/api/game-quiz/leaderboard?openid=' + encodeURIComponent(getOpenid()), null);
+}
+
 module.exports = {
   API_BASE: API_BASE,
   getOpenid: getOpenid,
   getTodayQuestions: getTodayQuestions,
   submitAnswer: submitAnswer,
-  getProgress: getProgress
+  getProgress: getProgress,
+  startChallenge: startChallenge,
+  submitLeaderboard: submitLeaderboard,
+  saveProfile: saveProfile,
+  getLeaderboard: getLeaderboard
 };

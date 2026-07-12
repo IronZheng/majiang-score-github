@@ -1,0 +1,359 @@
+.container {
+  min-height: 100vh;
+  padding: 24rpx 28rpx 40rpx;
+  box-sizing: border-box;
+  background: linear-gradient(180deg, #fffaf6 0%, #fdeee2 100%);
+}
+
+/* ============ 顶部状态栏 ============ */
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding: 12rpx 18rpx;
+  background: #ffffff;
+  border-radius: 20rpx;
+  box-shadow: 0 8rpx 20rpx rgba(150, 100, 70, 0.1);
+}
+
+.topbar .lv {
+  font-size: 28rpx;
+  font-weight: 800;
+  color: #8a3f24;
+}
+
+.topbar .lives {
+  display: flex;
+  gap: 4rpx;
+}
+
+.topbar .heart {
+  font-size: 30rpx;
+}
+
+.topbar .heart.on { color: #e2553f; }
+.topbar .heart.off { color: #e6d3c6; }
+
+.topbar .timer {
+  margin-left: auto;
+  font-size: 28rpx;
+  font-weight: 800;
+  color: #4f7a52;
+}
+
+.topbar .timer.warn { color: #e2553f; }
+
+.topbar .exit {
+  font-size: 24rpx;
+  color: #9a6f58;
+  padding: 6rpx 14rpx;
+  border: 1rpx solid #e6d3c6;
+  border-radius: 12rpx;
+}
+
+.scorebar {
+  margin: 16rpx 4rpx 4rpx;
+  font-size: 26rpx;
+  font-weight: 800;
+  color: #b07a5e;
+}
+
+/* ============ 答题卡 ============ */
+.card {
+  margin-top: 16rpx;
+  padding: 28rpx 24rpx 30rpx;
+  background: #ffffff;
+  border-radius: 24rpx;
+  box-shadow: 0 12rpx 30rpx rgba(150, 100, 70, 0.12);
+}
+
+.q-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.q-type {
+  font-size: 28rpx;
+  font-weight: 800;
+  color: #8a3f24;
+  background: #fff1e8;
+  padding: 6rpx 18rpx;
+  border-radius: 12rpx;
+}
+
+.q-diff { color: #e2553f; font-size: 26rpx; letter-spacing: 2rpx; }
+
+.q-text {
+  margin-top: 18rpx;
+  font-size: 28rpx;
+  line-height: 1.6;
+  color: #2f2a26;
+  font-weight: 600;
+}
+
+.q-laizi {
+  display: inline-block;
+  margin-top: 14rpx;
+  padding: 6rpx 16rpx;
+  border-radius: 12rpx;
+  background: linear-gradient(135deg, #f6c761, #e7a93c);
+  color: #5a3a10;
+  font-size: 22rpx;
+  font-weight: 800;
+}
+
+.q-multihint {
+  display: inline-block;
+  margin-top: 14rpx;
+  margin-left: 10rpx;
+  padding: 6rpx 16rpx;
+  border-radius: 12rpx;
+  background: #fef0e6;
+  color: #b8652f;
+  font-size: 22rpx;
+  font-weight: 700;
+}
+
+/* ============ 手牌 ============ */
+.tile-groups {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx 18rpx;
+  margin-top: 20rpx;
+}
+
+.tile-group {
+  display: flex;
+  gap: 4rpx;
+  padding: 8rpx;
+  background: #fff7ef;
+  border-radius: 12rpx;
+  border: 1rpx solid #f0e1d7;
+}
+
+.quiz-tile {
+  width: 56rpx;
+  height: 78rpx;
+  display: block;
+}
+
+.q-context {
+  margin-top: 16rpx;
+  font-size: 24rpx;
+  color: #8a7a6e;
+}
+
+/* ============ 选项（每行三张，字母在牌上方，共两行六张） ============ */
+.options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+  justify-content: center;
+  margin-top: 24rpx;
+}
+
+.option {
+  position: relative;
+  width: calc((100% - 32rpx) / 3);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14rpx;
+  padding: 22rpx 6rpx 26rpx;
+  border-radius: 20rpx;
+  background: #fffaf6;
+  border: 2rpx solid #f0e1d7;
+  transition: all 0.2s ease;
+}
+
+.option-letter {
+  width: 44rpx;
+  height: 44rpx;
+  border-radius: 12rpx;
+  background: #fff1e8;
+  color: #b86142;
+  font-size: 25rpx;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.option-tile {
+  width: 64rpx;
+  height: 90rpx;
+  flex-shrink: 0;
+  display: block;
+  filter: drop-shadow(0 4rpx 8rpx rgba(120, 88, 64, 0.12));
+}
+
+.option-mark {
+  position: absolute;
+  top: 14rpx;
+  right: 18rpx;
+  color: #5f8f6a;
+  font-size: 32rpx;
+  font-weight: 900;
+}
+
+.option-mark.wrong { color: #c66d61; }
+
+.option.correct {
+  background: #edf8f1;
+  border-color: rgba(95, 143, 106, 0.5);
+}
+
+.option.wrong {
+  background: #fff2ea;
+  border-color: rgba(198, 109, 97, 0.5);
+}
+
+.option.dim { opacity: 0.45; }
+
+.option.selected {
+  background: #fff4ea;
+  border-color: #e49b73;
+}
+
+.confirm-btn {
+  margin-top: 22rpx;
+  width: 100%;
+  height: 84rpx;
+  border-radius: 20rpx;
+  background: linear-gradient(145deg, #b95f3a 0%, #d87e53 48%, #e9a17b 100%);
+  color: #fff;
+  font-size: 30rpx;
+  font-weight: 800;
+}
+
+/* ============ 解析 ============ */
+.explain {
+  margin-top: 24rpx;
+  padding: 22rpx;
+  border-radius: 18rpx;
+  background: #f4faf6;
+  border: 1rpx solid rgba(95, 143, 106, 0.18);
+}
+
+.explain.ok {
+  background: #f4faf6;
+  border-color: rgba(95, 143, 106, 0.18);
+}
+
+.explain.no {
+  background: #fdf0ec;
+  border-color: rgba(198, 109, 97, 0.5);
+}
+
+.explain-head {
+  font-size: 28rpx;
+  font-weight: 800;
+  margin-bottom: 12rpx;
+}
+
+.explain-head.ok { color: #4f8766; }
+.explain-head.no { color: #c0392b; }
+
+.explain-body {
+  color: #4b5563;
+  font-size: 26rpx;
+  line-height: 1.65;
+}
+
+.explain.no .explain-body { color: #6b3a32; }
+
+.next-btn {
+  margin-top: 22rpx;
+  width: 100%;
+  height: 88rpx;
+  border-radius: 20rpx;
+  background: linear-gradient(145deg, #b95f3a 0%, #d87e53 48%, #e9a17b 100%);
+  color: #fff;
+  font-size: 30rpx;
+  font-weight: 800;
+}
+
+/* ============ 结算 ============ */
+.over-mask {
+  position: fixed;
+  left: 0; right: 0; top: 0; bottom: 0;
+  background: rgba(60, 35, 20, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60rpx;
+  z-index: 50;
+}
+
+.over-card {
+  width: 100%;
+  background: #ffffff;
+  border-radius: 28rpx;
+  padding: 44rpx 36rpx;
+  text-align: center;
+  box-shadow: 0 20rpx 50rpx rgba(0, 0, 0, 0.2);
+}
+
+.over-title {
+  font-size: 40rpx;
+  font-weight: 900;
+  color: #8a3f24;
+}
+
+.over-score {
+  margin-top: 18rpx;
+  font-size: 72rpx;
+  font-weight: 900;
+  color: #e2553f;
+}
+
+.over-detail {
+  margin-top: 10rpx;
+  font-size: 24rpx;
+  color: #9a6f58;
+  line-height: 1.7;
+}
+
+.over-rank {
+  margin-top: 14rpx;
+  font-size: 30rpx;
+  font-weight: 800;
+  color: #b07a5e;
+}
+
+.over-actions {
+  margin-top: 30rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 18rpx;
+}
+
+.over-btn {
+  height: 86rpx;
+  border-radius: 20rpx;
+  background: #f4ece4;
+  color: #8a3f24;
+  font-size: 30rpx;
+  font-weight: 800;
+}
+
+.over-btn.primary {
+  background: linear-gradient(145deg, #b95f3a 0%, #d87e53 48%, #e9a17b 100%);
+  color: #fff;
+}
+
+.over-btn.ghost {
+  background: #fff;
+  border: 1rpx solid #e6d3c6;
+  color: #9a6f58;
+}
+
+.loading-box {
+  margin-top: 80rpx;
+  text-align: center;
+  color: #b07a5e;
+  font-size: 28rpx;
+}
