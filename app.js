@@ -1,5 +1,7 @@
 const auth = require('./utils/auth');
 const track = require('./utils/track');
+const api = require('./utils/api');
+const storage = require('./utils/storage');
 
 // 包装全局 Page，自动为每个页面注入行为追踪
 (function wrapPage() {
@@ -39,7 +41,33 @@ App({
     // 3. 如果未登录，静默获取 openid（不上报到用户信息，仅记录 openid 用于行为追踪）
     if (!this.globalData.loggedIn) {
       this.fetchOpenidSilently();
+    } else {
+      // 已登录用户同样拥有 openid，直接触发计分记录同步（本地 + 服务器融合）
+      this.syncScoreHistory();
     }
+  },
+
+  /**
+   * 同步计分记录：把本地记录上传服务器（旧本地数据自动迁移），并拉取服务器全量合并回本地。
+   * 本地永远先写，服务器为权威；任一侧丢失都能靠另一侧恢复（冗余）。
+   */
+  syncScoreHistory() {
+    const openid = api.getOpenid();
+    if (!openid) {
+      console.log('[app] 暂无 openid，跳过计分记录同步');
+      return;
+    }
+    const localRecords = storage.getHistory();
+    api.syncScoreRecords(openid, localRecords)
+      .then((serverList) => {
+        if (Array.isArray(serverList)) {
+          storage.mergeServerRecords(serverList);
+          console.log('[app] 计分记录同步完成，服务器返回', serverList.length, '条');
+        }
+      })
+      .catch((err) => {
+        console.warn('[app] 计分记录同步失败（本地已留存）:', err);
+      });
   },
 
   /**
@@ -64,6 +92,8 @@ App({
         console.log('[app] 静默获取 openid 成功:', result.openid);
         // 补发等待队列中排队的上报
         track.flushPending();
+        // 触发计分记录同步：旧本地数据自动上传服务器，并拉取服务器全量合并回本地
+        app.syncScoreHistory();
       }
     }).catch(function (err) {
       console.warn('[app] 静默获取 openid 失败:', err);

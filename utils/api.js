@@ -80,6 +80,24 @@ function getLeaderboard() {
   return request('GET', '/api/game-quiz/leaderboard?openid=' + encodeURIComponent(getOpenid()), null);
 }
 
+// ===================== 麻将计分记录（服务器 + 本地双写冗余） =====================
+
+// 同步计分记录：上传本地记录数组并拉取服务器全量（按 openid+clientId 幂等去重）
+function syncScoreRecords(openid, records) {
+  if (!openid) return Promise.resolve(null);
+  return request('POST', '/api/mahjong-score/sync', { openid: openid, records: records || [] });
+}
+
+// 删除一条服务器记录（按 openid + clientId），与本地删除保持一致
+function deleteScoreRecord(openid, clientId) {
+  if (!openid || !clientId) return Promise.resolve();
+  return request(
+    'POST',
+    '/api/mahjong-score/delete?openid=' + encodeURIComponent(openid) + '&clientId=' + encodeURIComponent(clientId),
+    null
+  );
+}
+
 module.exports = {
   API_BASE: API_BASE,
   getOpenid: getOpenid,
@@ -89,5 +107,7 @@ module.exports = {
   startChallenge: startChallenge,
   submitLeaderboard: submitLeaderboard,
   saveProfile: saveProfile,
-  getLeaderboard: getLeaderboard
+  getLeaderboard: getLeaderboard,
+  syncScoreRecords: syncScoreRecords,
+  deleteScoreRecord: deleteScoreRecord
 };

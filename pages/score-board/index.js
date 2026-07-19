@@ -1,4 +1,5 @@
-const { getCurrentGame, saveCurrentGame, addHistory, clearCurrentGame } = require('../../utils/storage');
+const { getCurrentGame, saveCurrentGame, addHistory, clearCurrentGame, genClientId, mergeServerRecords } = require('../../utils/storage');
+const api = require('../../utils/api');
 const share = require('../../utils/share');
 const playerAvatars = require('../../utils/player-avatars');
 
@@ -177,7 +178,7 @@ Page({
     const game = this.data.game;
     const ranking = game.players.slice().sort((a, b) => b.score - a.score);
     const record = {
-      id: `${Date.now()}`,
+      id: genClientId(),
       finishedAt: Date.now(),
       players: game.players,
       ranking,
@@ -185,9 +186,23 @@ Page({
       totalRounds: game.currentRound,
       tableFee: game.tableFee || { enabled: false, score: 0, records: [] }
     };
+    // 本地先写（即时 UI + 冗余兜底），再异步同步服务器
     addHistory(record);
     clearCurrentGame();
+    this.syncRecord(record);
     wx.navigateTo({ url: `/pages/result/index?id=${record.id}` });
+  },
+  syncRecord(record) {
+    const openid = api.getOpenid();
+    if (!openid) return;
+    api.syncScoreRecords(openid, [record])
+      .then((serverList) => {
+        if (Array.isArray(serverList)) mergeServerRecords(serverList);
+      })
+      .catch((err) => {
+        // 同步失败不影响本地展示（本地已留存），仅打印告警
+        console.warn('[score-board] 计分记录同步服务器失败:', err);
+      });
   },
   onShareAppMessage() {
     return share.appMessage({

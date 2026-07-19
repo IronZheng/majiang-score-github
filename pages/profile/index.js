@@ -215,6 +215,10 @@ Page({
         removeHistory(id);
         this.setData({ history: this.formatHistory() });
         wx.showToast({ title: '已删除', icon: 'success' });
+        // 同步删除服务器记录（失败仅告警，本地已删除；下次同步会再次尝试删除）
+        api.deleteScoreRecord(api.getOpenid(), id).catch((err) => {
+          console.warn('[profile] 服务器删除计分记录失败:', err);
+        });
       }
     });
   },
