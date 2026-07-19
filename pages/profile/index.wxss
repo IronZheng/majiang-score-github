@@ -181,6 +181,36 @@
   flex-shrink: 0;
 }
 
+.head-right {
+  display: flex;
+  align-items: center;
+  gap: 14rpx;
+  flex-shrink: 0;
+}
+
+.sync-cloud-btn {
+  margin: 0;
+  padding: 0 20rpx;
+  height: 52rpx;
+  line-height: 52rpx;
+  font-size: 22rpx;
+  font-weight: 700;
+  color: #ffffff;
+  background: linear-gradient(135deg, #f0a070, #e07b45);
+  border-radius: 999rpx;
+  box-shadow: 0 8rpx 18rpx rgba(224, 123, 69, 0.25);
+}
+
+.sync-cloud-btn::after {
+  border: none;
+}
+
+.cloud-hint {
+  margin: -8rpx 0 18rpx;
+  font-size: 22rpx;
+  color: #9ca3af;
+}
+
 .item {
   padding: 22rpx;
   margin-bottom: 16rpx;

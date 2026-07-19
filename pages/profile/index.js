@@ -1,4 +1,5 @@
-const { getHistory, removeHistory } = require('../../utils/storage');
+const storage = require('../../utils/storage');
+const { getHistory, removeHistory } = storage;
 const share = require('../../utils/share');
 const defaultProfiles = require('../../utils/default-profiles');
 const api = require('../../utils/api');
@@ -10,7 +11,9 @@ Page({
   data: {
     userInfo: null,
     history: [],
-    avatarBg: 'rgba(255,255,255,0.12)'
+    avatarBg: 'rgba(255,255,255,0.12)',
+    syncLoading: false,
+    cloudHint: ''
   },
 
   onShow() {
@@ -221,6 +224,44 @@ Page({
         });
       }
     });
+  },
+
+  /**
+   * 手动「备份到云端」：把本地全部记录全量上传服务器，并拉取服务器全量合并回本地。
+   * 用于确保未上传的本地记录全部入库（幂等去重，已传的自动跳过），并给出可视反馈。
+   */
+  syncToCloud() {
+    if (this.data.syncLoading) return;
+    const openid = api.getOpenid();
+    if (!openid) {
+      wx.showToast({ title: '请先获取登录信息', icon: 'none' });
+      return;
+    }
+    const localRecords = storage.getHistory();
+    const localCount = localRecords.length;
+    if (localCount === 0) {
+      wx.showToast({ title: '暂无本地记录', icon: 'none' });
+      return;
+    }
+    this.setData({ syncLoading: true, cloudHint: '' });
+    api.syncScoreRecords(openid, localRecords)
+      .then((serverList) => {
+        if (Array.isArray(serverList)) {
+          storage.mergeServerRecords(serverList);
+          this.setData({ history: this.formatHistory(), cloudHint: `已备份：本地 ${localCount} 条，云端共 ${serverList.length} 条` });
+          wx.showToast({ title: '备份完成', icon: 'success' });
+        } else {
+          this.setData({ cloudHint: '备份完成' });
+        }
+      })
+      .catch((err) => {
+        console.warn('[profile] 备份到云端失败:', err);
+        this.setData({ cloudHint: '备份失败，请稍后重试' });
+        wx.showToast({ title: '备份失败', icon: 'none' });
+      })
+      .finally(() => {
+        this.setData({ syncLoading: false });
+      });
   },
 
   showAbout() {

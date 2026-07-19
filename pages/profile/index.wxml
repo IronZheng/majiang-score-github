@@ -37,8 +37,12 @@
   <view class="card history-card">
     <view class="section-head">
       <text class="title">历史计分记录</text>
-      <text class="history-count" wx:if="{{history.length}}">{{history.length}}条</text>
+      <view class="head-right">
+        <text class="history-count" wx:if="{{history.length}}">{{history.length}}条</text>
+        <button class="sync-cloud-btn" size="mini" loading="{{syncLoading}}" bindtap="syncToCloud">备份到云端</button>
+      </view>
     </view>
+    <view class="cloud-hint" wx:if="{{!syncLoading && cloudHint}}">{{cloudHint}}</view>
     <block wx:if="{{history.length === 0}}">
       <text class="empty">暂无记录</text>
     </block>
