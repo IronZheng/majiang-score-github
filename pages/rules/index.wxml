@@ -1,22 +1,64 @@
-<view class="container rules-page">
-  <view class="rules-head">
-    <view class="title">玩法</view>
-    <view class="subtitle">选择一种玩法，进入后查看基础入门、牌型打法和常见规则。</view>
+<view class="container setup-page">
+  <view class="add-my-guide" wx:if="{{showAddMyGuide}}">
+    <view class="guide-arrow"></view>
+    <view class="guide-icon">+</view>
+    <view class="guide-copy">
+      <view class="guide-title">喜欢这个小程序？把它留下吧</view>
+      <view class="guide-desc">点右上角「···」，选择「添加到我的小程序」，下次开局不迷路</view>
+    </view>
+    <view class="guide-close" catchtap="dismissAddMyGuide" role="button" aria-label="关闭提示">×</view>
   </view>
 
-  <view class="rule-menu">
-    <block wx:for="{{rules}}" wx:key="id" wx:for-item="rule">
-      <view class="menu-card {{rule.featured ? 'featured' : ''}}" data-id="{{rule.id}}" bindtap="openRule">
-        <image class="menu-visual" src="{{rule.image}}" mode="aspectFit"></image>
-        <view class="menu-body">
-          <view class="menu-top">
-            <text class="rule-category">{{rule.category}}</text>
-            <text class="menu-arrow">›</text>
-          </view>
-          <view class="menu-title">{{rule.title}}</view>
-          <view class="menu-tagline">{{rule.tagline}}</view>
-        </view>
+  <view class="page-head">
+    <view class="page-title">多人记账</view>
+    <view class="page-sub">创建房间，邀请牌友一起计分</view>
+  </view>
+
+  <view class="card">
+    <view class="title">房间名称</view>
+    <input class="title-input" placeholder="给房间起个名字（可选）" value="{{title}}" bindinput="onTitleInput" maxlength="20" />
+  </view>
+
+  <view class="card">
+    <view class="title">人数上限</view>
+    <view class="cap-grid">
+      <view wx:for="{{capacityOptions}}" wx:key="*this"
+            class="cap-btn {{capacity===item?'active':''}}" data-cap="{{item}}" bindtap="setCapacity">{{item}}人</view>
+    </view>
+  </view>
+
+  <view class="card fee-card {{tableFeeEnabled ? '' : 'fee-disabled'}}">
+    <view class="fee-top">
+      <view>
+        <view class="title fee-title">台费</view>
+        <view class="fee-subtitle">勾选后计分显示独立台费栏目</view>
       </view>
-    </block>
+      <checkbox-group class="fee-check-group" bindchange="onFeeChange">
+        <label class="fee-check">
+          <checkbox value="enabled" checked="{{tableFeeEnabled}}" color="#e49b73" />
+        </label>
+      </checkbox-group>
+    </view>
+    <input wx:if="{{tableFeeEnabled}}" class="fee-input" type="number" placeholder="每底台费分值" value="{{tableFeeScore}}" bindinput="onFeeScoreInput" />
+  </view>
+
+  <view class="primary-btn create-btn" bindtap="createRoom">{{creating ? '创建中…' : '创建房间'}}</view>
+  <view class="tip">创建后把房间分享给牌友，或展示小程序码让他们扫码加入</view>
+
+  <view class="single-entry" bindtap="startSingle">单人记账</view>
+
+  <view class="overlay" wx:if="{{inviteVisible}}">
+    <view class="invite-card">
+      <view class="invite-title">邀请好友加入</view>
+      <view class="invite-room">房间号：{{roomId}} <text class="copy" bindtap="copyRoomId">复制</text></view>
+      <button class="share-btn" open-type="share">分享给好友</button>
+      <image wx:if="{{qrcode}}" class="qrcode-img" src="{{qrcode}}" mode="aspectFit"></image>
+      <view wx:elif="{{qrcodeLoading}}" class="qrcode-tip">小程序码生成中…</view>
+      <view wx:else class="qrcode-tip">小程序码暂不可用，可改用上方分享按钮</view>
+      <view class="invite-actions">
+        <view class="ghost-btn" bindtap="toggleInvite">稍后</view>
+        <view class="primary-btn" bindtap="enterBoard">进入房间</view>
+      </view>
+    </view>
   </view>
 </view>
