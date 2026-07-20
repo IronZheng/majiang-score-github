@@ -5,8 +5,8 @@ Page({
   data: {
     roomId: '',
     nickname: '',
+    avatarUrl: '',
     error: '',
-    needLogin: false,
     joining: false,
     joined: false
   },
@@ -26,56 +26,62 @@ Page({
       this.setData({ error: '房间号缺失，请从分享链接或扫码进入' });
       return;
     }
-    this.setData({ roomId: roomId, nickname: user.nickname || '' });
-    this.tryJoinIfReady();
+    this.setData({
+      roomId: roomId,
+      nickname: user.nickname || '',
+      avatarUrl: user.avatarUrl || ''
+    });
   },
 
-  onShow() {
-    // 登录返回后重试
-    if (!this.data.joined && this.data.roomId) {
-      this.tryJoinIfReady();
-    }
-  },
-
-  tryJoinIfReady() {
-    if (this.data.joined) return;
-    const openid = api.getOpenid();
-    if (!openid) {
-      this.setData({ needLogin: true });
-      return;
-    }
-    this.setData({ needLogin: false });
+  onChooseAvatar(e) {
+    this.setData({ avatarUrl: e.detail.avatarUrl || '' });
   },
 
   onNicknameInput(e) {
     this.setData({ nickname: e.detail.value });
   },
 
-  goLogin() {
-    wx.navigateTo({ url: '/pages/login/index' });
-  },
-
   goHome() {
-    wx.switchTab({ url: '/pages/scoring-setup/index' });
+    wx.switchTab({ url: '/pages/rules/index' });
   },
 
   join() {
     if (this.data.joining || this.data.joined) return;
     const openid = api.getOpenid();
     if (!openid) {
-      this.setData({ needLogin: true });
+      wx.showToast({ title: '正在获取登录信息，请稍后重试', icon: 'none' });
       return;
     }
+    const nickname = (this.data.nickname || '').trim();
+    if (!nickname) {
+      wx.showToast({ title: '请填写昵称', icon: 'none' });
+      return;
+    }
+    if (!this.data.avatarUrl) {
+      wx.showToast({ title: '请选择头像', icon: 'none' });
+      return;
+    }
+    // 记住资料，方便下次
     const app = getApp();
-    const user = (app && app.globalData && app.globalData.userInfo) || {};
-    const nickname = (this.data.nickname || '').trim() || '玩家';
+    const user = app.globalData.userInfo || {};
+    user.nickname = nickname;
+    user.avatarUrl = this.data.avatarUrl;
+    app.globalData.userInfo = user;
+    try {
+      const cached = wx.getStorageSync('mj_user') || {};
+      cached.nickname = nickname;
+      cached.avatarUrl = this.data.avatarUrl;
+      cached.openid = cached.openid || openid;
+      wx.setStorageSync('mj_user', cached);
+    } catch (e) {}
+
     const that = this;
     this.setData({ joining: true });
     api.joinRoom({
       roomId: that.data.roomId,
       openid: openid,
       nickname: nickname,
-      avatarUrl: user.avatarUrl || ''
+      avatarUrl: that.data.avatarUrl
     }).then(function (res) {
       api.saveRoomToken(res.roomId, openid, res.accessToken);
       that.setData({ joined: true, joining: false });

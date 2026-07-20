@@ -74,3 +74,42 @@
   justify-content: center;
   font-size: 30rpx;
 }
+
+/* ===== 授权面板 ===== */
+.auth-card {
+  background: #ffffff;
+  border-radius: 28rpx;
+  padding: 44rpx 40rpx 40rpx;
+  box-sizing: border-box;
+  text-align: center;
+  box-shadow: 0 16rpx 40rpx rgba(184, 97, 66, 0.14);
+  margin-bottom: 28rpx;
+}
+
+.avatar-btn {
+  width: 150rpx;
+  height: 150rpx;
+  margin: 0 auto 26rpx;
+  padding: 0;
+  border-radius: 50%;
+  background: #fff4ed;
+  border: 2rpx dashed #e49b73;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.avatar-btn::after {
+  border: none;
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+}
+
+.avatar-placeholder {
+  color: #c08a6a;
+  font-size: 24rpx;
+}

@@ -22,16 +22,17 @@ Page({
     status: STATUS_WAITING,
     statusText: '待开始',
     title: '',
-    capacity: 4,
     tableFeeEnabled: false,
     tableFeeScore: 0,
     players: [],
     ranking: [],
     feed: [],
-    selfOpenid: '',
+    selectedTarget: '',
+    selectedNickname: '',
     scoreInput: '',
-    roundInput: '1',
-    noteInput: '',
+    scoringRound: 1,
+    displaySum: 0,
+    sumOk: true,
     loading: false,
     error: '',
     inviteVisible: false,
@@ -48,7 +49,8 @@ Page({
       this.setData({ error: '房间号缺失' });
       return;
     }
-    this.setData({ roomId: query.roomId, openid: openid });
+    this.setData({ roomId: query.roomId, openid: openid, selectedTarget: openid });
+    this.loadQrcode();
   },
 
   onShow() {
@@ -86,16 +88,7 @@ Page({
       const status = state.status;
       const statusText = status === STATUS_PLAYING ? '进行中' : (status === STATUS_FINISHED ? '已结束' : '待开始');
       const selfOpenid = that.data.openid;
-      const feed = (state.feed || []).map(function (f) {
-        return {
-          nickname: f.nickname,
-          deltaText: (f.delta > 0 ? '+' : '') + f.delta,
-          deltaPositive: f.delta >= 0,
-          roundText: '第' + f.round + '手',
-          timeText: formatTime(f.at)
-        };
-      });
-      const ranking = (state.ranking || []).map(function (p) {
+      const players = (state.players || []).map(function (p) {
         return {
           openid: p.openid,
           nickname: p.nickname,
@@ -106,19 +99,53 @@ Page({
           isSelf: p.openid === selfOpenid
         };
       });
+      const ranking = players.slice().sort(function (a, b) {
+        return b.totalScore - a.totalScore;
+      });
+      const feed = (state.feed || []).map(function (f) {
+        return {
+          nickname: f.nickname,
+          deltaText: (f.delta > 0 ? '+' : '') + f.delta,
+          deltaPositive: f.delta >= 0,
+          roundText: '第' + f.round + '圈',
+          timeText: formatTime(f.at)
+        };
+      });
+
+      // 当前圈：本地 scoringRound 跟随后端最新圈号，但不回退
+      let scoringRound = that.data.scoringRound;
+      if (state.currentRound > scoringRound) scoringRound = state.currentRound;
+      else if (scoringRound < 1) scoringRound = Math.max(1, state.currentRound);
+      const advanced = scoringRound > state.currentRound; // 已本地开新圈
+      const displaySum = advanced ? 0 : state.currentRoundSum;
+
+      // 选中目标：默认自己；若已不在房间则选第一个成员
+      let selectedTarget = that.data.selectedTarget;
+      let stillIn = players.some(function (p) { return p.openid === selectedTarget; });
+      if (!stillIn) {
+        const selfIn = players.some(function (p) { return p.openid === selfOpenid; });
+        selectedTarget = selfIn ? selfOpenid : (players.length ? players[0].openid : '');
+      }
+      let selectedNickname = '';
+      players.forEach(function (p) { if (p.openid === selectedTarget) selectedNickname = p.nickname; });
+
       that.setData({
         status: status,
         statusText: statusText,
         title: state.title,
-        capacity: state.capacity,
         tableFeeEnabled: state.tableFeeEnabled,
         tableFeeScore: state.tableFeeScore,
-        players: state.players || [],
+        players: players,
         ranking: ranking,
         feed: feed,
-        selfOpenid: selfOpenid,
-        isHost: state.hostOpenid === selfOpenid
+        isHost: state.hostOpenid === selfOpenid,
+        scoringRound: scoringRound,
+        displaySum: displaySum,
+        sumOk: displaySum === 0,
+        selectedTarget: selectedTarget,
+        selectedNickname: selectedNickname
       });
+
       if (status === STATUS_FINISHED && !that.data._navigated) {
         that.setData({ _navigated: true });
         that.stopPolling();
@@ -131,33 +158,36 @@ Page({
     });
   },
 
+  selectTarget(e) {
+    const openid = e.currentTarget.dataset.openid;
+    let nickname = '';
+    this.data.players.forEach(function (p) { if (p.openid === openid) nickname = p.nickname; });
+    this.setData({ selectedTarget: openid, selectedNickname: nickname });
+  },
+
   onScoreInput(e) {
     this.setData({ scoreInput: e.detail.value });
-  },
-
-  onRoundInput(e) {
-    this.setData({ roundInput: e.detail.value });
-  },
-
-  onNoteInput(e) {
-    this.setData({ noteInput: e.detail.value });
   },
 
   submit(delta) {
     const mag = Number(this.data.scoreInput);
     if (!mag || mag <= 0) {
-      wx.showToast({ title: '请输入本手分数', icon: 'none' });
+      wx.showToast({ title: '请输入分数', icon: 'none' });
+      return;
+    }
+    if (!this.data.selectedTarget) {
+      wx.showToast({ title: '请选择计分玩家', icon: 'none' });
+      return;
+    }
+    if (this.data.status !== STATUS_PLAYING) {
+      wx.showToast({ title: '房间未开始计分', icon: 'none' });
       return;
     }
     const that = this;
-    const round = Number(this.data.roundInput) || 1;
-    const note = (this.data.noteInput || '').trim();
-    api.submitRoomScore(this.data.roomId, round, delta, note).then(function () {
-      that.setData({
-        scoreInput: '',
-        noteInput: '',
-        roundInput: String(round + 1)
-      });
+    const round = this.data.scoringRound;
+    const note = '';
+    api.submitRoomScore(this.data.roomId, round, delta, note, this.data.selectedTarget).then(function () {
+      that.setData({ scoreInput: '' });
       that.pollState();
     }).catch(function (err) {
       wx.showToast({ title: (err && err.message) || '提交失败', icon: 'none' });
@@ -171,26 +201,39 @@ Page({
   submitLose() {
     const mag = Number(this.data.scoreInput);
     if (!mag || mag <= 0) {
-      wx.showToast({ title: '请输入本手分数', icon: 'none' });
+      wx.showToast({ title: '请输入分数', icon: 'none' });
       return;
     }
     this.submit(-mag);
   },
 
-  undo() {
+  nextCircle() {
+    if (this.data.status !== STATUS_PLAYING) {
+      wx.showToast({ title: '房间未开始计分', icon: 'none' });
+      return;
+    }
     const that = this;
-    api.undoRoomScore(this.data.roomId).then(function () {
-      that.pollState();
-    }).catch(function (err) {
-      wx.showToast({ title: (err && err.message) || '撤销失败', icon: 'none' });
-    });
+    const proceed = function () {
+      const newRound = Math.max(that.data.scoringRound, that.data.status === STATUS_PLAYING ? that.data.scoringRound : 1) + 1;
+      that.setData({ scoringRound: newRound, scoreInput: '', displaySum: 0, sumOk: true });
+      wx.showToast({ title: '进入第' + newRound + '圈', icon: 'none' });
+    };
+    if (!that.data.sumOk) {
+      wx.showModal({
+        title: '本圈合计不为 0',
+        content: '上一圈合计为 ' + that.data.displaySum + '（应为 0），确定开始下一圈？',
+        success: function (res) { if (res.confirm) proceed(); }
+      });
+    } else {
+      proceed();
+    }
   },
 
   startGame() {
     const that = this;
     wx.showModal({
-      title: '开始游戏',
-      content: '开始后即可记录每一手得分',
+      title: '开始计分',
+      content: '开始后所有人都可以记录分数',
       success: function (res) {
         if (!res.confirm) return;
         api.startRoom(that.data.roomId).then(function () {
@@ -228,7 +271,7 @@ Page({
       success: function (res) {
         if (!res.confirm) return;
         api.leaveRoom(that.data.roomId).then(function () {
-          wx.switchTab({ url: '/pages/scoring-setup/index' });
+          wx.switchTab({ url: '/pages/rules/index' });
         }).catch(function (err) {
           wx.showToast({ title: (err && err.message) || '操作失败', icon: 'none' });
         });

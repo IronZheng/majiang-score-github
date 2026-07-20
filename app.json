@@ -15,6 +15,7 @@
     "pages/contact/index",
     "pages/room-join/index",
     "pages/room-board/index",
+    "pages/room-list/index",
     "pages/room-result/index"
   ],
   "window": {

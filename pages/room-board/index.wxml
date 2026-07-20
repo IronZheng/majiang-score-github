@@ -4,7 +4,7 @@
   <view class="top-bar" wx:else>
     <view class="top-left">
       <view class="room-title">{{title || '麻将房'}}</view>
-      <view class="room-meta">房间号 {{roomId}} · {{ranking.length}}/{{capacity}}人 · {{statusText}}</view>
+      <view class="room-meta">房间号 {{roomId}} · {{players.length}}人 · {{statusText}}</view>
     </view>
     <view class="top-actions">
       <view class="icon-btn" bindtap="toggleInvite">邀请</view>
@@ -12,45 +12,61 @@
     </view>
   </view>
 
-  <!-- 实时排名 -->
-  <view class="card ranking-card">
-    <view class="card-title">实时排名</view>
-    <view wx:if="{{ranking.length===0}}" class="empty">还没有玩家加入</view>
-    <view wx:for="{{ranking}}" wx:key="openid" class="rank-row {{item.isSelf?'self':''}}">
-      <view class="rank-no">{{index + 1}}</view>
-      <image wx:if="{{item.avatarUrl}}" class="rank-avatar" src="{{item.avatarUrl}}" mode="aspectFill"></image>
-      <view wx:else class="rank-avatar fallback">{{item.initial}}</view>
-      <view class="rank-name">
-        {{item.nickname}}
-        <text wx:if="{{item.isHost}}" class="host-tag">房主</text>
-        <text wx:if="{{item.isSelf}}" class="self-tag">我</text>
-      </view>
-      <view class="rank-score">{{item.totalScore}}</view>
+  <!-- 二维码（创建后直接展示，扫码加入） -->
+  <view class="card qrcode-card" wx:if="{{!error}}">
+    <view class="qrcode-left">
+      <view class="qr-title">扫码加入</view>
+      <view class="qr-room" bindtap="copyRoomId">房间号 {{roomId}}（点击复制）</view>
+      <button class="share-btn" open-type="share">分享给好友</button>
     </view>
+    <image wx:if="{{qrcode}}" class="qrcode-img" src="{{qrcode}}" mode="aspectFit" bindtap="toggleInvite"></image>
+    <view wx:elif="{{qrcodeLoading}}" class="qrcode-tip">二维码生成中…</view>
+    <view wx:else class="qrcode-tip" bindtap="loadQrcode">点击加载二维码</view>
+  </view>
+
+  <!-- 玩家列表（点击选择计分对象） -->
+  <view class="card">
+    <view class="card-title">玩家（{{players.length}}人）{{tableFeeEnabled ? ' · 台费'+tableFeeScore : ''}}</view>
+    <scroll-view scroll-x class="player-scroll" wx:if="{{players.length>0}}">
+      <view wx:for="{{players}}" wx:key="openid"
+            class="player-chip {{selectedTarget===item.openid?'active':''}} {{item.isSelf?'self':''}}"
+            data-openid="{{item.openid}}" bindtap="selectTarget">
+        <image wx:if="{{item.avatarUrl}}" class="chip-avatar" src="{{item.avatarUrl}}" mode="aspectFill"></image>
+        <view wx:else class="chip-avatar fallback">{{item.initial}}</view>
+        <view class="chip-name">{{item.nickname}}<text wx:if="{{item.isHost}}" class="host-tag">主</text></view>
+        <view class="chip-score">{{item.totalScore}}</view>
+      </view>
+    </scroll-view>
+    <view wx:else class="empty">还没有玩家加入，分享二维码邀请牌友</view>
+  </view>
+
+  <!-- 本圈合计 -->
+  <view class="circle-bar {{sumOk?'ok':'bad'}}">
+    <text class="circle-label">第{{scoringRound}}圈 合计</text>
+    <text class="circle-sum">{{displaySum}}</text>
+    <text class="circle-hint">{{sumOk ? '（已平衡）' : '（应为 0）'}}</text>
   </view>
 
   <!-- 计分面板 -->
   <view class="card score-card">
-    <view class="card-title">记我这一手</view>
+    <view class="card-title">给「{{selectedNickname || '选择玩家'}}」记分</view>
     <view class="score-input-row">
-      <input class="score-input" type="number" placeholder="本手分数" value="{{scoreInput}}" bindinput="onScoreInput" />
+      <input class="score-input" type="number" placeholder="本圈分数" value="{{scoreInput}}" bindinput="onScoreInput" />
     </view>
     <view class="score-btns">
       <view class="score-btn win" bindtap="submitWin">赢 +{{scoreInput || 0}}</view>
       <view class="score-btn lose" bindtap="submitLose">输 -{{scoreInput || 0}}</view>
     </view>
-    <view class="score-extra">
-      <input class="extra-input" type="number" placeholder="第几手" value="{{roundInput}}" bindinput="onRoundInput" />
-      <input class="extra-input note" placeholder="备注（可选）" value="{{noteInput}}" bindinput="onNoteInput" />
-    </view>
-    <view class="undo-link" bindtap="undo">撤销上一笔</view>
+    <view class="target-tip">点上方玩家头像可切换计分对象</view>
   </view>
 
   <!-- 房主操作 -->
   <view wx:if="{{isHost}}" class="host-bar">
-    <view wx:if="{{status===0}}" class="primary-btn host-btn" bindtap="startGame">开始游戏</view>
+    <view wx:if="{{status===0}}" class="primary-btn host-btn" bindtap="startGame">开始计分</view>
     <view wx:if="{{status===1}}" class="primary-btn host-btn" bindtap="finishGame">结束游戏</view>
   </view>
+
+  <view wx:if="{{status===1}}" class="next-circle" bindtap="nextCircle">完成本圈，开始下一圈 ›</view>
 
   <!-- 动态流水 -->
   <view class="card feed-card" wx:if="{{feed.length>0}}">

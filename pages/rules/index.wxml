@@ -1,61 +1,78 @@
-<view class="container setup-page">
-  <view class="add-my-guide" wx:if="{{showAddMyGuide}}">
-    <view class="guide-arrow"></view>
-    <view class="guide-icon">+</view>
-    <view class="guide-copy">
-      <view class="guide-title">喜欢这个小程序？把它留下吧</view>
-      <view class="guide-desc">点右上角「···」，选择「添加到我的小程序」，下次开局不迷路</view>
-    </view>
-    <view class="guide-close" catchtap="dismissAddMyGuide" role="button" aria-label="关闭提示">×</view>
-  </view>
-
-  <view class="page-head">
-    <view class="page-title">多人记账</view>
-    <view class="page-sub">创建房间，邀请牌友一起计分</view>
-  </view>
-
-  <view class="card">
-    <view class="title">房间名称</view>
-    <input class="title-input" placeholder="给房间起个名字（可选）" value="{{title}}" bindinput="onTitleInput" maxlength="20" />
-  </view>
-
-  <view class="card">
-    <view class="title">人数上限</view>
-    <view class="cap-grid">
-      <view wx:for="{{capacityOptions}}" wx:key="*this"
-            class="cap-btn {{capacity===item?'active':''}}" data-cap="{{item}}" bindtap="setCapacity">{{item}}人</view>
+<view class="container multi-page">
+  <!-- 授权面板：进入即要求头像 + 昵称 -->
+  <view wx:if="{{needAuth}}" class="auth-mask">
+    <view class="auth-card">
+      <view class="auth-title">欢迎使用多人记账</view>
+      <view class="auth-sub">请先设置头像和昵称</view>
+      <button class="avatar-btn" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
+        <image wx:if="{{avatarUrl}}" class="avatar-img" src="{{avatarUrl}}" mode="aspectFill"></image>
+        <view wx:else class="avatar-placeholder">点击选头像</view>
+      </button>
+      <input class="nick-input" type="nickname" placeholder="请输入昵称" value="{{nickname}}" bindinput="onNicknameInput" />
+      <view class="primary-btn auth-btn" bindtap="confirmAuth">进入</view>
     </view>
   </view>
 
-  <view class="card fee-card {{tableFeeEnabled ? '' : 'fee-disabled'}}">
-    <view class="fee-top">
-      <view>
-        <view class="title fee-title">台费</view>
-        <view class="fee-subtitle">勾选后计分显示独立台费栏目</view>
+  <view wx:else class="multi-body">
+    <view class="add-my-guide" wx:if="{{showAddMyGuide}}">
+      <view class="guide-arrow"></view>
+      <view class="guide-icon">+</view>
+      <view class="guide-copy">
+        <view class="guide-title">喜欢这个小程序？把它留下吧</view>
+        <view class="guide-desc">点右上角「···」，选择「添加到我的小程序」，下次开局不迷路</view>
       </view>
-      <checkbox-group class="fee-check-group" bindchange="onFeeChange">
-        <label class="fee-check">
-          <checkbox value="enabled" checked="{{tableFeeEnabled}}" color="#e49b73" />
-        </label>
-      </checkbox-group>
+      <view class="guide-close" catchtap="dismissAddMyGuide" role="button" aria-label="关闭提示">×</view>
     </view>
-    <input wx:if="{{tableFeeEnabled}}" class="fee-input" type="number" placeholder="每底台费分值" value="{{tableFeeScore}}" bindinput="onFeeScoreInput" />
+
+    <view class="page-head">
+      <view class="page-title">多人记账</view>
+      <view class="page-sub">建房间 · 扫码一起计分</view>
+    </view>
+
+    <view class="menu-grid">
+      <view class="menu-cell create" bindtap="openCreate">
+        <view class="menu-ico">＋</view>
+        <view class="menu-name">创建房间</view>
+        <view class="menu-desc">开一桌，分享二维码</view>
+      </view>
+      <view class="menu-cell progress" bindtap="goInProgress">
+        <view class="menu-ico">▶</view>
+        <view class="menu-name">进行中</view>
+        <view class="menu-desc">未结束的房间</view>
+      </view>
+      <view class="menu-cell history" bindtap="goHistory">
+        <view class="menu-ico">☰</view>
+        <view class="menu-name">历史记录</view>
+        <view class="menu-desc">已结束的房间</view>
+      </view>
+    </view>
   </view>
 
-  <view class="primary-btn create-btn" bindtap="createRoom">{{creating ? '创建中…' : '创建房间'}}</view>
-  <view class="tip">创建后把房间分享给牌友，或展示小程序码让他们扫码加入</view>
-
-  <view class="overlay" wx:if="{{inviteVisible}}">
-    <view class="invite-card">
-      <view class="invite-title">邀请好友加入</view>
-      <view class="invite-room">房间号：{{roomId}} <text class="copy" bindtap="copyRoomId">复制</text></view>
-      <button class="share-btn" open-type="share">分享给好友</button>
-      <image wx:if="{{qrcode}}" class="qrcode-img" src="{{qrcode}}" mode="aspectFit"></image>
-      <view wx:elif="{{qrcodeLoading}}" class="qrcode-tip">小程序码生成中…</view>
-      <view wx:else class="qrcode-tip">小程序码暂不可用，可改用上方分享按钮</view>
-      <view class="invite-actions">
-        <view class="ghost-btn" bindtap="toggleInvite">稍后</view>
-        <view class="primary-btn" bindtap="enterBoard">进入房间</view>
+  <!-- 创建房间弹窗 -->
+  <view class="overlay" wx:if="{{showCreate}}">
+    <view class="create-card">
+      <view class="create-title">创建房间</view>
+      <view class="card">
+        <view class="title">房间名称</view>
+        <input class="title-input" placeholder="给房间起个名字（可选）" value="{{createTitle}}" bindinput="onTitleInput" maxlength="20" />
+      </view>
+      <view class="card fee-card {{tableFeeEnabled ? '' : 'fee-disabled'}}">
+        <view class="fee-top">
+          <view>
+            <view class="title fee-title">台费</view>
+            <view class="fee-subtitle">勾选后计分显示独立台费栏目</view>
+          </view>
+          <checkbox-group class="fee-check-group" bindchange="onFeeChange">
+            <label class="fee-check">
+              <checkbox value="enabled" checked="{{tableFeeEnabled}}" color="#e49b73" />
+            </label>
+          </checkbox-group>
+        </view>
+        <input wx:if="{{tableFeeEnabled}}" class="fee-input" type="number" placeholder="每底台费分值" value="{{tableFeeScore}}" bindinput="onFeeScoreInput" />
+      </view>
+      <view class="create-actions">
+        <view class="ghost-btn" bindtap="closeCreate">取消</view>
+        <view class="primary-btn" bindtap="createRoom">{{creating ? '创建中…' : '创建并进入'}}</view>
       </view>
     </view>
   </view>

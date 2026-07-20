@@ -140,8 +140,8 @@ function startRoom(roomId) {
   });
 }
 
-// 提交本人本局分数（delta 可正可负）
-function submitRoomScore(roomId, round, delta, note) {
+// 提交分数：可指定目标玩家（targetOpenid，不传则本人），任意成员可改任意成员
+function submitRoomScore(roomId, round, delta, note, targetOpenid) {
   var openid = getOpenid();
   return request('POST', '/api/mahjong-room/score', {
     roomId: roomId,
@@ -149,6 +149,7 @@ function submitRoomScore(roomId, round, delta, note) {
     accessToken: getRoomToken(roomId, openid),
     round: round,
     delta: delta,
+    targetOpenid: targetOpenid || '',
     note: note || ''
   });
 }
@@ -194,6 +195,12 @@ function getRoomQrcode(roomId) {
   return request('GET', '/api/mahjong-room/qrcode?roomId=' + encodeURIComponent(roomId), null);
 }
 
+// 我的房间列表（进行中 + 历史记录）
+function getMyRooms(openid) {
+  if (!openid) return Promise.resolve([]);
+  return request('GET', '/api/mahjong-room/my-rooms?openid=' + encodeURIComponent(openid), null);
+}
+
 module.exports = {
   API_BASE: API_BASE,
   getOpenid: getOpenid,
@@ -217,5 +224,6 @@ module.exports = {
   getRoomState: getRoomState,
   finishRoom: finishRoom,
   getRoomShareInfo: getRoomShareInfo,
-  getRoomQrcode: getRoomQrcode
+  getRoomQrcode: getRoomQrcode,
+  getMyRooms: getMyRooms
 };
