@@ -32,75 +32,101 @@ Page({
       showAddMyGuide: !wx.getStorageSync(ADD_MY_GUIDE_DISMISSED_KEY)
     });
   },
+
   data: {
     showAddMyGuide: false,
-    mode: 'single',
-    presetCounts: [2, 3, 4],
-    playerCount: 4,
-    setupSeed: defaultProfiles.getLocalProfileSeed(),
-    players: createPlayers(4, defaultProfiles.getLocalProfileSeed()),
-    avatars: playerAvatars,
-    tableFeeEnabled: false
+    // 多人（房间）配置 —— 原 room-create 逻辑整合到本页
+    title: '',
+    capacity: 4,
+    capacityOptions: [2, 3, 4, 5, 6, 7, 8],
+    tableFeeEnabled: false,
+    tableFeeScore: 0,
+    creating: false,
+    roomId: '',
+    inviteVisible: false,
+    qrcode: '',
+    qrcodeLoading: false
   },
+
   dismissAddMyGuide() {
     wx.setStorageSync(ADD_MY_GUIDE_DISMISSED_KEY, true);
     this.setData({ showAddMyGuide: false });
   },
-  syncPlayers(count) {
-    const players = this.data.players.slice(0, count);
-    while (players.length < count) players.push(createPlayer(players.length, this.data.setupSeed));
-    this.setData({ playerCount: players.length, players });
+
+  // ===================== 多人记账：房间配置 =====================
+  onTitleInput(e) {
+    this.setData({ title: e.detail.value });
   },
-  setPresetCount(e) { this.syncPlayers(Number(e.currentTarget.dataset.count)); },
-  addPlayer() { this.syncPlayers(this.data.playerCount + 1); },
-  removePlayer(e) {
-    const index = Number(e.currentTarget.dataset.index);
-    const players = this.data.players.slice();
-    if (players.length <= 2) return wx.showToast({ title: '至少保留2名玩家', icon: 'none' });
-    players.splice(index, 1);
-    this.setData({ players, playerCount: players.length });
+  setCapacity(e) {
+    this.setData({ capacity: Number(e.currentTarget.dataset.cap) });
   },
-  clearName(e) {
-    const index = Number(e.currentTarget.dataset.index);
-    const players = this.data.players.slice();
-    players[index].name = '';
-    this.setData({ players });
-  },
-  onNameChange(e) {
-    const { index } = e.currentTarget.dataset;
-    const players = this.data.players.slice();
-    players[index].name = e.detail.value;
-    this.setData({ players });
-  },
-  onNameBlur(e) {
-    const { index } = e.currentTarget.dataset;
-    const players = this.data.players.slice();
-    const name = (players[index].name || '').trim();
-    players[index].name = name || defaultProfiles.createPlayerProfile(this.data.setupSeed, Number(index)).name;
-    this.setData({ players });
-  },
-  onTableFeeChange(e) {
+  onFeeChange(e) {
     this.setData({ tableFeeEnabled: (e.detail.value || []).includes('enabled') });
   },
-  setMode(e) {
-    this.setData({ mode: e.currentTarget.dataset.mode });
+  onFeeScoreInput(e) {
+    const v = Number(e.detail.value);
+    this.setData({ tableFeeScore: isNaN(v) ? 0 : v });
   },
-  startGame() {
-    if (this.data.mode === 'multi') {
-      const openid = api.getOpenid();
-      if (!openid) {
-        wx.showToast({ title: '请先登录后再创建房间', icon: 'none' });
-        setTimeout(() => wx.navigateTo({ url: '/pages/login/index' }), 800);
-        return;
-      }
-      wx.navigateTo({ url: '/pages/room-create/index' });
+
+  // 创建多人房间（原 room-create 的 create 逻辑）
+  createRoom() {
+    if (this.data.creating) return;
+    const openid = api.getOpenid();
+    if (!openid) {
+      wx.showToast({ title: '请先登录后再创建房间', icon: 'none' });
+      setTimeout(() => wx.navigateTo({ url: '/pages/login/index' }), 800);
       return;
     }
-    const players = this.data.players.map((p, i) => {
-      const profile = defaultProfiles.createPlayerProfile(this.data.setupSeed, i);
+    const app = getApp();
+    const user = (app && app.globalData && app.globalData.userInfo) || {};
+    const that = this;
+    this.setData({ creating: true });
+    api.createRoom({
+      openid: openid,
+      nickname: user.nickname || '房主',
+      avatarUrl: user.avatarUrl || '',
+      title: (that.data.title || '').trim(),
+      tableFeeEnabled: that.data.tableFeeEnabled ? 1 : 0,
+      tableFeeScore: that.data.tableFeeScore,
+      playerCapacity: that.data.capacity
+    }).then(function (res) {
+      api.saveRoomToken(res.roomId, openid, res.accessToken);
+      that.setData({ roomId: res.roomId, creating: false, inviteVisible: true });
+      that.loadQrcode(res.roomId);
+    }).catch(function (err) {
+      that.setData({ creating: false });
+      wx.showToast({ title: (err && err.message) || '创建失败', icon: 'none' });
+    });
+  },
+
+  loadQrcode(roomId) {
+    const that = this;
+    this.setData({ qrcodeLoading: true });
+    api.getRoomQrcode(roomId).then(function (res) {
+      that.setData({ qrcode: res.imageBase64, qrcodeLoading: false });
+    }).catch(function () {
+      that.setData({ qrcodeLoading: false });
+    });
+  },
+
+  toggleInvite() {
+    this.setData({ inviteVisible: !this.data.inviteVisible });
+  },
+  enterBoard() {
+    wx.redirectTo({ url: '/pages/room-board/index?roomId=' + this.data.roomId });
+  },
+  copyRoomId() {
+    wx.setClipboardData({ data: this.data.roomId });
+  },
+
+  // ===================== 单人记账：逻辑不变，走本地计分 =====================
+  startSingle() {
+    const seed = defaultProfiles.getLocalProfileSeed();
+    const players = createPlayers(this.data.capacity, seed).map((p, i) => {
+      const profile = defaultProfiles.createPlayerProfile(seed, i);
       return {
         ...p,
-        name: (p.name || '').trim() || profile.name,
+        name: profile.name,
         avatarUrl: p.avatarUrl || profile.avatarUrl || playerAvatars[i % playerAvatars.length],
         score: 0
       };
@@ -118,7 +144,15 @@ Page({
     });
     wx.navigateTo({ url: '/pages/score-board/index' });
   },
+
   onShareAppMessage() {
+    const roomId = this.data.roomId;
+    if (roomId) {
+      return share.appMessage({
+        title: '麻将开局啦，房间号 ' + roomId + '，快来加入！',
+        path: '/pages/room-join/index?roomId=' + roomId
+      });
+    }
     return share.appMessage({
       title: '麻将计分器：开局就能记分'
     });
