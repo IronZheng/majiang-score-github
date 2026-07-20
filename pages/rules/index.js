@@ -1,25 +1,7 @@
-const { saveCurrentGame } = require('../../utils/storage');
 const share = require('../../utils/share');
 const api = require('../../utils/api');
-const playerAvatars = require('../../utils/player-avatars');
-const defaultProfiles = require('../../utils/default-profiles');
 
 const ADD_MY_GUIDE_DISMISSED_KEY = 'mj_add_my_guide_dismissed_v1';
-
-function createPlayer(index, seed) {
-  const profile = defaultProfiles.createPlayerProfile(seed, index);
-  return {
-    id: `${Date.now()}_${index}`,
-    name: profile.name,
-    avatarUrl: profile.avatarUrl,
-    defaultProfileKey: profile.defaultProfileKey,
-    score: 0
-  };
-}
-
-function createPlayers(count, seed) {
-  return Array.from({ length: count }).map((_, i) => createPlayer(i, seed));
-}
 
 Page({
   onShow() {
@@ -116,32 +98,6 @@ Page({
   },
   copyRoomId() {
     wx.setClipboardData({ data: this.data.roomId });
-  },
-
-  // ===================== 单人记账：逻辑不变，走本地计分 =====================
-  startSingle() {
-    const seed = defaultProfiles.getLocalProfileSeed();
-    const players = createPlayers(this.data.capacity, seed).map((p, i) => {
-      const profile = defaultProfiles.createPlayerProfile(seed, i);
-      return {
-        ...p,
-        name: profile.name,
-        avatarUrl: p.avatarUrl || profile.avatarUrl || playerAvatars[i % playerAvatars.length],
-        score: 0
-      };
-    });
-    saveCurrentGame({
-      players,
-      rounds: [],
-      currentRound: 1,
-      createdAt: Date.now(),
-      tableFee: {
-        enabled: Boolean(this.data.tableFeeEnabled),
-        score: 0,
-        records: []
-      }
-    });
-    wx.navigateTo({ url: '/pages/score-board/index' });
   },
 
   onShareAppMessage() {

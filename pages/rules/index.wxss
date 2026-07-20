@@ -229,18 +229,6 @@
   margin-bottom: 28rpx;
 }
 
-.single-entry {
-  text-align: center;
-  color: #e07b45;
-  font-size: 28rpx;
-  font-weight: 700;
-  padding: 14rpx 0 8rpx;
-}
-
-.single-entry:active {
-  opacity: 0.6;
-}
-
 .overlay {
   position: fixed;
   inset: 0;

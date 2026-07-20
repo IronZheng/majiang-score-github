@@ -33,7 +33,7 @@
     "list": [
       {
         "pagePath": "pages/scoring-setup/index",
-        "text": "计分"
+        "text": "单人"
       },
       {
         "pagePath": "pages/rules/index",

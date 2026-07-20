@@ -45,8 +45,6 @@
   <view class="primary-btn create-btn" bindtap="createRoom">{{creating ? '创建中…' : '创建房间'}}</view>
   <view class="tip">创建后把房间分享给牌友，或展示小程序码让他们扫码加入</view>
 
-  <view class="single-entry" bindtap="startSingle">单人记账</view>
-
   <view class="overlay" wx:if="{{inviteVisible}}">
     <view class="invite-card">
       <view class="invite-title">邀请好友加入</view>
