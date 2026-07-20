@@ -4,13 +4,13 @@ Component({
     list: [
       {
         pagePath: '/pages/scoring-setup/index',
-        text: '计分',
+        text: '单人',
         icon: '/assets/icons/score.svg',
         activeIcon: '/assets/icons/score-active.svg'
       },
       {
         pagePath: '/pages/rules/index',
-        text: '玩法',
+        text: '多人',
         icon: '/assets/icons/rules.svg',
         activeIcon: '/assets/icons/rules-active.svg'
       },
