@@ -1,0 +1,22 @@
+<view class="container join-page">
+  <view wx:if="{{error}}" class="error-card">
+    <view class="error-text">{{error}}</view>
+    <view class="primary-btn" bindtap="goHome">返回首页</view>
+  </view>
+
+  <block wx:else>
+    <view class="card room-card">
+      <view class="room-label">你要加入的房间</view>
+      <view class="room-id">{{roomId}}</view>
+    </view>
+
+    <view class="card">
+      <view class="title">你的昵称</view>
+      <input class="nick-input" placeholder="输入昵称（牌友可见）" value="{{nickname}}" bindinput="onNicknameInput" maxlength="16" />
+    </view>
+
+    <view wx:if="{{needLogin}}" class="primary-btn join-btn" bindtap="goLogin">请先登录后加入</view>
+    <view wx:else class="primary-btn join-btn" bindtap="join">{{joining ? '加入中…' : '加入房间'}}</view>
+    <view class="tip">加入后你将看到实时排名，并可记录自己的每一手得分</view>
+  </block>
+</view>

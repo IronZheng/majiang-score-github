@@ -98,6 +98,102 @@ function deleteScoreRecord(openid, clientId) {
   );
 }
 
+// ===================== 麻将多人房间（开放访问 + 成员令牌防串房） =====================
+
+// 持久化房间成员令牌：key 绑定 roomId + openid，避免被他人串房滥用
+function saveRoomToken(roomId, openid, token) {
+  if (!roomId || !openid || !token) return;
+  wx.setStorageSync('mj_room_token:' + roomId + ':' + openid, token);
+}
+function getRoomToken(roomId, openid) {
+  if (!roomId || !openid) return '';
+  return wx.getStorageSync('mj_room_token:' + roomId + ':' + openid) || '';
+}
+
+// 创建房间：房主建房 + 入座，返回 roomId + accessToken
+function createRoom(payload) {
+  return request('POST', '/api/mahjong-room/create', payload);
+}
+
+// 加入房间：返回 accessToken
+function joinRoom(payload) {
+  return request('POST', '/api/mahjong-room/join', payload);
+}
+
+// 离开房间（房主离开转移/解散）
+function leaveRoom(roomId) {
+  var openid = getOpenid();
+  return request('POST', '/api/mahjong-room/leave', {
+    roomId: roomId,
+    openid: openid,
+    accessToken: getRoomToken(roomId, openid)
+  });
+}
+
+// 开始游戏（仅房主）
+function startRoom(roomId) {
+  var openid = getOpenid();
+  return request('POST', '/api/mahjong-room/start', {
+    roomId: roomId,
+    openid: openid,
+    accessToken: getRoomToken(roomId, openid)
+  });
+}
+
+// 提交本人本局分数（delta 可正可负）
+function submitRoomScore(roomId, round, delta, note) {
+  var openid = getOpenid();
+  return request('POST', '/api/mahjong-room/score', {
+    roomId: roomId,
+    openid: openid,
+    accessToken: getRoomToken(roomId, openid),
+    round: round,
+    delta: delta,
+    note: note || ''
+  });
+}
+
+// 撤销本人上一笔计分
+function undoRoomScore(roomId) {
+  var openid = getOpenid();
+  return request('POST', '/api/mahjong-room/undo', {
+    roomId: roomId,
+    openid: openid,
+    accessToken: getRoomToken(roomId, openid)
+  });
+}
+
+// 轮询房间状态（只读，无需令牌）
+function getRoomState(roomId) {
+  var openid = getOpenid();
+  return request(
+    'GET',
+    '/api/mahjong-room/state?roomId=' + encodeURIComponent(roomId) +
+      '&selfOpenid=' + encodeURIComponent(openid),
+    null
+  );
+}
+
+// 结束游戏（仅房主）
+function finishRoom(roomId) {
+  var openid = getOpenid();
+  return request('POST', '/api/mahjong-room/finish', {
+    roomId: roomId,
+    openid: openid,
+    accessToken: getRoomToken(roomId, openid)
+  });
+}
+
+// 分享信息（点击即加入的路径）
+function getRoomShareInfo(roomId) {
+  return request('GET', '/api/mahjong-room/share-info?roomId=' + encodeURIComponent(roomId), null);
+}
+
+// 小程序码（扫码加入，返回 base64 data-url）
+function getRoomQrcode(roomId) {
+  return request('GET', '/api/mahjong-room/qrcode?roomId=' + encodeURIComponent(roomId), null);
+}
+
 module.exports = {
   API_BASE: API_BASE,
   getOpenid: getOpenid,
@@ -109,5 +205,17 @@ module.exports = {
   saveProfile: saveProfile,
   getLeaderboard: getLeaderboard,
   syncScoreRecords: syncScoreRecords,
-  deleteScoreRecord: deleteScoreRecord
+  deleteScoreRecord: deleteScoreRecord,
+  saveRoomToken: saveRoomToken,
+  getRoomToken: getRoomToken,
+  createRoom: createRoom,
+  joinRoom: joinRoom,
+  leaveRoom: leaveRoom,
+  startRoom: startRoom,
+  submitRoomScore: submitRoomScore,
+  undoRoomScore: undoRoomScore,
+  getRoomState: getRoomState,
+  finishRoom: finishRoom,
+  getRoomShareInfo: getRoomShareInfo,
+  getRoomQrcode: getRoomQrcode
 };

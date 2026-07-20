@@ -1,0 +1,78 @@
+<view class="container board-page">
+  <view wx:if="{{error}}" class="error-text">{{error}}</view>
+
+  <view class="top-bar" wx:else>
+    <view class="top-left">
+      <view class="room-title">{{title || '麻将房'}}</view>
+      <view class="room-meta">房间号 {{roomId}} · {{ranking.length}}/{{capacity}}人 · {{statusText}}</view>
+    </view>
+    <view class="top-actions">
+      <view class="icon-btn" bindtap="toggleInvite">邀请</view>
+      <view class="icon-btn ghost" bindtap="leave">离开</view>
+    </view>
+  </view>
+
+  <!-- 实时排名 -->
+  <view class="card ranking-card">
+    <view class="card-title">实时排名</view>
+    <view wx:if="{{ranking.length===0}}" class="empty">还没有玩家加入</view>
+    <view wx:for="{{ranking}}" wx:key="openid" class="rank-row {{item.isSelf?'self':''}}">
+      <view class="rank-no">{{index + 1}}</view>
+      <image wx:if="{{item.avatarUrl}}" class="rank-avatar" src="{{item.avatarUrl}}" mode="aspectFill"></image>
+      <view wx:else class="rank-avatar fallback">{{item.initial}}</view>
+      <view class="rank-name">
+        {{item.nickname}}
+        <text wx:if="{{item.isHost}}" class="host-tag">房主</text>
+        <text wx:if="{{item.isSelf}}" class="self-tag">我</text>
+      </view>
+      <view class="rank-score">{{item.totalScore}}</view>
+    </view>
+  </view>
+
+  <!-- 计分面板 -->
+  <view class="card score-card">
+    <view class="card-title">记我这一手</view>
+    <view class="score-input-row">
+      <input class="score-input" type="number" placeholder="本手分数" value="{{scoreInput}}" bindinput="onScoreInput" />
+    </view>
+    <view class="score-btns">
+      <view class="score-btn win" bindtap="submitWin">赢 +{{scoreInput || 0}}</view>
+      <view class="score-btn lose" bindtap="submitLose">输 -{{scoreInput || 0}}</view>
+    </view>
+    <view class="score-extra">
+      <input class="extra-input" type="number" placeholder="第几手" value="{{roundInput}}" bindinput="onRoundInput" />
+      <input class="extra-input note" placeholder="备注（可选）" value="{{noteInput}}" bindinput="onNoteInput" />
+    </view>
+    <view class="undo-link" bindtap="undo">撤销上一笔</view>
+  </view>
+
+  <!-- 房主操作 -->
+  <view wx:if="{{isHost}}" class="host-bar">
+    <view wx:if="{{status===0}}" class="primary-btn host-btn" bindtap="startGame">开始游戏</view>
+    <view wx:if="{{status===1}}" class="primary-btn host-btn" bindtap="finishGame">结束游戏</view>
+  </view>
+
+  <!-- 动态流水 -->
+  <view class="card feed-card" wx:if="{{feed.length>0}}">
+    <view class="card-title">最近动态</view>
+    <view wx:for="{{feed}}" wx:key="index" class="feed-row">
+      <view class="feed-name">{{item.nickname}}</view>
+      <view class="feed-round">{{item.roundText}}</view>
+      <view class="feed-delta {{item.deltaPositive?'pos':'neg'}}">{{item.deltaText}}</view>
+      <view class="feed-time">{{item.timeText}}</view>
+    </view>
+  </view>
+</view>
+
+<!-- 邀请面板 -->
+<view class="overlay" wx:if="{{inviteVisible}}">
+  <view class="invite-card">
+    <view class="invite-title">邀请好友加入</view>
+    <view class="invite-room">房间号：{{roomId}} <text class="copy" bindtap="copyRoomId">复制</text></view>
+    <button class="share-btn" open-type="share">分享给好友</button>
+    <image wx:if="{{qrcode}}" class="qrcode-img" src="{{qrcode}}" mode="aspectFit"></image>
+    <view wx:elif="{{qrcodeLoading}}" class="qrcode-tip">小程序码生成中…</view>
+    <view wx:else class="qrcode-tip">小程序码暂不可用，可改用上方分享按钮</view>
+    <view class="invite-close" bindtap="toggleInvite">关闭</view>
+  </view>
+</view>

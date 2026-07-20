@@ -273,3 +273,32 @@
   align-items: center;
   justify-content: center;
 }
+
+.mode-switch {
+  display: flex;
+  gap: 10rpx;
+  padding: 8rpx;
+  margin: 0 0 24rpx;
+  background: #f3f4f6;
+  border-radius: 18rpx;
+  box-sizing: border-box;
+}
+
+.mode-item {
+  flex: 1;
+  height: 80rpx;
+  border-radius: 14rpx;
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.mode-item.active {
+  background: #e49b73;
+  color: #ffffff;
+  box-shadow: 0 10rpx 22rpx rgba(228, 155, 115, 0.22);
+}

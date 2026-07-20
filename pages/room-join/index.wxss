@@ -1,0 +1,76 @@
+.join-page {
+  font-size: 30rpx;
+}
+
+.title {
+  font-size: 32rpx;
+  font-weight: 700;
+  margin-bottom: 22rpx;
+  color: #1f2937;
+}
+
+.room-card {
+  text-align: center;
+}
+
+.room-label {
+  font-size: 26rpx;
+  color: #9ca3af;
+  margin-bottom: 12rpx;
+}
+
+.room-id {
+  font-size: 56rpx;
+  font-weight: 800;
+  letter-spacing: 8rpx;
+  color: #e49b73;
+}
+
+.nick-input {
+  height: 84rpx;
+  background: #fffaf6;
+  border: 1rpx solid #f0d9cb;
+  border-radius: 16rpx;
+  padding: 0 22rpx;
+  font-size: 30rpx;
+  box-sizing: border-box;
+}
+
+.join-btn {
+  width: 100%;
+  height: 96rpx;
+  margin: 6rpx 0 18rpx;
+  font-size: 32rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tip {
+  text-align: center;
+  color: #9ca3af;
+  font-size: 25rpx;
+  line-height: 1.5;
+}
+
+.error-card {
+  text-align: center;
+  padding: 80rpx 20rpx;
+}
+
+.error-text {
+  font-size: 30rpx;
+  color: #6b7280;
+  margin-bottom: 40rpx;
+  line-height: 1.6;
+}
+
+.error-card .primary-btn {
+  width: 60%;
+  height: 88rpx;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30rpx;
+}

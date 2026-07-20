@@ -1,5 +1,6 @@
 const { saveCurrentGame } = require('../../utils/storage');
 const share = require('../../utils/share');
+const api = require('../../utils/api');
 const playerAvatars = require('../../utils/player-avatars');
 const defaultProfiles = require('../../utils/default-profiles');
 
@@ -33,6 +34,7 @@ Page({
   },
   data: {
     showAddMyGuide: false,
+    mode: 'single',
     presetCounts: [2, 3, 4],
     playerCount: 4,
     setupSeed: defaultProfiles.getLocalProfileSeed(),
@@ -80,7 +82,20 @@ Page({
   onTableFeeChange(e) {
     this.setData({ tableFeeEnabled: (e.detail.value || []).includes('enabled') });
   },
+  setMode(e) {
+    this.setData({ mode: e.currentTarget.dataset.mode });
+  },
   startGame() {
+    if (this.data.mode === 'multi') {
+      const openid = api.getOpenid();
+      if (!openid) {
+        wx.showToast({ title: '请先登录后再创建房间', icon: 'none' });
+        setTimeout(() => wx.navigateTo({ url: '/pages/login/index' }), 800);
+        return;
+      }
+      wx.navigateTo({ url: '/pages/room-create/index' });
+      return;
+    }
     const players = this.data.players.map((p, i) => {
       const profile = defaultProfiles.createPlayerProfile(this.data.setupSeed, i);
       return {

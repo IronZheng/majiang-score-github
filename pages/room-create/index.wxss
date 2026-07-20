@@ -1,0 +1,212 @@
+.create-page {
+  font-size: 30rpx;
+}
+
+.title {
+  font-size: 32rpx;
+  font-weight: 700;
+  margin-bottom: 22rpx;
+  color: #1f2937;
+}
+
+.title-input {
+  height: 84rpx;
+  background: #fffaf6;
+  border: 1rpx solid #f0d9cb;
+  border-radius: 16rpx;
+  padding: 0 22rpx;
+  font-size: 30rpx;
+  box-sizing: border-box;
+}
+
+.cap-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14rpx;
+}
+
+.cap-btn {
+  height: 84rpx;
+  background: #f3f4f6;
+  color: #4b5563;
+  border-radius: 16rpx;
+  font-size: 30rpx;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cap-btn.active {
+  background: #e49b73;
+  color: #fff;
+}
+
+.fee-card {
+  transition: opacity 0.2s ease;
+}
+
+.fee-card.fee-disabled {
+  background: #f8f9fb;
+}
+
+.fee-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18rpx;
+}
+
+.fee-title {
+  margin-bottom: 8rpx;
+}
+
+.fee-subtitle {
+  color: #6b7280;
+  font-size: 25rpx;
+  line-height: 1.45;
+}
+
+.fee-check-group {
+  flex-shrink: 0;
+}
+
+.fee-check {
+  width: 64rpx;
+  height: 64rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fee-input {
+  margin-top: 18rpx;
+  height: 84rpx;
+  background: #fffaf6;
+  border: 1rpx solid #f0d9cb;
+  border-radius: 16rpx;
+  padding: 0 22rpx;
+  font-size: 30rpx;
+  box-sizing: border-box;
+}
+
+.create-btn {
+  width: 100%;
+  height: 96rpx;
+  margin: 6rpx 0 18rpx;
+  font-size: 32rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tip {
+  text-align: center;
+  color: #9ca3af;
+  font-size: 25rpx;
+  line-height: 1.5;
+}
+
+/* 邀请面板 */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(17, 24, 39, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48rpx;
+  box-sizing: border-box;
+  z-index: 50;
+}
+
+.invite-card {
+  width: 100%;
+  max-width: 560rpx;
+  background: #fff;
+  border-radius: 28rpx;
+  padding: 40rpx 36rpx 32rpx;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.invite-title {
+  font-size: 34rpx;
+  font-weight: 800;
+  color: #1f2937;
+  margin-bottom: 20rpx;
+}
+
+.invite-room {
+  font-size: 30rpx;
+  color: #374151;
+  margin-bottom: 24rpx;
+}
+
+.copy {
+  color: #e49b73;
+  font-weight: 700;
+  margin-left: 12rpx;
+}
+
+.share-btn {
+  width: 100%;
+  height: 88rpx;
+  background: #e49b73;
+  color: #fff;
+  border-radius: 18rpx;
+  font-size: 30rpx;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24rpx;
+  line-height: 1.2;
+}
+
+.share-btn::after {
+  border: none;
+}
+
+.qrcode-img {
+  width: 360rpx;
+  height: 360rpx;
+  margin: 8rpx auto 0;
+  display: block;
+  background: #fff;
+  border-radius: 16rpx;
+}
+
+.qrcode-tip {
+  font-size: 26rpx;
+  color: #9ca3af;
+  padding: 40rpx 0;
+}
+
+.invite-actions {
+  display: flex;
+  gap: 18rpx;
+  margin-top: 28rpx;
+}
+
+.ghost-btn {
+  flex: 1;
+  height: 88rpx;
+  background: #f3f4f6;
+  color: #4b5563;
+  border-radius: 18rpx;
+  font-size: 30rpx;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.invite-actions .primary-btn {
+  flex: 1;
+  height: 88rpx;
+  font-size: 30rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

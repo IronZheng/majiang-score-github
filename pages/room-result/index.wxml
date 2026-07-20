@@ -1,0 +1,38 @@
+<view class="container result-page">
+  <view wx:if="{{error}}" class="error-text">{{error}}</view>
+
+  <block wx:else>
+    <view class="result-header">
+      <view class="result-title">{{title || '麻将房'}} · 最终战绩</view>
+      <view class="result-room">房间号 {{roomId}}</view>
+    </view>
+
+    <view wx:if="{{bestName}}" class="best-banner">
+      <view class="best-label">本局最大赢家</view>
+      <view class="best-name">{{bestName}}</view>
+      <view class="best-score">{{bestScore}} 分</view>
+    </view>
+
+    <view class="card">
+      <view wx:for="{{ranking}}" wx:key="openid" class="result-row {{item.isSelf?'self':''}}">
+        <view class="result-no {{item.medal}}">{{index + 1}}</view>
+        <image wx:if="{{item.avatarUrl}}" class="result-avatar" src="{{item.avatarUrl}}" mode="aspectFill"></image>
+        <view wx:else class="result-avatar fallback">{{item.initial}}</view>
+        <view class="result-name">
+          {{item.nickname}}
+          <text wx:if="{{item.isHost}}" class="host-tag">房主</text>
+          <text wx:if="{{item.isSelf}}" class="self-tag">我</text>
+        </view>
+        <view class="result-score">
+          <view class="score-num">{{item.totalScore}}</view>
+          <view wx:if="{{item.diff>0}}" class="score-diff">落后 {{item.diff}}</view>
+        </view>
+      </view>
+    </view>
+
+    <view wx:if="{{tableFeeEnabled}}" class="fee-note">本局每底台费 {{tableFeeScore}} 分</view>
+
+    <button class="share-btn" open-type="share">分享战绩给牌友</button>
+    <view class="primary-btn home-btn" bindtap="backHome">返回首页</view>
+  </block>
+</view>

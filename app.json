@@ -12,7 +12,11 @@
     "pages/login/index",
     "pages/profile/index",
     "pages/studio/index",
-    "pages/contact/index"
+    "pages/contact/index",
+    "pages/room-create/index",
+    "pages/room-join/index",
+    "pages/room-board/index",
+    "pages/room-result/index"
   ],
   "window": {
     "navigationBarTitleText": "麻将计分器",
