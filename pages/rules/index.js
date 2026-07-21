@@ -11,21 +11,21 @@ Page({
 
     const app = getApp();
     const user = (app && app.globalData && app.globalData.userInfo) || {};
-    const needAuth = !user.avatarUrl || !user.nickname;
     this.setData({
-      needAuth: needAuth,
       nickname: user.nickname || '',
       avatarUrl: user.avatarUrl || '',
-      showAddMyGuide: !needAuth && !wx.getStorageSync(ADD_MY_GUIDE_DISMISSED_KEY)
+      avatarInitial: (user.nickname || '?').charAt(0),
+      showAddMyGuide: !wx.getStorageSync(ADD_MY_GUIDE_DISMISSED_KEY)
     });
   },
 
   data: {
-    needAuth: true,
     nickname: '',
     avatarUrl: '',
+    avatarInitial: '?',
     showAddMyGuide: false,
     showCreate: false,
+    showEditProfile: false,
     createTitle: '',
     tableFeeEnabled: false,
     tableFeeScore: 0,
@@ -37,22 +37,26 @@ Page({
     this.setData({ showAddMyGuide: false });
   },
 
-  // ===================== 授权头像 + 昵称 =====================
+  // ===================== 头像 + 昵称（顶部点击修改） =====================
   onChooseAvatar(e) {
-    const avatarUrl = e.detail.avatarUrl || '';
-    this.setData({ avatarUrl: avatarUrl });
+    this.setData({ avatarUrl: e.detail.avatarUrl || '' });
   },
   onNicknameInput(e) {
     this.setData({ nickname: e.detail.value });
   },
-  confirmAuth() {
+  openEditProfile() {
+    this.setData({
+      showEditProfile: true,
+      avatarInitial: (this.data.nickname || '?').charAt(0)
+    });
+  },
+  closeEditProfile() {
+    this.setData({ showEditProfile: false });
+  },
+  saveProfile() {
     const nickname = (this.data.nickname || '').trim();
     if (!nickname) {
       wx.showToast({ title: '请填写昵称', icon: 'none' });
-      return;
-    }
-    if (!this.data.avatarUrl) {
-      wx.showToast({ title: '请选择头像', icon: 'none' });
       return;
     }
     const app = getApp();
@@ -67,7 +71,8 @@ Page({
       cached.openid = cached.openid || user.openid;
       wx.setStorageSync('mj_user', cached);
     } catch (e) {}
-    this.setData({ needAuth: false, showAddMyGuide: !wx.getStorageSync(ADD_MY_GUIDE_DISMISSED_KEY) });
+    this.setData({ showEditProfile: false, avatarInitial: nickname.charAt(0) });
+    wx.showToast({ title: '已保存', icon: 'success' });
   },
 
   // ===================== 三个入口 =====================
@@ -96,12 +101,24 @@ Page({
     }
     const app = getApp();
     const user = (app && app.globalData && app.globalData.userInfo) || {};
+    const nickname = (that.data.nickname || '').trim() || '房主';
+    const avatarUrl = that.data.avatarUrl || '';
+    user.nickname = nickname;
+    user.avatarUrl = avatarUrl;
+    app.globalData.userInfo = user;
+    try {
+      const cached = wx.getStorageSync('mj_user') || {};
+      cached.nickname = nickname;
+      cached.avatarUrl = avatarUrl;
+      cached.openid = cached.openid || openid;
+      wx.setStorageSync('mj_user', cached);
+    } catch (e) {}
     const that = this;
     this.setData({ creating: true });
     api.createRoom({
       openid: openid,
-      nickname: user.nickname || '房主',
-      avatarUrl: user.avatarUrl || '',
+      nickname: nickname,
+      avatarUrl: avatarUrl,
       title: (that.data.createTitle || '').trim(),
       tableFeeEnabled: that.data.tableFeeEnabled ? 1 : 0,
       tableFeeScore: that.data.tableFeeScore

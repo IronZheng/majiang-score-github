@@ -4,19 +4,68 @@
   font-size: 30rpx;
 }
 
-/* ===== 授权面板 ===== */
-.auth-mask {
-  position: fixed;
-  inset: 0;
-  background: linear-gradient(160deg, #fbe9da, #f6d3bb);
+/* ===== 顶部个人资料卡 ===== */
+.profile-bar {
+  display: flex;
+  align-items: center;
+  gap: 22rpx;
+  padding: 22rpx 24rpx;
+  margin-bottom: 26rpx;
+  background: #ffffff;
+  border: 1rpx solid rgba(228, 155, 115, 0.14);
+  border-radius: 22rpx;
+  box-shadow: 0 14rpx 34rpx rgba(120, 88, 64, 0.08);
+  box-sizing: border-box;
+}
+
+.profile-bar:active {
+  opacity: 0.9;
+}
+
+.profile-avatar {
+  width: 92rpx;
+  height: 92rpx;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: #fff4ed;
+  border: 2rpx solid #f0d9cb;
+  overflow: hidden;
+}
+
+.profile-avatar.placeholder {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 60rpx;
-  box-sizing: border-box;
-  z-index: 100;
+  color: #c08a6a;
+  font-size: 40rpx;
+  font-weight: 700;
 }
 
+.profile-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.profile-name {
+  font-size: 32rpx;
+  font-weight: 800;
+  color: #1f2937;
+  line-height: 1.4;
+}
+
+.profile-tip {
+  margin-top: 4rpx;
+  font-size: 24rpx;
+  color: #9ca3af;
+}
+
+.profile-edit {
+  color: #cbd2dc;
+  font-size: 44rpx;
+  flex-shrink: 0;
+}
+
+/* ===== 授权/编辑面板 ===== */
 .auth-card {
   width: 100%;
   background: #ffffff;

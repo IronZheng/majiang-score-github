@@ -52,25 +52,19 @@ Page({
       wx.showToast({ title: '正在获取登录信息，请稍后重试', icon: 'none' });
       return;
     }
-    const nickname = (this.data.nickname || '').trim();
-    if (!nickname) {
-      wx.showToast({ title: '请填写昵称', icon: 'none' });
-      return;
-    }
-    if (!this.data.avatarUrl) {
-      wx.showToast({ title: '请选择头像', icon: 'none' });
-      return;
-    }
+    // 直接进入：昵称/头像可选，缺省时给默认身份
+    const nickname = (this.data.nickname || '').trim() || '牌友';
+    const avatarUrl = this.data.avatarUrl || '';
     // 记住资料，方便下次
     const app = getApp();
     const user = app.globalData.userInfo || {};
     user.nickname = nickname;
-    user.avatarUrl = this.data.avatarUrl;
+    user.avatarUrl = avatarUrl;
     app.globalData.userInfo = user;
     try {
       const cached = wx.getStorageSync('mj_user') || {};
       cached.nickname = nickname;
-      cached.avatarUrl = this.data.avatarUrl;
+      cached.avatarUrl = avatarUrl;
       cached.openid = cached.openid || openid;
       wx.setStorageSync('mj_user', cached);
     } catch (e) {}
@@ -81,7 +75,7 @@ Page({
       roomId: that.data.roomId,
       openid: openid,
       nickname: nickname,
-      avatarUrl: that.data.avatarUrl
+      avatarUrl: avatarUrl
     }).then(function (res) {
       api.saveRoomToken(res.roomId, openid, res.accessToken);
       that.setData({ joined: true, joining: false });
