@@ -1,14 +1,13 @@
 <view class="container multi-page">
   <view class="multi-body">
-    <!-- 顶部个人资料：点击修改头像和昵称 -->
-    <view class="profile-bar" bindtap="openEditProfile">
+    <!-- 顶部个人资料：与「我的」页共享，只读展示 -->
+    <view class="profile-bar">
       <image wx:if="{{avatarUrl}}" class="profile-avatar" src="{{avatarUrl}}" mode="aspectFill"></image>
       <view wx:else class="profile-avatar placeholder">{{avatarInitial}}</view>
       <view class="profile-info">
-        <view class="profile-name">{{nickname || '点击设置昵称'}}</view>
-        <view class="profile-tip">点击修改头像和昵称</view>
+        <view class="profile-name">{{nickname || '未设置'}}</view>
+        <view class="profile-tip">在「我的」页修改头像和昵称</view>
       </view>
-      <view class="profile-edit">›</view>
     </view>
 
     <view class="add-my-guide" wx:if="{{showAddMyGuide}}">
@@ -70,23 +69,6 @@
       <view class="create-actions">
         <view class="ghost-btn" bindtap="closeCreate">取消</view>
         <view class="primary-btn" bindtap="createRoom">{{creating ? '创建中…' : '创建并进入'}}</view>
-      </view>
-    </view>
-  </view>
-
-  <!-- 修改资料弹窗 -->
-  <view class="overlay" wx:if="{{showEditProfile}}">
-    <view class="auth-card">
-      <view class="auth-title">设置头像和昵称</view>
-      <view class="auth-sub">牌友们会看到你的资料</view>
-      <button class="avatar-btn" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
-        <image wx:if="{{avatarUrl}}" class="avatar-img" src="{{avatarUrl}}" mode="aspectFill"></image>
-        <view wx:else class="avatar-placeholder">点击选头像</view>
-      </button>
-      <input class="nick-input" type="nickname" placeholder="请输入昵称" value="{{nickname}}" bindinput="onNicknameInput" />
-      <view class="create-actions">
-        <view class="ghost-btn" bindtap="closeEditProfile">取消</view>
-        <view class="primary-btn" bindtap="saveProfile">保存</view>
       </view>
     </view>
   </view>

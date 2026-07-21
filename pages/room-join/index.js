@@ -6,6 +6,7 @@ Page({
     roomId: '',
     nickname: '',
     avatarUrl: '',
+    initial: '?',
     error: '',
     joining: false,
     joined: false
@@ -28,17 +29,10 @@ Page({
     }
     this.setData({
       roomId: roomId,
-      nickname: user.nickname || '',
-      avatarUrl: user.avatarUrl || ''
+      nickname: user.nickName || user.nickname || '',
+      avatarUrl: user.avatarUrl || '',
+      initial: ((user.nickName || user.nickname || '?').charAt(0))
     });
-  },
-
-  onChooseAvatar(e) {
-    this.setData({ avatarUrl: e.detail.avatarUrl || '' });
-  },
-
-  onNicknameInput(e) {
-    this.setData({ nickname: e.detail.value });
   },
 
   goHome() {

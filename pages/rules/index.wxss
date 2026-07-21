@@ -18,10 +18,6 @@
   box-sizing: border-box;
 }
 
-.profile-bar:active {
-  opacity: 0.9;
-}
-
 .profile-avatar {
   width: 92rpx;
   height: 92rpx;
@@ -57,12 +53,6 @@
   margin-top: 4rpx;
   font-size: 24rpx;
   color: #9ca3af;
-}
-
-.profile-edit {
-  color: #cbd2dc;
-  font-size: 44rpx;
-  flex-shrink: 0;
 }
 
 /* ===== 授权/编辑面板 ===== */

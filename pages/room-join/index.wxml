@@ -10,13 +10,11 @@
       <view class="room-id">{{roomId}}</view>
     </view>
 
-    <view class="card auth-card">
-      <view class="title">设置头像和昵称</view>
-      <button class="avatar-btn" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
-        <image wx:if="{{avatarUrl}}" class="avatar-img" src="{{avatarUrl}}" mode="aspectFill"></image>
-        <view wx:else class="avatar-placeholder">选头像</view>
-      </button>
-      <input class="nick-input" type="nickname" placeholder="输入昵称（牌友可见）" value="{{nickname}}" bindinput="onNicknameInput" maxlength="16" />
+    <view class="card join-profile">
+      <image wx:if="{{avatarUrl}}" class="join-avatar" src="{{avatarUrl}}" mode="aspectFill"></image>
+      <view wx:else class="join-avatar placeholder">{{initial}}</view>
+      <view class="join-name">{{nickname || '牌友'}}</view>
+      <view class="join-sub">以此身份加入（可在「我的」中修改）</view>
     </view>
 
     <view class="primary-btn join-btn" bindtap="join">{{joining ? '加入中…' : '加入房间'}}</view>

@@ -11,10 +11,12 @@ Page({
 
     const app = getApp();
     const user = (app && app.globalData && app.globalData.userInfo) || {};
+    // 与「我的」页共用同一份资料：昵称字段为 nickName
+    const nickname = user.nickName || user.nickname || '';
     this.setData({
-      nickname: user.nickname || '',
+      nickname: nickname,
       avatarUrl: user.avatarUrl || '',
-      avatarInitial: (user.nickname || '?').charAt(0),
+      avatarInitial: (nickname || '?').charAt(0),
       showAddMyGuide: !wx.getStorageSync(ADD_MY_GUIDE_DISMISSED_KEY)
     });
   },
@@ -25,7 +27,6 @@ Page({
     avatarInitial: '?',
     showAddMyGuide: false,
     showCreate: false,
-    showEditProfile: false,
     createTitle: '',
     tableFeeEnabled: false,
     tableFeeScore: 0,
@@ -35,44 +36,6 @@ Page({
   dismissAddMyGuide() {
     wx.setStorageSync(ADD_MY_GUIDE_DISMISSED_KEY, true);
     this.setData({ showAddMyGuide: false });
-  },
-
-  // ===================== 头像 + 昵称（顶部点击修改） =====================
-  onChooseAvatar(e) {
-    this.setData({ avatarUrl: e.detail.avatarUrl || '' });
-  },
-  onNicknameInput(e) {
-    this.setData({ nickname: e.detail.value });
-  },
-  openEditProfile() {
-    this.setData({
-      showEditProfile: true,
-      avatarInitial: (this.data.nickname || '?').charAt(0)
-    });
-  },
-  closeEditProfile() {
-    this.setData({ showEditProfile: false });
-  },
-  saveProfile() {
-    const nickname = (this.data.nickname || '').trim();
-    if (!nickname) {
-      wx.showToast({ title: '请填写昵称', icon: 'none' });
-      return;
-    }
-    const app = getApp();
-    const user = app.globalData.userInfo || {};
-    user.nickname = nickname;
-    user.avatarUrl = this.data.avatarUrl;
-    app.globalData.userInfo = user;
-    try {
-      const cached = wx.getStorageSync('mj_user') || {};
-      cached.nickname = nickname;
-      cached.avatarUrl = this.data.avatarUrl;
-      cached.openid = cached.openid || user.openid;
-      wx.setStorageSync('mj_user', cached);
-    } catch (e) {}
-    this.setData({ showEditProfile: false, avatarInitial: nickname.charAt(0) });
-    wx.showToast({ title: '已保存', icon: 'success' });
   },
 
   // ===================== 三个入口 =====================
@@ -99,20 +62,9 @@ Page({
       wx.showToast({ title: '请先授权', icon: 'none' });
       return;
     }
-    const app = getApp();
-    const user = (app && app.globalData && app.globalData.userInfo) || {};
-    const nickname = (that.data.nickname || '').trim() || '房主';
-    const avatarUrl = that.data.avatarUrl || '';
-    user.nickname = nickname;
-    user.avatarUrl = avatarUrl;
-    app.globalData.userInfo = user;
-    try {
-      const cached = wx.getStorageSync('mj_user') || {};
-      cached.nickname = nickname;
-      cached.avatarUrl = avatarUrl;
-      cached.openid = cached.openid || openid;
-      wx.setStorageSync('mj_user', cached);
-    } catch (e) {}
+    // 直接复用「我的」页同步过来的头像和昵称
+    const nickname = (this.data.nickname || '').trim() || '房主';
+    const avatarUrl = this.data.avatarUrl || '';
     const that = this;
     this.setData({ creating: true });
     api.createRoom({

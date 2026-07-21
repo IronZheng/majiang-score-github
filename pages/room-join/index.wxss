@@ -75,41 +75,43 @@
   font-size: 30rpx;
 }
 
-/* ===== 授权面板 ===== */
-.auth-card {
-  background: #ffffff;
-  border-radius: 28rpx;
-  padding: 44rpx 40rpx 40rpx;
-  box-sizing: border-box;
+/* ===== 加入身份（只读，与「我的」页同步） ===== */
+.join-profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
-  box-shadow: 0 16rpx 40rpx rgba(184, 97, 66, 0.14);
+  padding: 36rpx 30rpx 30rpx;
   margin-bottom: 28rpx;
 }
 
-.avatar-btn {
-  width: 150rpx;
-  height: 150rpx;
-  margin: 0 auto 26rpx;
-  padding: 0;
+.join-avatar {
+  width: 120rpx;
+  height: 120rpx;
   border-radius: 50%;
   background: #fff4ed;
-  border: 2rpx dashed #e49b73;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  border: 2rpx solid #f0d9cb;
   overflow: hidden;
 }
 
-.avatar-btn::after {
-  border: none;
-}
-
-.avatar-img {
-  width: 100%;
-  height: 100%;
-}
-
-.avatar-placeholder {
+.join-avatar.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: #c08a6a;
+  font-size: 48rpx;
+  font-weight: 700;
+}
+
+.join-name {
+  margin-top: 18rpx;
+  font-size: 34rpx;
+  font-weight: 800;
+  color: #1f2937;
+}
+
+.join-sub {
+  margin-top: 6rpx;
   font-size: 24rpx;
+  color: #9ca3af;
 }
