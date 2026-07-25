@@ -146,77 +146,306 @@
   text-align: right;
 }
 
-.score-card {
-  background: #ffffff;
+/* ===== 等待：玩家列表加人 ===== */
+.title-warn {
+  color: #ef4444;
+  font-size: 24rpx;
+  font-weight: 600;
+  margin-left: 6rpx;
 }
 
-.score-input-row {
-  margin-bottom: 16rpx;
+.add-chip {
+  background: #fff4ed;
+  border: 2rpx dashed #e49b73;
+  cursor: pointer;
 }
 
-.score-input {
-  height: 92rpx;
-  background: #fffaf6;
-  border: 1rpx solid #f0d9cb;
-  border-radius: 16rpx;
-  padding: 0 24rpx;
-  font-size: 36rpx;
-  font-weight: 700;
-  text-align: center;
-  box-sizing: border-box;
-}
-
-.score-btns {
-  display: flex;
-  gap: 18rpx;
-}
-
-.score-btn {
-  flex: 1;
-  height: 92rpx;
-  border-radius: 18rpx;
-  font-size: 30rpx;
-  font-weight: 800;
+.add-ico {
+  width: 76rpx;
+  height: 76rpx;
+  border-radius: 50%;
+  background: #e49b73;
   color: #fff;
+  font-size: 44rpx;
+  font-weight: 300;
+  line-height: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 10rpx 22rpx rgba(0, 0, 0, 0.08);
 }
 
-.score-btn.win {
-  background: #34a853;
+.add-text {
+  max-width: 124rpx;
+  font-size: 24rpx;
+  color: #c0743f;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.score-btn.lose {
-  background: #ef4444;
+.add-chip:active {
+  opacity: 0.7;
 }
 
-.score-extra {
+/* ===== 进行中：按圈记分 ===== */
+.score-form {
+  background: #ffffff;
+}
+
+.form-head {
   display: flex;
-  gap: 18rpx;
-  margin-top: 16rpx;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16rpx;
+  margin-bottom: 20rpx;
 }
 
-.extra-input {
-  flex: 1;
-  height: 76rpx;
-  background: #f3f4f6;
-  border-radius: 14rpx;
-  padding: 0 20rpx;
-  font-size: 28rpx;
+.form-title {
+  font-size: 32rpx;
+  font-weight: 800;
+  color: #1f2937;
+}
+
+.form-sum {
+  font-size: 26rpx;
+  font-weight: 700;
+  padding: 6rpx 18rpx;
+  border-radius: 999rpx;
+}
+
+.form-sum.ok {
+  background: #eafaef;
+  color: #34a853;
+}
+
+.form-sum.bad {
+  background: #fdecec;
+  color: #ef4444;
+}
+
+.score-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 14rpx;
+}
+
+.score-row {
+  display: flex;
+  align-items: center;
+  gap: 18rpx;
+  padding: 16rpx 18rpx;
+  border-radius: 18rpx;
+  background: #fffaf6;
+  border: 1rpx solid rgba(228, 155, 115, 0.14);
   box-sizing: border-box;
 }
 
-.extra-input.note {
-  flex: 2;
+.row-avatar {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+  background: #eee;
+  flex-shrink: 0;
 }
 
-.undo-link {
-  margin-top: 16rpx;
+.row-avatar.fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e49b73;
+  color: #fff;
+  font-size: 32rpx;
+  font-weight: 700;
+}
+
+.row-name {
+  flex: 1;
+  min-width: 0;
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #1f2937;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.row-toggle {
+  position: relative;
+  width: 152rpx;
+  height: 76rpx;
+  border-radius: 999rpx;
+  background: #f7ece3;
+  border: 1rpx solid rgba(228, 155, 115, 0.28);
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  box-shadow: inset 0 1rpx 3rpx rgba(120, 88, 64, 0.12);
+}
+
+.row-toggle:active {
+  opacity: 0.92;
+}
+
+.toggle-thumb {
+  position: absolute;
+  top: 4rpx;
+  left: 4rpx;
+  width: calc(50% - 4rpx);
+  height: calc(100% - 8rpx);
+  border-radius: 999rpx;
+  z-index: 0;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.2);
+  transition: transform 0.32s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.32s ease;
+}
+
+/* ＋ 赢/涨 = 红；－ 输/跌 = 绿（红涨绿跌） */
+.row-toggle.plus .toggle-thumb {
+  transform: translateX(0);
+  background: linear-gradient(135deg, #f0808a, #e25560);
+}
+
+.row-toggle.minus .toggle-thumb {
+  transform: translateX(100%);
+  background: linear-gradient(135deg, #43c463, #2fa94e);
+}
+
+.toggle-opt {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 42rpx;
+  font-weight: 300;
+  line-height: 1;
+  transition: color 0.32s ease;
+}
+
+.row-toggle.plus .plus-opt {
+  color: #ffffff;
+}
+
+.row-toggle.plus .minus-opt {
+  color: #b08968;
+}
+
+.row-toggle.minus .plus-opt {
+  color: #b08968;
+}
+
+.row-toggle.minus .minus-opt {
+  color: #ffffff;
+}
+
+.row-input {
+  width: 180rpx;
+  height: 76rpx;
+  background: #ffffff;
+  border: 1rpx solid #f0d9cb;
+  border-radius: 16rpx;
+  padding: 0 20rpx;
+  font-size: 34rpx;
+  font-weight: 700;
   text-align: center;
-  color: #6b7280;
-  font-size: 26rpx;
+  color: #1f2937;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.auto-tag {
+  flex-shrink: 0;
+  font-size: 20rpx;
+  font-weight: 700;
+  color: #2fa94e;
+  background: #eafaef;
+  border-radius: 999rpx;
+  padding: 4rpx 12rpx;
+}
+
+/* 每圈台费输入（正数，可改） */
+.fee-input-row {
+  display: flex;
+  align-items: center;
+  gap: 18rpx;
+  margin-top: 16rpx;
+  padding: 16rpx 18rpx;
+  border-radius: 18rpx;
+  background: #fff7f0;
+  border: 1rpx solid rgba(228, 155, 115, 0.22);
+  box-sizing: border-box;
+}
+
+.fee-label {
+  flex: 1;
+  min-width: 0;
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #b45309;
+}
+
+.fee-input {
+  width: 180rpx;
+  height: 76rpx;
+  background: #ffffff;
+  border: 1rpx solid #f0d9cb;
+  border-radius: 16rpx;
+  padding: 0 20rpx;
+  font-size: 34rpx;
+  font-weight: 700;
+  text-align: center;
+  color: #1f2937;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.round-actions {
+  display: flex;
+  gap: 18rpx;
+  margin-top: 24rpx;
+}
+
+.round-actions .ghost-btn {
+  flex: 1;
+  height: 92rpx;
+  border-radius: 16rpx;
+  background: #f3f4f6;
+  color: #4b5563;
+  font-size: 30rpx;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.round-actions .ghost-btn:active {
+  opacity: 0.7;
+}
+
+.round-actions .primary-btn {
+  flex: 2;
+  height: 92rpx;
+  font-size: 32rpx;
+  font-weight: 800;
+  color: #ffffff;
+  background: linear-gradient(135deg, #f0a070, #e07b45);
+  border-radius: 16rpx;
+  box-shadow: 0 14rpx 30rpx rgba(224, 123, 69, 0.28);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.round-actions .primary-btn.disabled {
+  background: #d9c3b4;
+  box-shadow: none;
+}
+
+.round-actions .primary-btn:active {
+  transform: scale(0.99);
+  opacity: 0.92;
 }
 
 .host-bar {
@@ -230,6 +459,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.primary-btn.disabled {
+  background: #d9c3b4;
+  box-shadow: none;
+}
+
+.host-btn.ghost-end {
+  background: #f3f4f6;
+  color: #b45309;
+  box-shadow: none;
 }
 
 .feed-row {
@@ -273,6 +513,132 @@
 .feed-time {
   color: #9ca3af;
   font-size: 24rpx;
+}
+
+/* ===== 回合战况矩阵 ===== */
+.matrix-card {
+  background: #ffffff;
+}
+
+.matrix-card .card-title {
+  text-align: center;
+}
+
+.matrix-scroll {
+  width: 100%;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+}
+
+.matrix {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: max-content;
+}
+
+.matrix-row {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+}
+
+.matrix-cell {
+  box-sizing: border-box;
+  font-size: 26rpx;
+  text-align: center;
+}
+
+.matrix-head {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.matrix-head-cell {
+  width: 104rpx;
+  padding: 8rpx 6rpx 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+}
+
+/* 表头首格：与头像同行的"回合战况"标题，与数据行首列等宽保证对齐 */
+.matrix-cell.corner {
+  width: 90rpx;
+  padding-bottom: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22rpx;
+  font-weight: 600;
+  color: #b0a89c;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.m-avatar {
+  width: 68rpx;
+  height: 68rpx;
+  border-radius: 50%;
+  background: #eee;
+  flex-shrink: 0;
+}
+
+.matrix-head-cell.self .m-avatar {
+  box-shadow: 0 0 0 3rpx #e49b73;
+}
+
+.m-avatar.fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e49b73;
+  color: #fff;
+  font-size: 28rpx;
+  font-weight: 700;
+}
+
+.round-label {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  width: 90rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  color: #b0a89c;
+  font-weight: 500;
+  font-size: 24rpx;
+}
+
+.matrix-row:not(.matrix-head) {
+  border-top: 1rpx solid #f5eee7;
+}
+
+.m-score {
+  width: 104rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 30rpx;
+  color: #c9c2b8;
+  padding: 24rpx 4rpx;
+}
+
+.m-score.pos {
+  color: #e25560;
+}
+
+.m-score.neg {
+  color: #2fa94e;
+}
+
+.m-score.zero {
+  color: #d8d2c8;
 }
 
 /* 邀请面板（与 room-create 一致） */
@@ -468,63 +834,22 @@
   color: #1f2937;
 }
 
-/* ===== 本圈合计 ===== */
-.circle-bar {
-  display: flex;
-  align-items: baseline;
-  gap: 14rpx;
-  padding: 20rpx 26rpx;
-  border-radius: 18rpx;
-  margin-bottom: 22rpx;
-}
-
-.circle-bar.ok {
-  background: #eafaef;
-}
-
-.circle-bar.bad {
-  background: #fdecec;
-}
-
-.circle-label {
-  font-size: 28rpx;
+/* 矩阵中与玩家并列的台费列：固定宽度 + 左侧虚线分隔，整行可直接看到无需滑动 */
+.fee-col-head {
+  width: 132rpx;
+  color: #b45309;
   font-weight: 700;
-  color: #374151;
+  margin-left: 12rpx;
+  padding-left: 8rpx;
+  border-left: 1rpx dashed #e7d3c4;
 }
 
-.circle-sum {
-  font-size: 44rpx;
-  font-weight: 800;
-}
-
-.circle-bar.ok .circle-sum {
-  color: #34a853;
-}
-
-.circle-bar.bad .circle-sum {
-  color: #ef4444;
-}
-
-.circle-hint {
-  font-size: 24rpx;
-  color: #9ca3af;
-}
-
-.target-tip {
-  margin-top: 16rpx;
-  text-align: center;
-  color: #9ca3af;
-  font-size: 24rpx;
-}
-
-.next-circle {
-  text-align: center;
-  color: #2f7ac9;
-  font-size: 30rpx;
-  font-weight: 800;
-  padding: 20rpx 0 24rpx;
-}
-
-.next-circle:active {
-  opacity: 0.6;
+.fee-col {
+  width: 132rpx;
+  color: #b45309;
+  font-weight: 600;
+  margin-left: 12rpx;
+  padding-left: 8rpx;
+  border-left: 1rpx dashed #e7d3c4;
+  background: #fdf8f2;
 }

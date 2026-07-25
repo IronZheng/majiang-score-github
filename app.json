@@ -1,8 +1,8 @@
 {
   "lazyCodeLoading": "requiredComponents",
   "pages": [
-    "pages/scoring-setup/index",
     "pages/rules/index",
+    "pages/scoring-setup/index",
     "pages/game-quiz/index",
     "pages/challenge/index",
     "pages/leaderboard/index",
@@ -16,7 +16,8 @@
     "pages/room-join/index",
     "pages/room-board/index",
     "pages/room-list/index",
-    "pages/room-result/index"
+    "pages/room-result/index",
+    "pages/records/index"
   ],
   "window": {
     "navigationBarTitleText": "麻将计分器",
@@ -33,12 +34,12 @@
     "borderStyle": "black",
     "list": [
       {
-        "pagePath": "pages/scoring-setup/index",
-        "text": "单人"
-      },
-      {
         "pagePath": "pages/rules/index",
         "text": "多人"
+      },
+      {
+        "pagePath": "pages/records/index",
+        "text": "记录"
       },
       {
         "pagePath": "pages/game-quiz/index",

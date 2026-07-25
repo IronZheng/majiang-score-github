@@ -1,6 +1,7 @@
 const auth = require('../../utils/auth');
 const share = require('../../utils/share');
 const defaultProfiles = require('../../utils/default-profiles');
+const oss = require('../../utils/oss-upload');
 
 Page({
   data: {
@@ -40,7 +41,23 @@ Page({
         const app = getApp();
         const user = app.globalData.userInfo || {};
         if (!user.nickNameCustomized) user.nickName = nickName;
-        if (!user.avatarCustomized && avatarUrl) user.avatarUrl = avatarUrl;
+        if (!user.avatarCustomized && avatarUrl) {
+          user.avatarUrl = avatarUrl;
+          // 异步把微信头像转存到 OSS，确保分享给他人时头像可公开访问
+          wx.downloadFile({
+            url: avatarUrl,
+            success: function (dl) {
+              if (!dl || !dl.tempFilePath) return;
+              oss.uploadAvatar(dl.tempFilePath).then(function (ossUrl) {
+                const u = wx.getStorageSync('mj_user') || {};
+                u.avatarUrl = ossUrl;
+                wx.setStorageSync('mj_user', u);
+                if (getApp().globalData.userInfo) getApp().globalData.userInfo.avatarUrl = ossUrl;
+              }).catch(function () {});
+            },
+            fail: function () {}
+          });
+        }
         wx.setStorageSync('mj_user', user);
         app.globalData.userInfo = user;
         console.log('[login] 已获取微信头像和昵称:', nickName);

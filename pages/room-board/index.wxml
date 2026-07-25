@@ -12,72 +12,100 @@
     </view>
   </view>
 
-  <!-- 二维码（创建后直接展示，扫码加入） -->
-  <view class="card qrcode-card" wx:if="{{!error}}">
-    <view class="qrcode-left">
-      <view class="qr-title">扫码加入</view>
-      <view class="qr-room" bindtap="copyRoomId">房间号 {{roomId}}（点击复制）</view>
-      <button class="share-btn" open-type="share">分享给好友</button>
-    </view>
-    <image wx:if="{{qrcode}}" class="qrcode-img" src="{{qrcode}}" mode="aspectFit" bindtap="toggleInvite"></image>
-    <view wx:elif="{{qrcodeLoading}}" class="qrcode-tip">二维码生成中…</view>
-    <view wx:else class="qrcode-tip" bindtap="loadQrcode">点击加载二维码</view>
-  </view>
-
-  <!-- 玩家列表（点击选择计分对象） -->
-  <view class="card">
-    <view class="card-title">玩家（{{players.length}}人）{{tableFeeEnabled ? ' · 台费'+tableFeeScore : ''}}</view>
-    <scroll-view scroll-x class="player-scroll" wx:if="{{players.length>0}}">
-      <view wx:for="{{players}}" wx:key="openid"
-            class="player-chip {{selectedTarget===item.openid?'active':''}} {{item.isSelf?'self':''}}"
-            data-openid="{{item.openid}}" bindtap="selectTarget">
-        <image wx:if="{{item.avatarUrl}}" class="chip-avatar" src="{{item.avatarUrl}}" mode="aspectFill"></image>
-        <view wx:else class="chip-avatar fallback">{{item.initial}}</view>
-        <view class="chip-name">{{item.nickname}}<text wx:if="{{item.isHost}}" class="host-tag">主</text></view>
-        <view class="chip-score">{{item.totalScore}}</view>
+  <!-- ===== 等待中：二维码 + 玩家列表 + 开始 ===== -->
+  <block wx:if="{{status === 0}}">
+    <view class="card qrcode-card">
+      <view class="qrcode-left">
+        <view class="qr-title">扫码加入</view>
+        <view class="qr-room" bindtap="copyRoomId">房间号 {{roomId}}（点击复制）</view>
+        <button class="share-btn" open-type="share">分享给好友</button>
       </view>
-    </scroll-view>
-    <view wx:else class="empty">还没有玩家加入，分享二维码邀请牌友</view>
-  </view>
-
-  <!-- 本圈合计 -->
-  <view class="circle-bar {{sumOk?'ok':'bad'}}">
-    <text class="circle-label">第{{scoringRound}}圈 合计</text>
-    <text class="circle-sum">{{displaySum}}</text>
-    <text class="circle-hint">{{sumOk ? '（已平衡）' : '（应为 0）'}}</text>
-  </view>
-
-  <!-- 计分面板 -->
-  <view class="card score-card">
-    <view class="card-title">给「{{selectedNickname || '选择玩家'}}」记分</view>
-    <view class="score-input-row">
-      <input class="score-input" type="number" placeholder="本圈分数" value="{{scoreInput}}" bindinput="onScoreInput" />
+      <image wx:if="{{qrcode}}" class="qrcode-img" src="{{qrcode}}" mode="aspectFit" bindtap="toggleInvite"></image>
+      <view wx:elif="{{qrcodeLoading}}" class="qrcode-tip">二维码生成中…</view>
+      <view wx:else class="qrcode-tip" bindtap="loadQrcode">点击加载二维码</view>
     </view>
-    <view class="score-btns">
-      <view class="score-btn win" bindtap="submitWin">赢 +{{scoreInput || 0}}</view>
-      <view class="score-btn lose" bindtap="submitLose">输 -{{scoreInput || 0}}</view>
+
+    <view class="card">
+      <view class="card-title">
+        玩家（{{players.length}}人）
+        <text wx:if="{{players.length < 2}}" class="title-warn">· 至少 2 人才能开始</text>
+      </view>
+      <scroll-view scroll-x class="player-scroll" wx:if="{{players.length > 0}}">
+        <view wx:for="{{players}}" wx:key="openid" class="player-chip {{item.isSelf ? 'self' : ''}}">
+          <image wx:if="{{item.avatarUrl}}" class="chip-avatar" src="{{item.avatarUrl}}" mode="aspectFill"></image>
+          <view wx:else class="chip-avatar fallback">{{item.initial}}</view>
+          <view class="chip-name">{{item.nickname}}<text wx:if="{{item.isHost}}" class="host-tag">主</text></view>
+          <view class="chip-score">{{item.totalScore}}</view>
+        </view>
+        <view class="player-chip add-chip" bindtap="addPlayer">
+          <view class="add-ico">＋</view>
+          <view class="add-text">加人</view>
+        </view>
+      </scroll-view>
+      <view wx:else class="empty">还没有玩家，点右侧「＋」添加</view>
     </view>
-    <view class="target-tip">点上方玩家头像可切换计分对象</view>
-  </view>
 
-  <!-- 房主操作 -->
-  <view wx:if="{{isHost}}" class="host-bar">
-    <view wx:if="{{status===0}}" class="primary-btn host-btn" bindtap="startGame">开始计分</view>
-    <view wx:if="{{status===1}}" class="primary-btn host-btn" bindtap="finishGame">结束游戏</view>
-  </view>
-
-  <view wx:if="{{status===1}}" class="next-circle" bindtap="nextCircle">完成本圈，开始下一圈 ›</view>
-
-  <!-- 动态流水 -->
-  <view class="card feed-card" wx:if="{{feed.length>0}}">
-    <view class="card-title">最近动态</view>
-    <view wx:for="{{feed}}" wx:key="index" class="feed-row">
-      <view class="feed-name">{{item.nickname}}</view>
-      <view class="feed-round">{{item.roundText}}</view>
-      <view class="feed-delta {{item.deltaPositive?'pos':'neg'}}">{{item.deltaText}}</view>
-      <view class="feed-time">{{item.timeText}}</view>
+    <view wx:if="{{isHost}}" class="host-bar">
+      <view class="primary-btn host-btn {{players.length < 2 ? 'disabled' : ''}}" bindtap="startGame">{{players.length < 2 ? '至少 2 人开始' : '开始计分'}}</view>
     </view>
-  </view>
+  </block>
+
+  <!-- ===== 进行中：按圈记分 ===== -->
+  <block wx:if="{{status === 1}}">
+    <view class="card score-form">
+      <view class="form-head">
+        <view class="form-title">第 {{editingRound}} 圈 · 记分</view>
+        <view wx:if="{{tableFeeEnabled}}" class="form-sum {{sumOk ? 'ok' : 'bad'}}">玩家合计 {{roundSum}} + 台费 {{tableFeeInput || 0}}，应为 0</view>
+        <view wx:else class="form-sum {{sumOk ? 'ok' : 'bad'}}">合计 {{roundSum}}（需为 0）</view>
+      </view>
+      <view class="score-rows">
+        <view class="score-row" wx:for="{{scoreRows}}" wx:key="openid">
+          <image wx:if="{{item.avatarUrl}}" class="row-avatar" src="{{item.avatarUrl}}" mode="aspectFill"></image>
+          <view wx:else class="row-avatar fallback">{{item.initial}}</view>
+          <view class="row-name">{{item.nickname}}<text wx:if="{{item.isHost}}" class="host-tag">主</text></view>
+          <view class="row-toggle {{item.sign > 0 ? 'plus' : 'minus'}}" data-openid="{{item.openid}}" bindtap="toggleSign">
+            <view class="toggle-thumb"></view>
+            <text class="toggle-opt plus-opt">＋</text>
+            <text class="toggle-opt minus-opt">－</text>
+          </view>
+          <input class="row-input" type="number" placeholder="0" value="{{item.value}}" data-openid="{{item.openid}}" bindinput="onRowInput" />
+          <text wx:if="{{item.auto}}" class="auto-tag">自动</text>
+        </view>
+      </view>
+      <view wx:if="{{tableFeeEnabled}}" class="fee-input-row">
+        <text class="fee-label">台费（本圈，正数）</text>
+        <input class="fee-input" type="number" placeholder="0" value="{{tableFeeInput}}" bindinput="onFeeInput" />
+      </view>
+      <view class="round-actions">
+        <view class="ghost-btn" bindtap="resetRound">重置本回合</view>
+        <view class="primary-btn {{sumOk ? '' : 'disabled'}}" bindtap="confirmRound">确定本回合</view>
+      </view>
+    </view>
+
+    <view wx:if="{{isHost}}" class="host-bar">
+      <view class="primary-btn host-btn ghost-end" bindtap="finishGame">结束游戏</view>
+    </view>
+
+    <view class="card matrix-card" wx:if="{{matrixRows.length > 0}}">
+      <scroll-view scroll-x class="matrix-scroll" enhanced show-scrollbar="{{false}}">
+        <view class="matrix">
+          <view class="matrix-row matrix-head">
+            <view class="matrix-cell corner">回合战况</view>
+            <view wx:for="{{players}}" wx:key="openid" class="matrix-cell matrix-head-cell {{item.isSelf ? 'self' : ''}}">
+              <image wx:if="{{item.avatarUrl}}" class="m-avatar" src="{{item.avatarUrl}}" mode="aspectFill"></image>
+              <view wx:else class="m-avatar fallback">{{item.initial}}</view>
+            </view>
+            <view wx:if="{{tableFeeEnabled}}" class="matrix-cell matrix-head-cell fee-col-head">台费</view>
+          </view>
+          <view wx:for="{{matrixRows}}" wx:key="roundLabel" class="matrix-row">
+            <view class="matrix-cell round-label">{{item.roundLabel}}</view>
+            <view wx:for="{{item.cells}}" wx:for-item="cell" wx:key="index" class="matrix-cell m-score {{cell.positive ? 'pos' : ''}} {{cell.negative ? 'neg' : ''}} {{cell.zero ? 'zero' : ''}}">{{cell.deltaText}}</view>
+            <view wx:if="{{tableFeeEnabled}}" class="matrix-cell m-score fee-col {{item.feeCell.positive ? 'pos' : ''}} {{item.feeCell.zero ? 'zero' : ''}}">{{item.feeCell.deltaText}}</view>
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+  </block>
 </view>
 
 <!-- 邀请面板 -->

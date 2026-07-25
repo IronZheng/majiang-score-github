@@ -3,16 +3,16 @@ Component({
     selected: 0,
     list: [
       {
-        pagePath: '/pages/scoring-setup/index',
-        text: '单人',
-        icon: '/assets/icons/score.svg',
-        activeIcon: '/assets/icons/score-active.svg'
-      },
-      {
         pagePath: '/pages/rules/index',
         text: '多人',
         icon: '/assets/icons/rules.svg',
         activeIcon: '/assets/icons/rules-active.svg'
+      },
+      {
+        pagePath: '/pages/records/index',
+        text: '记录',
+        icon: '/assets/icons/record.svg',
+        activeIcon: '/assets/icons/record-active.svg'
       },
       {
         pagePath: '/pages/game-quiz/index',
@@ -30,9 +30,14 @@ Component({
   },
   methods: {
     switchTab(e) {
-      const { path, index } = e.currentTarget.dataset;
-      this.setData({ selected: index });
-      wx.switchTab({ url: path });
+      const idx = e.currentTarget.dataset.index;
+      const item = this.data.list[idx];
+      this.setData({ selected: idx });
+      if (item.navigate) {
+        wx.navigateTo({ url: item.pagePath });
+      } else {
+        wx.switchTab({ url: item.pagePath });
+      }
     }
   }
 });

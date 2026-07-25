@@ -1,21 +1,16 @@
 <view class="container list-page">
-  <view class="top-bar">
-    <view class="back" bindtap="goBack">‹</view>
-    <view class="top-title">我的房间</view>
-    <view class="top-refresh" bindtap="loadRooms">刷新</view>
-  </view>
-
   <view class="tabs">
     <view class="tab {{activeTab==='progress'?'active':''}}" data-tab="progress" bindtap="switchTab">进行中</view>
     <view class="tab {{activeTab==='history'?'active':''}}" data-tab="history" bindtap="switchTab">历史记录</view>
+    <view class="tab-refresh {{loading ? 'spinning' : ''}}" bindtap="loadRooms">↻</view>
   </view>
 
   <view wx:if="{{activeTab==='progress'}}" class="list">
     <view wx:if="{{progressList.length===0}}" class="empty">还没有进行中的房间</view>
-    <view wx:for="{{progressList}}" wx:key="roomId" class="room-cell" data-roomId="{{item.roomId}}" data-finished="{{item.finished}}" bindtap="openRoom">
+    <view wx:for="{{progressList}}" wx:key="roomId" class="room-cell" data-room-id="{{item.roomId}}" data-finished="{{item.finished}}" bindtap="openRoom">
       <view class="room-main">
         <view class="room-name">{{item.title}}</view>
-        <view class="room-meta">{{item.statusText}} · {{item.memberCount}}人{{item.isHost?' · 房主':''}}</view>
+        <view class="room-meta">{{item.dateText}}{{item.dateText?' · ':''}}{{item.statusText}} · {{item.memberCount}}人{{item.isHost?' · 房主':''}}</view>
       </view>
       <view class="room-arrow">›</view>
     </view>
@@ -23,10 +18,10 @@
 
   <view wx:if="{{activeTab==='history'}}" class="list">
     <view wx:if="{{historyList.length===0}}" class="empty">还没有历史房间</view>
-    <view wx:for="{{historyList}}" wx:key="roomId" class="room-cell" data-roomId="{{item.roomId}}" data-finished="{{item.finished}}" bindtap="openRoom">
+    <view wx:for="{{historyList}}" wx:key="roomId" class="room-cell" data-room-id="{{item.roomId}}" data-finished="{{item.finished}}" bindtap="openRoom">
       <view class="room-main">
         <view class="room-name">{{item.title}}</view>
-        <view class="room-meta">{{item.statusText}} · {{item.memberCount}}人{{item.isHost?' · 房主':''}}</view>
+        <view class="room-meta">{{item.dateText}}{{item.dateText?' · ':''}}{{item.statusText}} · {{item.memberCount}}人{{item.isHost?' · 房主':''}}</view>
       </view>
       <view class="room-arrow">›</view>
     </view>

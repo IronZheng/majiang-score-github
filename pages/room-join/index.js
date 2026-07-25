@@ -1,5 +1,6 @@
 const api = require('../../utils/api');
 const share = require('../../utils/share');
+const userUtil = require('../../utils/user');
 
 Page({
   data: {
@@ -21,8 +22,7 @@ Page({
       const m = decoded.match(/roomId=([^&]+)/);
       if (m) roomId = m[1];
     }
-    const app = getApp();
-    const user = (app && app.globalData && app.globalData.userInfo) || {};
+    const user = userUtil.ensureUser();
     if (!roomId) {
       this.setData({ error: '房间号缺失，请从分享链接或扫码进入' });
       return;
@@ -49,15 +49,15 @@ Page({
     // 直接进入：昵称/头像可选，缺省时给默认身份
     const nickname = (this.data.nickname || '').trim() || '牌友';
     const avatarUrl = this.data.avatarUrl || '';
-    // 记住资料，方便下次
+    // 记住资料，方便下次（统一用 nickName 字段，与「我的」页一致）
     const app = getApp();
     const user = app.globalData.userInfo || {};
-    user.nickname = nickname;
+    user.nickName = nickname;
     user.avatarUrl = avatarUrl;
     app.globalData.userInfo = user;
     try {
       const cached = wx.getStorageSync('mj_user') || {};
-      cached.nickname = nickname;
+      cached.nickName = nickname;
       cached.avatarUrl = avatarUrl;
       cached.openid = cached.openid || openid;
       wx.setStorageSync('mj_user', cached);

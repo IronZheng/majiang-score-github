@@ -1,0 +1,460 @@
+.container {
+  padding: 24rpx 24rpx 160rpx;
+  min-height: 100vh;
+  box-sizing: border-box;
+  background: #fffaf6;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 26rpx;
+  box-shadow: 0 14rpx 36rpx rgba(228, 155, 115, 0.08);
+  padding: 28rpx;
+  margin-bottom: 24rpx;
+}
+
+.card-title {
+  font-size: 30rpx;
+  font-weight: 800;
+  color: #1f2937;
+  margin-bottom: 20rpx;
+}
+
+/* 顶部概览 */
+.overview {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.ov-item {
+  flex: 1;
+  text-align: center;
+}
+
+.ov-num {
+  font-size: 44rpx;
+  font-weight: 800;
+}
+
+.ov-total { color: #e07b45; }
+.ov-win { color: #1f7a5a; }
+.ov-avg { color: #c2410c; }
+.ov-avg.win { color: #e25560; }
+.ov-avg.lose { color: #2fa94e; }
+.ov-avg.flat { color: #9b9286; }
+
+.ov-label {
+  margin-top: 8rpx;
+  font-size: 24rpx;
+  color: #9b9286;
+}
+
+.ov-divider {
+  width: 1rpx;
+  height: 56rpx;
+  background: #f0e6dd;
+}
+
+/* 方位麻将桌 */
+.table-surface {
+  position: relative;
+  background: linear-gradient(155deg, #1f7a5a, #125c45);
+  border-radius: 24rpx;
+  padding: 22rpx;
+  box-shadow: inset 0 4rpx 18rpx rgba(0, 0, 0, 0.28), 0 10rpx 26rpx rgba(31, 122, 90, 0.18);
+}
+
+.mahjong-table {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr 1fr;
+  grid-template-rows: auto 1fr auto;
+  gap: 12rpx;
+  align-items: stretch;
+}
+
+.seat {
+  position: relative;
+  background: #ffffff;
+  border-radius: 18rpx;
+  padding: 20rpx 12rpx 16rpx;
+  text-align: center;
+  box-shadow: 0 6rpx 14rpx rgba(0, 0, 0, 0.10);
+  overflow: hidden;
+}
+
+.seat.best {
+  box-shadow: 0 0 0 4rpx #f5c542, 0 10rpx 26rpx rgba(245, 197, 66, 0.45);
+}
+
+.seat-best {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: linear-gradient(135deg, #f7d774, #f0b429);
+  color: #5a3d00;
+  font-size: 18rpx;
+  font-weight: 800;
+  padding: 5rpx 14rpx;
+  border-bottom-right-radius: 14rpx;
+  box-shadow: 0 2rpx 6rpx rgba(240, 180, 41, 0.4);
+}
+
+.seat-games {
+  position: absolute;
+  top: 12rpx;
+  right: 12rpx;
+  font-size: 18rpx;
+  color: #9b9286;
+  background: #f6f0ea;
+  border-radius: 999rpx;
+  padding: 3rpx 12rpx;
+}
+
+.seat-name {
+  font-size: 34rpx;
+  font-weight: 900;
+  color: #b45309;
+  letter-spacing: 2rpx;
+}
+
+.seat-metrics {
+  margin-top: 14rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 10rpx;
+}
+
+.metric {
+  display: block;
+  font-size: 20rpx;
+  border-radius: 999rpx;
+  padding: 7rpx 0;
+  white-space: nowrap;
+}
+
+.metric-rate {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  background: transparent;
+  padding: 0;
+  color: #6f6457;
+}
+
+.metric-name {
+  flex-shrink: 0;
+  color: #c2410c;
+  font-weight: 700;
+}
+
+.rate-bar {
+  flex: 1;
+  height: 12rpx;
+  min-width: 0;
+  background: #f0e6dd;
+  border-radius: 999rpx;
+  overflow: hidden;
+}
+
+.rate-fill {
+  height: 100%;
+  border-radius: 999rpx;
+  background: linear-gradient(90deg, #f0a070, #e07b45);
+  transition: width 0.4s ease;
+}
+
+.metric-val {
+  flex-shrink: 0;
+  color: #b45309;
+  font-weight: 700;
+}
+
+.metric-avg {
+  color: #2fa94e;
+  background: #eef9f0;
+}
+.metric-avg.win { color: #e25560; background: #fdf0e8; }
+.metric-avg.lose { color: #2fa94e; background: #eef9f0; }
+.metric-avg.flat { color: #9b9286; background: #f6f0ea; }
+
+.seat-top { grid-column: 2; grid-row: 1; }
+.seat-left { grid-column: 1; grid-row: 2; }
+.table-center {
+  grid-column: 2;
+  grid-row: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.table-logo {
+  width: 112rpx;
+  height: 112rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  border: 2rpx solid rgba(255, 255, 255, 0.38);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 56rpx;
+  line-height: 1;
+  box-shadow: inset 0 2rpx 10rpx rgba(0, 0, 0, 0.25);
+}
+.seat-right { grid-column: 3; grid-row: 2; }
+.seat-bottom { grid-column: 2; grid-row: 3; }
+
+/* 记录列表 */
+.rec-item {
+  display: flex;
+  align-items: stretch;
+  margin-bottom: 16rpx;
+  background: #ffffff;
+  border-radius: 18rpx;
+  box-shadow: 0 6rpx 16rpx rgba(228, 155, 115, 0.10);
+  overflow: hidden;
+  border-left: 8rpx solid #d8cfc5;
+}
+
+.rec-item.win { border-left-color: #e25560; }
+.rec-item.lose { border-left-color: #2fa94e; }
+.rec-item.flat { border-left-color: #d8cfc5; }
+
+.rec-left {
+  width: 150rpx;
+  flex-shrink: 0;
+  padding: 20rpx 0 20rpx 16rpx;
+}
+
+.rec-seat {
+  font-size: 30rpx;
+  font-weight: 800;
+  color: #b45309;
+}
+
+.rec-date {
+  font-size: 22rpx;
+  color: #9b9286;
+  margin-top: 6rpx;
+  white-space: nowrap;
+}
+
+.rec-mid {
+  flex: 1;
+  min-width: 0;
+  padding: 20rpx 20rpx 20rpx 0;
+}
+
+.rec-win {
+  font-size: 36rpx;
+  font-weight: 800;
+}
+
+.rec-win.win { color: #e25560; }
+.rec-win.lose { color: #2fa94e; }
+.rec-win.flat { color: #9b9286; }
+
+.rec-sub {
+  font-size: 24rpx;
+  color: #8a7d70;
+  margin-top: 6rpx;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rec-note {
+  font-size: 24rpx;
+  color: #6f87a3;
+  margin-top: 6rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.empty {
+  text-align: center;
+  color: #9ca3af;
+  font-size: 26rpx;
+  padding: 40rpx 0;
+}
+
+/* 悬浮按钮 */
+.fab {
+  position: fixed;
+  right: 40rpx;
+  bottom: calc(170rpx + env(safe-area-inset-bottom));
+  width: 104rpx;
+  height: 104rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f0a070, #e07b45);
+  color: #fff;
+  font-size: 64rpx;
+  line-height: 100rpx;
+  text-align: center;
+  box-shadow: 0 12rpx 28rpx rgba(224, 123, 69, 0.4);
+  z-index: 50;
+}
+
+/* 录入弹窗 */
+.mask {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+}
+
+.sheet {
+  width: 100%;
+  max-height: 86vh;
+  overflow-y: auto;
+  background: #ffffff;
+  border-radius: 28rpx 28rpx 0 0;
+  padding: 32rpx 32rpx calc(170rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+}
+
+.sheet-title {
+  font-size: 34rpx;
+  font-weight: 800;
+  color: #1f2937;
+  text-align: center;
+  margin-bottom: 24rpx;
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  padding: 18rpx 0;
+  border-bottom: 1rpx solid #f3eee9;
+}
+
+.field-label {
+  width: 180rpx;
+  flex-shrink: 0;
+  font-size: 28rpx;
+  color: #4b443c;
+}
+
+.field-input {
+  flex: 1;
+  font-size: 28rpx;
+}
+
+/* 输赢正负开关（红涨绿跌，与计分一致） */
+.row-toggle {
+  position: relative;
+  width: 152rpx;
+  height: 64rpx;
+  border-radius: 999rpx;
+  background: #f7ece3;
+  border: 1rpx solid rgba(228, 155, 115, 0.28);
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  margin-right: 16rpx;
+  box-shadow: inset 0 1rpx 3rpx rgba(120, 88, 64, 0.12);
+}
+
+.row-toggle:active {
+  opacity: 0.92;
+}
+
+.toggle-thumb {
+  position: absolute;
+  top: 4rpx;
+  left: 4rpx;
+  width: calc(50% - 4rpx);
+  height: calc(100% - 8rpx);
+  border-radius: 999rpx;
+  z-index: 0;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.2);
+  transition: transform 0.32s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.32s ease;
+}
+
+/* ＋ 赢/涨 = 红；－ 输/跌 = 绿（红涨绿跌） */
+.row-toggle.plus .toggle-thumb {
+  transform: translateX(0);
+  background: linear-gradient(135deg, #f0808a, #e25560);
+}
+
+.row-toggle.minus .toggle-thumb {
+  transform: translateX(100%);
+  background: linear-gradient(135deg, #43c463, #2fa94e);
+}
+
+.toggle-opt {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40rpx;
+  font-weight: 300;
+  line-height: 1;
+  transition: color 0.32s ease;
+}
+
+.row-toggle.plus .plus-opt {
+  color: #ffffff;
+}
+
+.row-toggle.plus .minus-opt {
+  color: #b08968;
+}
+
+.row-toggle.minus .plus-opt {
+  color: #b08968;
+}
+
+.row-toggle.minus .minus-opt {
+  color: #ffffff;
+}
+
+.field-picker-wrap {
+  flex: 1;
+}
+
+.field-picker {
+  flex: 1;
+  font-size: 28rpx;
+  color: #1f2937;
+}
+
+.seat-picker {
+  flex: 1;
+  display: flex;
+  gap: 16rpx;
+}
+
+.seat-chip {
+  flex: 1;
+  text-align: center;
+  padding: 14rpx 0;
+  border-radius: 14rpx;
+  border: 1rpx solid #e7ddd2;
+  font-size: 28rpx;
+  color: #6f6457;
+}
+
+.seat-chip.active {
+  background: #fff1e6;
+  border-color: #e07b45;
+  color: #e07b45;
+  font-weight: 800;
+}
+
+.save-btn {
+  margin-top: 32rpx;
+  background: linear-gradient(135deg, #f0a070, #e07b45);
+  color: #fff;
+  font-size: 30rpx;
+  font-weight: 700;
+  border-radius: 999rpx;
+}
+
+.save-btn::after {
+  border: none;
+}

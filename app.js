@@ -2,6 +2,7 @@ const auth = require('./utils/auth');
 const track = require('./utils/track');
 const api = require('./utils/api');
 const storage = require('./utils/storage');
+const userUtil = require('./utils/user');
 
 // 包装全局 Page，自动为每个页面注入行为追踪
 (function wrapPage() {
@@ -35,7 +36,15 @@ App({
       traceUser: false
     });
 
-    // 2. 从缓存恢复登录状态
+    // 2. 初始化用户资料到全局：读缓存，缺失则生成默认头像昵称，
+    //    避免任何页面都必须先进入「我的」页才能显示头像
+    try {
+      userUtil.ensureUser();
+    } catch (e) {
+      console.warn('[app] 初始化用户资料失败:', e);
+    }
+
+    // 3. 从缓存恢复登录状态
     auth.restoreLogin();
 
     // 3. 如果未登录，静默获取 openid（不上报到用户信息，仅记录 openid 用于行为追踪）

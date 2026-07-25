@@ -1,8 +1,7 @@
-const storage = require('../../utils/storage');
-const { getHistory, removeHistory } = storage;
 const share = require('../../utils/share');
 const defaultProfiles = require('../../utils/default-profiles');
 const api = require('../../utils/api');
+const ossUpload = require('../../utils/oss-upload');
 const app = getApp();
 
 const CACHE_KEY = 'mj_user';
@@ -10,10 +9,7 @@ const CACHE_KEY = 'mj_user';
 Page({
   data: {
     userInfo: null,
-    history: [],
-    avatarBg: 'rgba(255,255,255,0.12)',
-    syncLoading: false,
-    cloudHint: ''
+    avatarBg: 'rgba(255,255,255,0.12)'
   },
 
   onShow() {
@@ -25,8 +21,7 @@ Page({
     const userInfo = this._getOrCreateUser();
 
     this.setData({
-      userInfo,
-      history: this.formatHistory()
+      userInfo
     });
 
     // 进入页面即把已设置的昵称/头像同步到后端（openid 就绪时）
@@ -88,29 +83,22 @@ Page({
     this._uploadAvatar(avatarUrl);
   },
 
-  // 选头像：临时文件先上传到微信云存储，拿到云文件ID后保存并上报后端
+  // 选头像：临时文件上传到 OSS，拿到公开 URL 后保存并上报后端
   _uploadAvatar(tempPath) {
     const that = this;
-    const extMatch = tempPath.match(/\.(png|jpg|jpeg|webp)(?:\?|$)/i);
-    const ext = extMatch ? extMatch[1].toLowerCase() : 'png';
-    const cloudPath = `avatar/${Date.now()}_${Math.floor(Math.random() * 1e6)}.${ext}`;
     wx.showLoading({ title: '上传头像...' });
-    wx.cloud.uploadFile({
-      cloudPath: cloudPath,
-      filePath: tempPath
-    }).then(function (res) {
+    ossUpload.uploadAvatar(tempPath).then(function (ossUrl) {
       wx.hideLoading();
-      const fileID = (res && res.fileID) || '';
-      if (!fileID) {
+      if (!ossUrl) {
         wx.showToast({ title: '头像上传失败', icon: 'none' });
         return;
       }
-      that._saveAvatarUrl(fileID);
+      that._saveAvatarUrl(ossUrl);
       that._reportProfile();
     }).catch(function (err) {
       wx.hideLoading();
-      console.warn('[profile] 头像云上传失败:', err);
-      wx.showToast({ title: '头像上传失败', icon: 'none' });
+      console.warn('[profile] 头像上传失败:', err);
+      wx.showToast({ title: (err && err.message) || '头像上传失败', icon: 'none' });
     });
   },
 
@@ -201,73 +189,10 @@ Page({
     this.setData({ userInfo: { ...normalized } });
   },
 
-  openRecord(e) {
-    const { id } = e.currentTarget.dataset;
-    wx.navigateTo({ url: `/pages/result/index?id=${id}` });
-  },
-
-  deleteRecord(e) {
-    const { id } = e.currentTarget.dataset;
-    wx.showModal({
-      title: '删除记录',
-      content: '确定删除这条历史计分记录吗？删除后无法恢复。',
-      confirmText: '删除',
-      confirmColor: '#d9534f',
-      success: (res) => {
-        if (!res.confirm) return;
-        removeHistory(id);
-        this.setData({ history: this.formatHistory() });
-        wx.showToast({ title: '已删除', icon: 'success' });
-        // 同步删除服务器记录（失败仅告警，本地已删除；下次同步会再次尝试删除）
-        api.deleteScoreRecord(api.getOpenid(), id).catch((err) => {
-          console.warn('[profile] 服务器删除计分记录失败:', err);
-        });
-      }
-    });
-  },
-
-  /**
-   * 手动「备份到云端」：把本地全部记录全量上传服务器，并拉取服务器全量合并回本地。
-   * 用于确保未上传的本地记录全部入库（幂等去重，已传的自动跳过），并给出可视反馈。
-   */
-  syncToCloud() {
-    if (this.data.syncLoading) return;
-    const openid = api.getOpenid();
-    if (!openid) {
-      wx.showToast({ title: '请先获取登录信息', icon: 'none' });
-      return;
-    }
-    const localRecords = storage.getHistory();
-    const localCount = localRecords.length;
-    if (localCount === 0) {
-      wx.showToast({ title: '暂无本地记录', icon: 'none' });
-      return;
-    }
-    this.setData({ syncLoading: true, cloudHint: '' });
-    api.syncScoreRecords(openid, localRecords)
-      .then((serverList) => {
-        if (Array.isArray(serverList)) {
-          storage.mergeServerRecords(serverList);
-          this.setData({ history: this.formatHistory(), cloudHint: `已备份：本地 ${localCount} 条，云端共 ${serverList.length} 条` });
-          wx.showToast({ title: '备份完成', icon: 'success' });
-        } else {
-          this.setData({ cloudHint: '备份完成' });
-        }
-      })
-      .catch((err) => {
-        console.warn('[profile] 备份到云端失败:', err);
-        this.setData({ cloudHint: '备份失败，请稍后重试' });
-        wx.showToast({ title: '备份失败', icon: 'none' });
-      })
-      .finally(() => {
-        this.setData({ syncLoading: false });
-      });
-  },
-
   showAbout() {
     wx.showModal({
       title: '小程序说明',
-      content: '麻将计分器适合朋友聚会、家庭牌局等场景使用。你可以快速设置玩家，记录每局加减分，按需单独统计台费，并在历史记录中回看每次结果。数据主要保存在本机，轻量、简单，不需要复杂登录。',
+      content: '麻将计分器适合朋友聚会、家庭牌局等场景使用。你可以快速创建多人房间，记录每局加减分，并按需单独统计台费。数据自动保存在云端，轻量、简单，不需要复杂登录。',
       showCancel: false,
       confirmText: '知道了'
     });
@@ -289,33 +214,14 @@ Page({
 
   onShareAppMessage() {
     return share.appMessage({
-      title: '麻将计分器：我的历史战绩'
+      title: '麻将计分器：多人记分'
     });
   },
 
   onShareTimeline() {
     return share.timeline({
-      title: '麻将计分器：我的历史战绩'
+      title: '麻将计分器：多人记分'
     });
   },
 
-  formatHistory() {
-    return getHistory().map(item => ({
-      ...item,
-      finishedAtText: item.finishedAt
-        ? this.formatFinishedAt(item.finishedAt)
-        : ''
-    }));
-  },
-
-  formatFinishedAt(value) {
-    const date = new Date(value);
-    if (Number.isNaN(date.getTime())) return '';
-
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-    const hour = `${date.getHours()}`.padStart(2, '0');
-    const minute = `${date.getMinutes()}`.padStart(2, '0');
-    return `${month}月${day}日 ${hour}:${minute}`;
-  }
 });

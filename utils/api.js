@@ -154,6 +154,21 @@ function submitRoomScore(roomId, round, delta, note, targetOpenid) {
   });
 }
 
+// 提交台费：独立计项，不计入玩家总分（fee>0）
+function submitRoomFee(roomId, round, fee) {
+  var openid = getOpenid();
+  return request('POST', '/api/mahjong-room/score', {
+    roomId: roomId,
+    openid: openid,
+    accessToken: getRoomToken(roomId, openid),
+    round: round,
+    delta: 0,
+    targetOpenid: '',
+    note: '台费',
+    fee: fee
+  });
+}
+
 // 撤销本人上一笔计分
 function undoRoomScore(roomId) {
   var openid = getOpenid();
@@ -201,6 +216,27 @@ function getMyRooms(openid) {
   return request('GET', '/api/mahjong-room/my-rooms?openid=' + encodeURIComponent(openid), null);
 }
 
+// ===================== 个人对局记录（方位统计） =====================
+
+// 保存对局记录
+function saveUserRecord(payload) {
+  return request('POST', '/api/mahjong-record/save', payload);
+}
+
+// 查询我的对局记录（按日期倒序）
+function listUserRecords() {
+  var openid = getOpenid();
+  if (!openid) return Promise.resolve([]);
+  return request('GET', '/api/mahjong-record/list?openid=' + encodeURIComponent(openid), null);
+}
+
+// 查询我的对局统计（总局数/胜率/场均/方位）
+function getUserRecordStats() {
+  var openid = getOpenid();
+  if (!openid) return Promise.resolve(null);
+  return request('GET', '/api/mahjong-record/stats?openid=' + encodeURIComponent(openid), null);
+}
+
 module.exports = {
   API_BASE: API_BASE,
   getOpenid: getOpenid,
@@ -220,10 +256,14 @@ module.exports = {
   leaveRoom: leaveRoom,
   startRoom: startRoom,
   submitRoomScore: submitRoomScore,
+  submitRoomFee: submitRoomFee,
   undoRoomScore: undoRoomScore,
   getRoomState: getRoomState,
   finishRoom: finishRoom,
   getRoomShareInfo: getRoomShareInfo,
   getRoomQrcode: getRoomQrcode,
-  getMyRooms: getMyRooms
+  getMyRooms: getMyRooms,
+  saveUserRecord: saveUserRecord,
+  listUserRecords: listUserRecords,
+  getUserRecordStats: getUserRecordStats
 };

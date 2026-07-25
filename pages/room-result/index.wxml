@@ -30,7 +30,28 @@
       </view>
     </view>
 
-    <view wx:if="{{tableFeeEnabled}}" class="fee-note">本局每底台费 {{tableFeeScore}} 分</view>
+    <view class="card matrix-card" wx:if="{{matrixRows.length > 0}}">
+      <view class="card-title">回合战况</view>
+      <scroll-view scroll-x class="matrix-scroll" enhanced show-scrollbar="{{false}}">
+        <view class="matrix">
+          <view class="matrix-row matrix-head">
+            <view class="matrix-cell corner">回合</view>
+            <view wx:for="{{players}}" wx:key="openid" class="matrix-cell matrix-head-cell {{item.isSelf ? 'self' : ''}}">
+              <image wx:if="{{item.avatarUrl}}" class="m-avatar" src="{{item.avatarUrl}}" mode="aspectFill"></image>
+              <view wx:else class="m-avatar fallback">{{item.initial}}</view>
+            </view>
+            <view wx:if="{{tableFeeEnabled}}" class="matrix-cell matrix-head-cell fee-col-head">台费</view>
+          </view>
+          <view wx:for="{{matrixRows}}" wx:key="roundLabel" class="matrix-row {{item.isTotal ? 'total-row' : ''}}">
+            <view class="matrix-cell round-label">{{item.roundLabel}}</view>
+            <view wx:for="{{item.cells}}" wx:for-item="cell" wx:key="index" class="matrix-cell m-score {{cell.positive ? 'pos' : ''}} {{cell.negative ? 'neg' : ''}} {{cell.zero ? 'zero' : ''}}">{{cell.deltaText}}</view>
+            <view wx:if="{{tableFeeEnabled}}" class="matrix-cell m-score fee-col {{item.feeCell.positive ? 'pos' : ''}} {{item.feeCell.zero ? 'zero' : ''}}">{{item.feeCell.deltaText}}</view>
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+
+    <view wx:if="{{tableFeeEnabled}}" class="fee-note">本局已计入台费</view>
 
     <button class="share-btn" open-type="share">分享战绩给牌友</button>
     <view class="primary-btn home-btn" bindtap="backHome">返回首页</view>

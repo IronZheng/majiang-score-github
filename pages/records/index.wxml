@@ -1,0 +1,162 @@
+<view class="container">
+
+  <!-- 顶部概览：总局数 / 胜率 / 场均分数 -->
+  <view class="overview card">
+    <view class="ov-item">
+      <view class="ov-num ov-total">{{stats.totalGames}}</view>
+      <view class="ov-label">总局数</view>
+    </view>
+    <view class="ov-divider"></view>
+    <view class="ov-item">
+      <view class="ov-num ov-win">{{stats.winRateText}}</view>
+      <view class="ov-label">胜率</view>
+    </view>
+    <view class="ov-divider"></view>
+    <view class="ov-item">
+      <view class="ov-num ov-avg {{stats.avgClass}}">{{stats.avgScoreText}}</view>
+      <view class="ov-label">场均分数</view>
+    </view>
+  </view>
+
+  <!-- 方位统计：方形麻将桌（上北下南 左西右东） -->
+  <view class="card table-card">
+    <view class="card-title">方位统计</view>
+    <view class="table-surface">
+      <view class="mahjong-table">
+        <view class="seat seat-top {{seatDisplay.top.best ? 'best' : ''}}">
+          <view wx:if="{{seatDisplay.top.best}}" class="seat-best">🏆 最佳</view>
+          <view class="seat-games">{{seatDisplay.top.games}}局</view>
+          <view class="seat-name">{{seatDisplay.top.seatName}}</view>
+          <view class="seat-metrics">
+            <view class="metric metric-rate">
+              <text class="metric-name">胜率</text>
+              <view class="rate-bar"><view class="rate-fill" style="width: {{seatDisplay.top.winRate}}%"></view></view>
+              <text class="metric-val">{{seatDisplay.top.winRateText}}</text>
+            </view>
+            <text class="metric metric-avg {{seatDisplay.top.avgClass}}">场均 {{seatDisplay.top.avgScoreText}}</text>
+          </view>
+        </view>
+        <view class="seat seat-left {{seatDisplay.left.best ? 'best' : ''}}">
+          <view wx:if="{{seatDisplay.left.best}}" class="seat-best">🏆 最佳</view>
+          <view class="seat-games">{{seatDisplay.left.games}}局</view>
+          <view class="seat-name">{{seatDisplay.left.seatName}}</view>
+          <view class="seat-metrics">
+            <view class="metric metric-rate">
+              <text class="metric-name">胜率</text>
+              <view class="rate-bar"><view class="rate-fill" style="width: {{seatDisplay.left.winRate}}%"></view></view>
+              <text class="metric-val">{{seatDisplay.left.winRateText}}</text>
+            </view>
+            <text class="metric metric-avg {{seatDisplay.left.avgClass}}">场均 {{seatDisplay.left.avgScoreText}}</text>
+          </view>
+        </view>
+        <view class="table-center">
+          <view class="table-logo">🀄</view>
+        </view>
+        <view class="seat seat-right {{seatDisplay.right.best ? 'best' : ''}}">
+          <view wx:if="{{seatDisplay.right.best}}" class="seat-best">🏆 最佳</view>
+          <view class="seat-games">{{seatDisplay.right.games}}局</view>
+          <view class="seat-name">{{seatDisplay.right.seatName}}</view>
+          <view class="seat-metrics">
+            <view class="metric metric-rate">
+              <text class="metric-name">胜率</text>
+              <view class="rate-bar"><view class="rate-fill" style="width: {{seatDisplay.right.winRate}}%"></view></view>
+              <text class="metric-val">{{seatDisplay.right.winRateText}}</text>
+            </view>
+            <text class="metric metric-avg {{seatDisplay.right.avgClass}}">场均 {{seatDisplay.right.avgScoreText}}</text>
+          </view>
+        </view>
+        <view class="seat seat-bottom {{seatDisplay.bottom.best ? 'best' : ''}}">
+          <view wx:if="{{seatDisplay.bottom.best}}" class="seat-best">🏆 最佳</view>
+          <view class="seat-games">{{seatDisplay.bottom.games}}局</view>
+          <view class="seat-name">{{seatDisplay.bottom.seatName}}</view>
+          <view class="seat-metrics">
+            <view class="metric metric-rate">
+              <text class="metric-name">胜率</text>
+              <view class="rate-bar"><view class="rate-fill" style="width: {{seatDisplay.bottom.winRate}}%"></view></view>
+              <text class="metric-val">{{seatDisplay.bottom.winRateText}}</text>
+            </view>
+            <text class="metric metric-avg {{seatDisplay.bottom.avgClass}}">场均 {{seatDisplay.bottom.avgScoreText}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 记录列表 -->
+  <view class="card list-card">
+    <view class="card-title">对局记录</view>
+    <view wx:if="{{records.length === 0}}" class="empty">还没有记录，点右下角按钮添加</view>
+    <view wx:for="{{records}}" wx:key="id" class="rec-item {{item.winClass}}">
+      <view class="rec-left">
+        <view class="rec-seat">{{item.seatName}}</view>
+        <view class="rec-date">{{item.date}}</view>
+      </view>
+      <view class="rec-mid">
+        <view class="rec-win {{item.winClass}}">{{item.winAmountText}}</view>
+        <view class="rec-sub">底分 {{item.baseScoreText}} · 台费 {{item.feeText}} · {{item.durationText}}</view>
+        <view wx:if="{{item.note}}" class="rec-note">备注：{{item.note}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 悬浮统计按钮 -->
+  <view class="fab" bindtap="openInput">＋</view>
+
+  <!-- 录入弹窗 -->
+  <view wx:if="{{showInput}}" class="mask" bindtap="closeInput">
+    <view class="sheet" catchtap="noop">
+      <view class="sheet-title">录入对局</view>
+
+      <view class="field">
+        <text class="field-label">输赢金额</text>
+        <view class="row-toggle {{form.winSign > 0 ? 'plus' : 'minus'}}" bindtap="toggleWinSign">
+          <view class="toggle-thumb"></view>
+          <text class="toggle-opt plus-opt">＋</text>
+          <text class="toggle-opt minus-opt">－</text>
+        </view>
+        <input class="field-input" type="digit" placeholder="输入金额" value="{{form.winAmount}}" bindinput="onWinInput" />
+      </view>
+
+      <view class="field">
+        <text class="field-label">底分</text>
+        <input class="field-input" type="digit" placeholder="0" value="{{form.baseScore}}" bindinput="onBaseInput" />
+      </view>
+
+      <view class="field">
+        <text class="field-label">台费</text>
+        <input class="field-input" type="digit" placeholder="0" value="{{form.fee}}" bindinput="onFeeInput" />
+      </view>
+
+      <view class="field">
+        <text class="field-label">时长</text>
+        <picker class="field-picker-wrap" range="{{durationOptions}}" range-key="" value="{{form.duration - 1}}" bindchange="onDurationChange">
+          <view class="field-picker">{{form.duration}}小时</view>
+        </picker>
+      </view>
+
+      <view class="field">
+        <text class="field-label">日期</text>
+        <picker mode="date" value="{{form.date}}" bindchange="onDateChange">
+          <view class="field-picker">{{form.date}}</view>
+        </picker>
+      </view>
+
+      <view class="field">
+        <text class="field-label">座位</text>
+        <view class="seat-picker">
+          <view wx:for="{{seatOptions}}" wx:key="value"
+                class="seat-chip {{form.seat === item.value ? 'active' : ''}}"
+                data-seat="{{item.value}}" bindtap="selectSeat">{{item.name}}</view>
+        </view>
+      </view>
+
+      <view class="field">
+        <text class="field-label">备注</text>
+        <input class="field-input" placeholder="选填" value="{{form.note}}" bindinput="onNoteInput" />
+      </view>
+
+      <button class="save-btn" loading="{{submitting}}" bindtap="onSubmit">保存</button>
+    </view>
+  </view>
+
+</view>

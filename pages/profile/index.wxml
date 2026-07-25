@@ -33,41 +33,6 @@
     <view class="profile-fade"></view>
   </view>
 
-  <!-- 历史记录 -->
-  <view class="card history-card">
-    <view class="section-head">
-      <text class="title">历史计分记录</text>
-      <view class="head-right">
-        <text class="history-count" wx:if="{{history.length}}">{{history.length}}条</text>
-        <button class="sync-cloud-btn" size="mini" loading="{{syncLoading}}" bindtap="syncToCloud">备份到云端</button>
-      </view>
-    </view>
-    <view class="cloud-hint" wx:if="{{!syncLoading && cloudHint}}">{{cloudHint}}</view>
-    <block wx:if="{{history.length === 0}}">
-      <text class="empty">暂无记录</text>
-    </block>
-    <block wx:for="{{history}}" wx:key="id">
-      <view class="item" data-id="{{item.id}}" bindtap="openRecord">
-        <view class="record-main">
-          <text class="champion">冠军：{{item.ranking[0].name}}</text>
-          <view class="score-row">
-            <text class="score">{{item.ranking[0].score}}分</text>
-            <text class="record-arrow">></text>
-          </view>
-        </view>
-        <view class="record-sub">
-          <view class="record-meta">
-            <text class="badge">{{item.players.length}}人局</text>
-            <text class="time">{{item.finishedAtText}}</text>
-          </view>
-          <view class="delete-record-btn" data-id="{{item.id}}" catchtap="deleteRecord">
-            <image class="delete-record-icon" src="/assets/icons/delete-record.svg" mode="aspectFit"></image>
-          </view>
-        </view>
-      </view>
-    </block>
-  </view>
-
   <view class="card menu-card">
     <view class="menu-item" bindtap="showAbout">
       <view class="menu-left">
