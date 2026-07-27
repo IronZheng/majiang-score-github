@@ -29,24 +29,50 @@ Page({
     const tabBar = this.getTabBar && this.getTabBar();
     if (tabBar) tabBar.setData({ selected: 0 });
 
-    // 与「我的」页共用同一份资料：优先读缓存，缺失则生成默认资料，无需先进入「我的」页
-    const user = userUtil.ensureUser();
+    // 立即用当前（默认/缓存）资料渲染，保证进入页面不白屏
+    this.renderIdentity();
+    // 第一步拿 openid -> 读服务端资料；数据回来后再次渲染，确保头像/昵称实时同步
+    const app = getApp();
+    if (app && app.ensureProfile) {
+      app.ensureProfile().then(() => {
+        this.renderIdentity();
+      });
+    }
+    this.loadProgressRooms();
+  },
+
+  // 统一渲染顶部身份条：优先用「我的」页实时写入 globalData 的资料，回退本地缓存
+  renderIdentity() {
+    const app = getApp();
+    const live = (app && app.globalData && app.globalData.userInfo) || null;
+    const cached = userUtil.ensureUser();
+    const src = (live && (live.avatarCustomized || live.nickNameCustomized)) ? live : cached;
     // 昵称字段统一为 nickName
-    const nickname = user.nickName || user.nickname || '';
+    const nickname = src.nickName || src.nickname || '';
     this.setData({
       nickname: nickname,
-      avatarUrl: user.avatarUrl || '',
+      avatarUrl: src.avatarUrl || '',
       avatarInitial: (nickname || '?').charAt(0),
       showAddMyGuide: !wx.getStorageSync(ADD_MY_GUIDE_DISMISSED_KEY)
     });
-    this.loadProgressRooms();
   },
 
   // 拉取进行中的房间，直接列表展示
   loadProgressRooms() {
     const openid = api.getOpenid();
     if (!openid) {
-      this.setData({ progressList: [], loading: false });
+      // openid 可能仍在静默获取中（清缓存后首次进入尤为常见）：
+      // 等其就绪后再加载，避免进入页面时列表空白、且之后不再刷新
+      const app = getApp();
+      if (app && app.ensureOpenid) {
+        this.setData({ loading: true });
+        app.ensureOpenid().then((id) => {
+          if (id) this.loadProgressRooms();
+          else this.setData({ progressList: [], loading: false });
+        });
+      } else {
+        this.setData({ progressList: [], loading: false });
+      }
       return;
     }
     const that = this;
@@ -99,11 +125,25 @@ Page({
   },
   createRoom() {
     if (this.data.creating) return;
+    const that = this;
     const openid = api.getOpenid();
     if (!openid) {
-      wx.showToast({ title: '请先授权', icon: 'none' });
+      // openid 可能还在静默获取中：等待其就绪后再创建，避免直接报「请先授权」
+      wx.showLoading({ title: '准备中...' });
+      getApp().ensureOpenid().then(function (id) {
+        wx.hideLoading();
+        if (!id) {
+          wx.showToast({ title: '请先授权后重试', icon: 'none' });
+          return;
+        }
+        that._doCreateRoom(id);
+      });
       return;
     }
+    this._doCreateRoom(openid);
+  },
+
+  _doCreateRoom(openid) {
     // 直接复用「我的」页同步过来的头像和昵称
     const nickname = (this.data.nickname || '').trim() || '房主';
     const avatarUrl = this.data.avatarUrl || '';
@@ -148,6 +188,11 @@ Page({
   },
   goInProgress() {
     wx.navigateTo({ url: '/pages/room-list/index?tab=progress' });
+  },
+
+  // 顶部身份条：点击跳转到「我的」页（设置头像/昵称）
+  goProfile() {
+    wx.switchTab({ url: '/pages/profile/index' });
   },
   goHistory() {
     wx.navigateTo({ url: '/pages/room-list/index?tab=history' });

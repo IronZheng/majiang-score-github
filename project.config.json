@@ -2,9 +2,9 @@
   "setting": {
     "es6": true,
     "postcss": true,
-    "minified": true,
+    "minified": false,
     "uglifyFileName": false,
-    "enhance": true,
+    "enhance": false,
     "packNpmRelationList": [],
     "babelSetting": {
       "ignore": [],
@@ -42,6 +42,22 @@
       {
         "value": ".cursor",
         "type": "folder"
+      },
+      {
+        "value": "knowledge-base",
+        "type": "folder"
+      },
+      {
+        "value": "skills-lock.json",
+        "type": "file"
+      },
+      {
+        "value": "code.jpg",
+        "type": "file"
+      },
+      {
+        "value": "3-TPGaxl7r3931af821e479aa828085378fad6d2785a.png",
+        "type": "file"
       }
     ],
     "include": []

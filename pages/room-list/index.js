@@ -48,7 +48,17 @@ Page({
   loadRooms() {
     const openid = api.getOpenid();
     if (!openid) {
-      this.setData({ progressList: [], historyList: [] });
+      // 与 rules 页同源：openid 仍在静默获取时，等其就绪再加载，避免列表空白
+      const app = getApp();
+      if (app && app.ensureOpenid) {
+        this.setData({ loading: true });
+        app.ensureOpenid().then((id) => {
+          if (id) this.loadRooms();
+          else this.setData({ progressList: [], historyList: [], loading: false });
+        });
+      } else {
+        this.setData({ progressList: [], historyList: [], loading: false });
+      }
       return;
     }
     const that = this;

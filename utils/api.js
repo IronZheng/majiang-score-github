@@ -75,6 +75,20 @@ function saveProfile(payload) {
   return request('POST', '/api/game-quiz/profile', payload);
 }
 
+// 读取用户资料（昵称 + 头像云文件ID），按 openid 读取；无记录返回 null
+function getProfile() {
+  const openid = getOpenid();
+  if (!openid) return Promise.resolve(null);
+  return request('GET', '/api/game-quiz/profile?openid=' + encodeURIComponent(openid), null)
+    .catch(function () { return null; });
+}
+
+// 清除用户资料（用户点击「恢复默认」时调用），按 openid 清空昵称与头像
+function clearProfile(openid) {
+  if (!openid) return Promise.resolve();
+  return request('POST', '/api/game-quiz/profile/clear', { openid: openid });
+}
+
 // 查询排行榜
 function getLeaderboard() {
   return request('GET', '/api/game-quiz/leaderboard?openid=' + encodeURIComponent(getOpenid()), null);
@@ -246,6 +260,8 @@ module.exports = {
   startChallenge: startChallenge,
   submitLeaderboard: submitLeaderboard,
   saveProfile: saveProfile,
+  getProfile: getProfile,
+  clearProfile: clearProfile,
   getLeaderboard: getLeaderboard,
   syncScoreRecords: syncScoreRecords,
   deleteScoreRecord: deleteScoreRecord,

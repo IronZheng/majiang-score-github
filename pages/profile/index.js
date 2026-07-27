@@ -67,7 +67,18 @@ Page({
           defaultProfileSeed: seed,
           defaultProfileAuto: true
         }, seed);
+        // 明确清除自定义标记，使其回到默认态（避免被当成已设置）
+        user.nickNameCustomized = false;
+        user.avatarCustomized = false;
+        user.defaultProfileAuto = true;
         this._saveUserInfo(user);
+        // 清除服务端（数据库）资料，下次识别 openid 回退到默认
+        const openid = api.getOpenid();
+        if (openid) {
+          api.clearProfile(openid).catch(function (err) {
+            console.warn('[profile] 清除服务端资料失败:', err);
+          });
+        }
         wx.showToast({ title: '已恢复默认', icon: 'success' });
       }
     });
@@ -136,10 +147,16 @@ Page({
     const openid = api.getOpenid();
     if (!openid) return;
     const user = app.globalData.userInfo || this._getOrCreateUser() || {};
+    // 仅当用户自定义过昵称或头像才上报：避免把默认资料回写数据库，
+    // 这样「恢复默认」清除数据库后能保持清除状态（下次识别 openid 回退默认）。
+    if (!user.nickNameCustomized && !user.avatarCustomized) return;
     const payload = { openid: openid };
     if (user.nickName) payload.nickname = user.nickName;
     if (user.avatarUrl) payload.avatarUrl = user.avatarUrl;
-    api.saveProfile(payload).catch(function (err) {
+    api.saveProfile(payload).then(function () {
+      const a = getApp();
+      if (a && a.globalData) a.globalData.needProfileSetup = false;
+    }).catch(function (err) {
       console.warn('[profile] 保存资料失败:', err);
     });
   },

@@ -95,15 +95,21 @@ Page({
       const status = state.status;
       const statusText = status === STATUS_PLAYING ? '进行中' : (status === STATUS_FINISHED ? '已结束' : '待开始');
       const selfOpenid = that.data.openid;
+      // 自己的头像/昵称以本地最新资料（globalData.userInfo）为准，
+      // 这样在「我的」页更新后，房间内自己的头像昵称能第一时间刷新（无需重新加入）。
+      const liveUser = getApp().globalData.userInfo || {};
       const players = (state.players || []).map(function (p) {
+        const isSelf = p.openid === selfOpenid;
+        const nickname = (isSelf && liveUser.nickName) ? liveUser.nickName : p.nickname;
+        const avatarUrl = (isSelf && liveUser.avatarUrl) ? liveUser.avatarUrl : p.avatarUrl;
         return {
           openid: p.openid,
-          nickname: p.nickname,
-          avatarUrl: p.avatarUrl,
+          nickname: nickname,
+          avatarUrl: avatarUrl,
           totalScore: p.totalScore,
           isHost: p.isHost,
-          initial: (p.nickname || '?').charAt(0),
-          isSelf: p.openid === selfOpenid
+          initial: (nickname || '?').charAt(0),
+          isSelf: isSelf
         };
       });
       // 保留当前各玩家本圈已输入的符号/数值与"是否被手动改过"标记

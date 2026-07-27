@@ -1,6 +1,6 @@
 <view class="container multi-page">
-  <!-- 顶部身份条：与「我的」页共享，只读展示 -->
-  <view class="identity-bar">
+  <!-- 顶部身份条：与「我的」页共享，只读展示；点击跳转到「我的」页 -->
+  <view class="identity-bar" bindtap="goProfile">
     <view class="identity-left">
       <image wx:if="{{avatarUrl}}" class="identity-avatar" src="{{avatarUrl}}" mode="aspectFill"></image>
       <view wx:else class="identity-avatar placeholder">{{avatarInitial}}</view>

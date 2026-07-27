@@ -45,7 +45,7 @@ Page({
 
     const history = getHistory();
     const record = history.find((item) => item.id === options.id) || history[0] || null;
-    if (record?.tableFee) {
+    if (record && record.tableFee) {
       record.tableFee = {
         enabled: Boolean(record.tableFee.enabled),
         score: Number(record.tableFee.score) || 0,
@@ -53,10 +53,10 @@ Page({
       };
     }
     const avatarMap = {};
-    (record?.players || []).forEach((p, i) => { avatarMap[p.id] = p.avatarUrl || AVATARS[i % AVATARS.length]; });
+    ((record && record.players) || []).forEach((p, i) => { avatarMap[p.id] = p.avatarUrl || AVATARS[i % AVATARS.length]; });
 
     const map = {};
-    (record?.rounds || []).forEach((r) => {
+    ((record && record.rounds) || []).forEach((r) => {
       if (!map[r.round]) map[r.round] = [];
       map[r.round].push({ ...r, playerAvatar: r.playerAvatar || avatarMap[r.playerId] || AVATARS[0] });
     });
@@ -240,7 +240,7 @@ Page({
     const heroStats = [
       { label: '人数', value: `${record.players.length}人` },
       { label: '回合', value: `${record.totalRounds || 1}轮` },
-      { label: '分差', value: `${Math.abs((safeRanking[0]?.score || 0) - (safeRanking[safeRanking.length - 1]?.score || 0))}分` }
+      { label: '分差', value: `${Math.abs(((safeRanking[0] && safeRanking[0].score) || 0) - ((safeRanking[safeRanking.length - 1] && safeRanking[safeRanking.length - 1].score) || 0))}分` }
     ];
     const heroStatW = (heroW - 60) / 3;
     heroStats.forEach((item, index) => {
@@ -331,7 +331,7 @@ Page({
 
     // 胜负差
     const ranking = record.ranking || players.slice().sort((a, b) => b.score - a.score);
-    const gap = (ranking[0]?.score || 0) - (ranking[ranking.length - 1]?.score || 0);
+    const gap = ((ranking[0] && ranking[0].score) || 0) - ((ranking[ranking.length - 1] && ranking[ranking.length - 1].score) || 0);
 
     // 每位玩家每回合的分数变化，用于计算稳定度
     const playerScoresPerRound = {};
