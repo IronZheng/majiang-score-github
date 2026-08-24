@@ -81,12 +81,43 @@
   box-shadow: inset 0 0 0 1rpx rgba(228, 155, 115, 0.4);
 }
 
+.rank-row.leader {
+  background: linear-gradient(135deg, #fff3e6, #ffe6cf);
+  box-shadow: inset 0 0 0 1rpx rgba(224, 123, 69, 0.5);
+}
+
+.rank-row.last {
+  background: #f4f6f8;
+  opacity: 0.92;
+}
+
 .rank-no {
   width: 44rpx;
   text-align: center;
   font-size: 30rpx;
   font-weight: 800;
   color: #e49b73;
+}
+
+.rank-no-1 {
+  color: #e07b45;
+  font-size: 34rpx;
+}
+
+/* 第一名皇冠：放在名字右边 */
+.crown-tag {
+  margin-left: 20rpx;
+  font-size: 30rpx;
+  line-height: 1;
+  filter: drop-shadow(0 2rpx 2rpx rgba(224, 123, 69, 0.35));
+}
+
+.rank-no-2 {
+  color: #c08457;
+}
+
+.rank-no-3 {
+  color: #b08968;
 }
 
 .rank-avatar {
@@ -144,6 +175,19 @@
   color: #1f2937;
   min-width: 80rpx;
   text-align: right;
+}
+
+/* 红涨绿跌：正分红色、负分绿色、零分灰 */
+.rank-score.pos {
+  color: #e25560;
+}
+
+.rank-score.neg {
+  color: #2fa94e;
+}
+
+.rank-score.zero {
+  color: #9ca3af;
 }
 
 /* ===== 等待：玩家列表加人 ===== */

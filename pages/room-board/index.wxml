@@ -86,6 +86,20 @@
       <view class="primary-btn host-btn ghost-end" bindtap="finishGame">结束游戏</view>
     </view>
 
+    <!-- 实时战况：每轮结束后展示各玩家累计得分与排名 -->
+    <view class="card live-rank-card" wx:if="{{ranking.length > 0}}">
+      <view class="card-title">实时战况 · 当前排名</view>
+      <view class="rank-list">
+        <view class="rank-row {{item.isSelf ? 'self' : ''}} {{item.isLeader ? 'leader' : ''}} {{item.isLast ? 'last' : ''}}" wx:for="{{ranking}}" wx:key="openid">
+          <view class="rank-no rank-no-{{item.rank}}">{{item.rank}}</view>
+          <image wx:if="{{item.avatarUrl}}" class="rank-avatar" src="{{item.avatarUrl}}" mode="aspectFill"></image>
+          <view wx:else class="rank-avatar fallback">{{item.initial}}</view>
+          <view class="rank-name">{{item.nickname}}<text wx:if="{{item.isSelf}}" class="self-tag">我</text><text wx:if="{{item.isLeader}}" class="crown-tag">👑</text></view>
+          <view class="rank-score {{item.scorePositive ? 'pos' : ''}} {{item.scoreNegative ? 'neg' : ''}} {{item.scoreZero ? 'zero' : ''}}">{{item.totalScore > 0 ? '+' : ''}}{{item.totalScore}}分</view>
+        </view>
+      </view>
+    </view>
+
     <view class="card matrix-card" wx:if="{{matrixRows.length > 0}}">
       <scroll-view scroll-x class="matrix-scroll" enhanced show-scrollbar="{{false}}">
         <view class="matrix">

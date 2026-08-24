@@ -22,17 +22,24 @@
     <view class="guide-close" catchtap="dismissAddMyGuide" role="button" aria-label="关闭提示">×</view>
   </view>
 
-  <!-- 主操作：创建房间 -->
-  <view class="hero-create" bindtap="openCreate">
-    <view class="hero-ico">＋</view>
-    <view class="hero-info">
-      <view class="hero-title">创建房间</view>
-      <view class="hero-sub">开一桌，生成二维码邀请好友扫码加入</view>
+  <!-- 板块一：创建房间（主操作，层级最高，实色强调） -->
+  <view class="section section--create">
+    <view class="section-head">
+      <view class="section-title">创建房间</view>
+      <view class="section-more" bindtap="openCreate">去创建 ›</view>
+    </view>
+    <view class="panel panel--solid" bindtap="openCreate">
+      <view class="panel-ico">＋</view>
+      <view class="panel-info">
+        <view class="panel-title">开一桌新牌局</view>
+        <view class="panel-desc">生成二维码，邀请好友扫码加入一起计分</view>
+      </view>
+      <view class="panel-arrow">›</view>
     </view>
   </view>
 
-  <!-- 进行中房间：直接列表展示 -->
-  <view class="section">
+  <!-- 板块二：进行中（活跃状态，青绿主题） -->
+  <view class="section section--progress">
     <view class="section-head">
       <view class="section-title">进行中</view>
       <view class="section-count">{{progressList.length}}</view>
@@ -41,43 +48,58 @@
 
     <view wx:if="{{loading}}" class="section-loading">加载中…</view>
 
-    <view wx:if="{{!loading && progressList.length === 0}}" class="section-empty">进行中 0</view>
+    <view wx:if="{{!loading && progressList.length === 0}}" class="section-empty">还没有进行中的房间</view>
 
-    <view wx:for="{{progressList}}" wx:for-index="index" wx:key="roomId" class="room-cell" wx:if="{{index < 4}}" data-room-id="{{item.roomId}}" bindtap="openProgressRoom">
-      <view class="room-main">
-        <view class="room-name">{{item.title}}</view>
-        <view class="room-meta">{{item.dateText}}{{item.dateText ? ' · ' : ''}}{{item.statusText}} · {{item.memberCount}}人{{item.isHost ? ' · 房主' : ''}}</view>
+    <view wx:for="{{progressList}}" wx:for-index="index" wx:key="roomId" class="panel panel--item" wx:if="{{index < 4}}" data-room-id="{{item.roomId}}" bindtap="openProgressRoom">
+      <view class="panel-main">
+        <view class="panel-title">{{item.title}}</view>
+        <view class="panel-desc">{{item.dateText}}{{item.dateText ? ' · ' : ''}}{{item.statusText}} · {{item.memberCount}}人{{item.isHost ? ' · 房主' : ''}}</view>
       </view>
-      <view class="room-arrow">›</view>
+      <view class="panel-arrow">›</view>
     </view>
   </view>
 
-  <!-- 历史记录入口 -->
-  <view class="entry-cell" bindtap="goHistory">
-    <view class="entry-ico history">☰</view>
-    <view class="hero-info">
-      <view class="entry-name">历史记录</view>
-      <view class="entry-desc">查看已结束的房间</view>
+  <!-- 板块三：历史记录（归档，靛蓝主题） -->
+  <view class="section section--history">
+    <view class="section-head">
+      <view class="section-title">历史记录</view>
+    </view>
+    <view class="panel panel--item" bindtap="goHistory">
+      <view class="panel-ico">☰</view>
+      <view class="panel-main">
+        <view class="panel-title">查看已结束的房间</view>
+        <view class="panel-desc">回顾往期牌局与最终得分</view>
+      </view>
+      <view class="panel-arrow">›</view>
     </view>
   </view>
 
   <!-- 创建房间弹窗 -->
   <view class="overlay" wx:if="{{showCreate}}">
-      <view class="create-card">
-      <view class="create-title">创建房间</view>
-      <view class="card fee-card {{tableFeeEnabled ? '' : 'fee-disabled'}}">
+    <view class="create-card">
+      <view class="create-head">
+        <view class="create-head-ico">＋</view>
+        <view class="create-head-text">
+          <view class="create-title">创建房间</view>
+          <view class="create-sub">生成二维码，邀请好友扫码一起计分</view>
+        </view>
+      </view>
+
+      <view class="card fee-card {{tableFeeEnabled ? 'on' : 'fee-disabled'}}">
         <view class="fee-top">
-          <view>
+          <view class="fee-ico">¥</view>
+          <view class="fee-copy">
             <view class="title fee-title">台费</view>
             <view class="fee-subtitle">开启后，每圈记账时实时填入台费</view>
           </view>
           <checkbox-group class="fee-check-group" bindchange="onFeeChange">
             <label class="fee-check">
-              <checkbox value="enabled" checked="{{tableFeeEnabled}}" color="#e49b73" />
+              <checkbox value="enabled" checked="{{tableFeeEnabled}}" color="#e07b45" />
             </label>
           </checkbox-group>
         </view>
       </view>
+
       <view class="create-actions">
         <view class="ghost-btn" bindtap="closeCreate">取消</view>
         <view class="primary-btn" bindtap="createRoom">{{creating ? '创建中…' : '创建并进入'}}</view>

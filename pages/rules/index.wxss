@@ -141,62 +141,13 @@
   background: rgba(228, 155, 115, 0.12);
 }
 
-/* ===== 主操作：创建房间 ===== */
-.hero-create {
-  display: flex;
-  align-items: center;
-  gap: 26rpx;
-  padding: 36rpx 30rpx;
-  margin-bottom: 22rpx;
-  border-radius: 24rpx;
-  background: linear-gradient(135deg, #f0a070, #e07b45);
-  box-shadow: 0 18rpx 40rpx rgba(224, 123, 69, 0.28);
-  box-sizing: border-box;
-}
-
-.hero-create:active {
-  transform: scale(0.99);
-  opacity: 0.94;
-}
-
-.hero-ico {
-  width: 84rpx;
-  height: 84rpx;
-  border-radius: 24rpx;
-  background: rgba(255, 255, 255, 0.22);
-  color: #ffffff;
-  font-size: 46rpx;
-  font-weight: 300;
-  line-height: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.hero-info {
-  flex: 1;
-  min-width: 0;
-}
-
-.hero-title {
-  font-size: 36rpx;
-  font-weight: 800;
-  color: #ffffff;
-}
-
-.hero-sub {
-  margin-top: 6rpx;
-  font-size: 25rpx;
-  color: rgba(255, 255, 255, 0.86);
-  line-height: 1.45;
-}
-
-/* ===== 进行中列表区 ===== */
+/* ===== 统一板块骨架（创建 / 进行中 / 历史 共用） ===== */
+/* 三块统一：外间距、头部高度、字体阶梯、圆角、阴影，仅用色相区分层级与状态 */
 .section {
   margin-bottom: 22rpx;
 }
 
+/* 板块头部：标题竖条 + 标题 + 计数/更多（统一结构） */
 .section-head {
   display: flex;
   align-items: center;
@@ -205,17 +156,34 @@
 }
 
 .section-title {
+  position: relative;
+  padding-left: 22rpx;
   font-size: 34rpx;
   font-weight: 800;
   color: #1f2937;
+  line-height: 1.3;
 }
 
+/* 标题左侧竖条：主题色，三块共用同一形态仅靠颜色区分 */
+.section-title::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8rpx;
+  height: 32rpx;
+  border-radius: 999rpx;
+  background: currentColor;
+  opacity: 0.9;
+}
+
+/* 状态计数徽标（进行中） */
 .section-count {
   min-width: 40rpx;
   height: 40rpx;
   padding: 0 14rpx;
   border-radius: 999rpx;
-  background: linear-gradient(135deg, #f0a070, #e07b45);
   color: #ffffff;
   font-size: 26rpx;
   font-weight: 800;
@@ -224,114 +192,145 @@
   box-sizing: border-box;
 }
 
+/* “更多/去创建”链接 */
 .section-more {
   margin-left: auto;
   font-size: 26rpx;
-  color: #e07b45;
   font-weight: 700;
   padding: 6rpx 4rpx;
 }
 
-.section-loading,
-.section-empty {
-  padding: 40rpx 0;
-  text-align: center;
-  font-size: 27rpx;
-  color: #9ca3af;
-  background: #ffffff;
-  border: 1rpx solid rgba(228, 155, 115, 0.1);
-  border-radius: 18rpx;
-  box-shadow: 0 12rpx 30rpx rgba(120, 88, 64, 0.06);
-}
-
-.room-cell {
+/* 统一内容面板：卡片内间距、圆角、阴影一致 */
+.panel {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  background: #ffffff;
-  border: 1rpx solid rgba(228, 155, 115, 0.12);
-  border-radius: 18rpx;
-  padding: 28rpx 24rpx;
-  margin-bottom: 16rpx;
-  box-shadow: 0 12rpx 30rpx rgba(120, 88, 64, 0.06);
-  box-sizing: border-box;
-}
-
-.room-cell:active {
-  transform: scale(0.99);
-  opacity: 0.92;
-}
-
-.room-main {
-  flex: 1;
-  min-width: 0;
-}
-
-.room-name {
-  font-size: 32rpx;
-  font-weight: 800;
-  color: #1f2937;
-}
-
-.room-meta {
-  margin-top: 8rpx;
-  font-size: 24rpx;
-  color: #9ca3af;
-}
-
-.room-arrow {
-  font-size: 44rpx;
-  color: #c9b8ac;
-  line-height: 1;
-  margin-left: 16rpx;
-}
-
-/* ===== 历史记录入口 ===== */
-.entry-cell {
-  display: flex;
-  align-items: center;
-  gap: 26rpx;
+  gap: 22rpx;
   padding: 30rpx 26rpx;
   border-radius: 22rpx;
-  background: #ffffff;
-  box-shadow: 0 14rpx 34rpx rgba(120, 88, 64, 0.08);
-  border: 1rpx solid rgba(228, 155, 115, 0.12);
   box-sizing: border-box;
+  margin-bottom: 16rpx;
 }
 
-.entry-cell:active {
+.panel:active {
   transform: scale(0.99);
-  opacity: 0.92;
+  opacity: 0.94;
 }
 
-.entry-ico {
+/* 面板图标徽标（方角圆角，白字） */
+.panel-ico {
   width: 76rpx;
   height: 76rpx;
   border-radius: 22rpx;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 38rpx;
-  font-weight: 800;
+  font-size: 40rpx;
+  font-weight: 300;
+  line-height: 1;
   color: #ffffff;
   flex-shrink: 0;
 }
 
-.entry-ico.history {
-  background: linear-gradient(135deg, #b6a0f0, #7b5fd9);
+.panel-info,
+.panel-main {
+  flex: 1;
+  min-width: 0;
 }
 
-.entry-name {
+.panel-title {
   font-size: 32rpx;
   font-weight: 800;
   color: #1f2937;
+  line-height: 1.4;
 }
 
-.entry-desc {
-  margin-top: 4rpx;
-  font-size: 23rpx;
+.panel-desc {
+  margin-top: 6rpx;
+  font-size: 24rpx;
   color: #9ca3af;
-  line-height: 1.4;
+  line-height: 1.45;
+}
+
+.panel-arrow {
+  font-size: 44rpx;
+  color: #c9b8ac;
+  line-height: 1;
+  margin-left: 16rpx;
+  flex-shrink: 0;
+}
+
+/* 空 / 加载态：与面板同圆角，主题浅底 */
+.section-loading,
+.section-empty {
+  padding: 40rpx 0;
+  text-align: center;
+  font-size: 27rpx;
+  border-radius: 22rpx;
+  box-sizing: border-box;
+  margin-bottom: 16rpx;
+}
+
+/* ---- 板块一：创建房间（主操作，层级最高，实色橙） ---- */
+.section--create .section-title::before {
+  color: #e07b45;
+}
+.section--create .section-more {
+  color: #e07b45;
+}
+.panel--solid {
+  background: linear-gradient(135deg, #f0a070, #e07b45);
+  box-shadow: 0 18rpx 40rpx rgba(224, 123, 69, 0.28);
+  border: 1rpx solid rgba(224, 123, 69, 0.3);
+}
+.panel--solid .panel-ico {
+  background: rgba(255, 255, 255, 0.22);
+}
+.panel--solid .panel-title {
+  color: #ffffff;
+}
+.panel--solid .panel-desc {
+  color: rgba(255, 255, 255, 0.86);
+}
+.panel--solid .panel-arrow {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* ---- 板块二：进行中（活跃状态，青绿） ---- */
+.section--progress .section-title::before {
+  color: #1f9e8c;
+}
+.section--progress .section-count {
+  background: linear-gradient(135deg, #36c0a8, #1f9e8c);
+}
+.section--progress .section-more {
+  color: #1f9e8c;
+}
+.section--progress .panel--item {
+  background: #ffffff;
+  border: 1rpx solid rgba(31, 158, 140, 0.16);
+  border-left: 6rpx solid #1f9e8c;
+  box-shadow: 0 12rpx 30rpx rgba(31, 130, 110, 0.07);
+}
+.section--progress .section-loading,
+.section--progress .section-empty {
+  color: #6aa99c;
+  background: #eafaf5;
+  border: 1rpx solid rgba(31, 158, 140, 0.16);
+}
+
+/* ---- 板块三：历史记录（归档，靛蓝） ---- */
+.section--history .section-title::before {
+  color: #486bc4;
+}
+.section--history .panel--item {
+  background: #ffffff;
+  border: 1rpx solid rgba(72, 107, 196, 0.18);
+  border-left: 6rpx solid #486bc4;
+  box-shadow: 0 12rpx 30rpx rgba(60, 90, 170, 0.08);
+}
+.section--history .panel-ico {
+  background: linear-gradient(135deg, #6f8ee0, #486bc4);
+  box-shadow: 0 10rpx 22rpx rgba(72, 107, 196, 0.28);
 }
 
 /* ===== 创建弹窗 ===== */
@@ -355,11 +354,46 @@
   box-sizing: border-box;
 }
 
+/* 弹窗头部：橙主题图标 + 标题，形成明确视觉锚点 */
+.create-head {
+  display: flex;
+  align-items: center;
+  gap: 22rpx;
+  margin-bottom: 28rpx;
+}
+
+.create-head-ico {
+  width: 84rpx;
+  height: 84rpx;
+  border-radius: 24rpx;
+  background: linear-gradient(135deg, #f0a070, #e07b45);
+  box-shadow: 0 14rpx 30rpx rgba(224, 123, 69, 0.28);
+  color: #ffffff;
+  font-size: 48rpx;
+  font-weight: 300;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.create-head-text {
+  min-width: 0;
+}
+
 .create-title {
-  font-size: 34rpx;
+  font-size: 36rpx;
   font-weight: 800;
   color: #1f2937;
-  margin-bottom: 24rpx;
+  line-height: 1.3;
+}
+
+.create-sub {
+  margin-top: 6rpx;
+  font-size: 24rpx;
+  color: #9ca3af;
+  line-height: 1.45;
 }
 
 .card {
@@ -393,7 +427,13 @@
 
 .fee-card {
   background: #ffffff;
-  transition: opacity 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+/* 台费开启态：橙描边强调，明确“已启用” */
+.fee-card.on {
+  border-color: rgba(224, 123, 69, 0.35);
+  box-shadow: 0 12rpx 30rpx rgba(224, 123, 69, 0.12);
 }
 
 .fee-card.fee-disabled {
@@ -402,9 +442,36 @@
 
 .fee-top {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 18rpx;
+}
+
+.fee-ico {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 18rpx;
+  background: linear-gradient(135deg, #f6d9c4, #f0c3a6);
+  color: #c0673a;
+  font-size: 34rpx;
+  font-weight: 800;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.fee-card.on .fee-ico {
+  background: linear-gradient(135deg, #f0a070, #e07b45);
+  color: #ffffff;
+  box-shadow: 0 10rpx 22rpx rgba(224, 123, 69, 0.28);
+}
+
+.fee-copy {
+  flex: 1;
+  min-width: 0;
+  padding: 0 16rpx;
 }
 
 .fee-title {
@@ -432,11 +499,11 @@
 .create-actions {
   display: flex;
   gap: 18rpx;
-  margin-top: 6rpx;
+  margin-top: 10rpx;
 }
 
 .ghost-btn {
-  flex: 1;
+  flex: 0 0 200rpx;
   height: 92rpx;
   border-radius: 16rpx;
   background: #f3f4f6;

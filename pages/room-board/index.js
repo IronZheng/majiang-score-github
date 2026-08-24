@@ -37,6 +37,7 @@ Page({
     players: [],
     feed: [],
     scoreRows: [],
+    ranking: [],
     editingRound: 0,
     roundSum: 0,
     sumOk: true,
@@ -66,10 +67,12 @@ Page({
 
   onHide() {
     this.stopPolling();
+    if (this._autoTimer) { clearTimeout(this._autoTimer); this._autoTimer = null; }
   },
 
   onUnload() {
     this.stopPolling();
+    if (this._autoTimer) { clearTimeout(this._autoTimer); this._autoTimer = null; }
   },
 
   startPolling() {
@@ -130,6 +133,27 @@ Page({
           deltaPositive: f.delta >= 0,
           roundText: '第' + f.round + '圈',
           timeText: formatTime(f.at)
+        };
+      });
+      // 实时排名：按累计总分降序（同分则按昵称稳定排序），用于每轮结束后即时展示战况
+      const playerCount = players.length;
+      const ranking = players.slice().sort(function (a, b) {
+        if (b.totalScore !== a.totalScore) return b.totalScore - a.totalScore;
+        return (a.nickname || '').localeCompare(b.nickname || '');
+      }).map(function (p, i) {
+        return {
+          rank: i + 1,
+          openid: p.openid,
+          nickname: p.nickname,
+          avatarUrl: p.avatarUrl,
+          initial: p.initial,
+          isSelf: p.isSelf,
+          totalScore: p.totalScore,
+          scorePositive: p.totalScore > 0,
+          scoreNegative: p.totalScore < 0,
+          scoreZero: p.totalScore === 0,
+          isLeader: i === 0,
+          isLast: i === playerCount - 1
         };
       });
       // 回合矩阵：列=玩家（与 players 顺序一致），行=每一回合；台费作为与玩家并列的独立列
@@ -196,7 +220,8 @@ Page({
         isHost: state.hostOpenid === selfOpenid,
         editingRound: editingRound,
         roundSum: sum,
-        sumOk: sum === 0
+        sumOk: sum === 0,
+        ranking: ranking
       });
 
       if (status === STATUS_FINISHED && !that.data._navigated) {
@@ -251,23 +276,57 @@ Page({
     rows.forEach(function (r, i) {
       if (r.value === '' || r.value === null) { emptyCount += 1; emptyIdx = i; }
     });
+    // 任意一次输入都先作废上一次挂起的自动计算，避免覆盖用户正在输入的内容
+    if (this._autoTimer) {
+      clearTimeout(this._autoTimer);
+      this._autoTimer = null;
+    }
+    // 仅剩一名未填、且从未被手动改过时，延迟自动补齐（留出输入时间，例如要输入 10）
     if (emptyCount === 1 && rows[emptyIdx].touched !== true && !feeEnabled) {
-      let sumOthers = 0;
-      rows.forEach(function (r) {
-        if (r.value !== '' && r.value !== null) {
+      const that = this;
+      this._autoTimer = setTimeout(function () {
+        that._autoTimer = null;
+        // 重新校验：用户若已在该行输入或新增其他空行，则取消自动补齐
+        const cur = that.data.scoreRows;
+        let cnt = 0;
+        let idx = -1;
+        cur.forEach(function (r, i) {
+          if (r.value === '' || r.value === null) { cnt += 1; idx = i; }
+        });
+        if (cnt !== 1 || cur[idx].touched === true) return;
+        let sumOthers = 0;
+        cur.forEach(function (r) {
+          if (r.value !== '' && r.value !== null) {
+            const v = Number(r.value) || 0;
+            if (v) sumOthers += r.sign * v;
+          }
+        });
+        // 目标：sumOthers + 自动值 + 台费 = 0
+        const complement = -(sumOthers + fee);
+        const rounded = Math.round(complement * 100) / 100;
+        const updated = cur.slice();
+        updated[idx] = Object.assign({}, updated[idx], {
+          sign: rounded >= 0 ? 1 : -1,
+          value: String(Math.abs(rounded)),
+          auto: true
+        });
+        let sum = 0;
+        updated.forEach(function (r) {
           const v = Number(r.value) || 0;
-          if (v) sumOthers += r.sign * v;
-        }
+          if (v) sum += r.sign * v;
+        });
+        const target = feeEnabled ? (sum + fee) : sum;
+        that.setData({ scoreRows: updated, roundSum: sum, sumOk: target === 0 });
+      }, 800);
+      // 先立即回写用户输入，不附带自动值，保证输入响应即时且不被覆盖
+      let sum = 0;
+      rows.forEach(function (r) {
+        const v = Number(r.value) || 0;
+        if (v) sum += r.sign * v;
       });
-      // 目标：sumOthers + 自动值 + 台费 = 0
-      const complement = -(sumOthers + fee);
-      const rounded = Math.round(complement * 100) / 100;
-      rows = rows.slice();
-      rows[emptyIdx] = Object.assign({}, rows[emptyIdx], {
-        sign: rounded >= 0 ? 1 : -1,
-        value: String(Math.abs(rounded)),
-        auto: true
-      });
+      const target = feeEnabled ? (sum + fee) : sum;
+      this.setData({ scoreRows: rows, roundSum: sum, sumOk: target === 0 });
+      return;
     }
     let sum = 0;
     rows.forEach(function (r) {
