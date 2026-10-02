@@ -1,0 +1,126 @@
+.dice-inline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 28rpx;
+  background: linear-gradient(140deg, #2a2f52 0%, #1b1f3a 55%, #12152b 100%);
+  border: 1rpx solid rgba(150, 165, 255, 0.25);
+  border-radius: 20rpx;
+  padding: 32rpx 24rpx;
+  margin: 4rpx 0 24rpx;
+  box-shadow: inset 0 2rpx 8rpx rgba(255, 255, 255, 0.05), 0 6rpx 18rpx rgba(0, 0, 0, 0.25);
+}
+
+/* ===== 3D 场景 =====
+ * 3D 深度的 perspective / translateZ 必须用 px（rpx 在部分内核不产生深度）。
+ * 立方体 52px，半边长 26px。
+ * .scene 是固定锚点；.mover 负责全屏位移（透视随它走）；.cube 只负责翻滚。 */
+.scene {
+  position: relative;
+  width: 52px;
+  height: 52px;
+}
+
+/* 滚动时允许骰子画出原框，并浮在最上层 */
+.dice-inline.rolling .scene {
+  overflow: visible;
+  z-index: 50;
+}
+
+.mover {
+  width: 52px;
+  height: 52px;
+  perspective: 230px;
+  transform: translate3d(0, 0, 0);
+  transform-style: preserve-3d;
+  /* 阴影加在 mover（非 .cube），避免压平 3D；时长由内联控制 */
+  filter: drop-shadow(0 5px 7px rgba(0, 0, 0, 0.45));
+  transition-property: transform;
+  transition-duration: 0s;
+  /* 物理关键帧已精确描述轨迹，段间用 linear 才能让撞边/落点准确 */
+  transition-timing-function: linear;
+}
+
+/* 最后回框段：柔和减速 */
+.mover.homing {
+  transition-timing-function: cubic-bezier(0.22, 0.9, 0.32, 1);
+}
+
+.dice-inline.rolling .mover {
+  filter: drop-shadow(0 7px 11px rgba(90, 110, 255, 0.45));
+}
+
+.cube {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  transform-style: preserve-3d;
+  transition-property: transform;
+  transition-duration: 0s;
+  transition-timing-function: linear;
+}
+
+.face {
+  position: absolute;
+  width: 52px;
+  height: 52px;
+  border-radius: 9px;
+  background: linear-gradient(150deg, #ffffff 0%, #eceef3 48%, #cfd3de 100%);
+  box-shadow: inset 0 1.5px 3px rgba(255, 255, 255, 0.95), inset 0 -2px 4px rgba(40, 50, 80, 0.18);
+  backface-visibility: hidden;
+}
+
+/* 半边长 = 26px（px，保证纵深真实） */
+.f-front  { transform: translateZ(26px); }
+.f-back   { transform: rotateY(180deg) translateZ(26px); }
+.f-right  { transform: rotateY(90deg) translateZ(26px); }
+.f-left   { transform: rotateY(-90deg) translateZ(26px); }
+.f-top    { transform: rotateX(90deg) translateZ(26px); }
+.f-bottom { transform: rotateX(-90deg) translateZ(26px); }
+
+/* ===== 点数（适配 52px 骰子） ===== */
+.pip {
+  position: absolute;
+  width: 8.5px;
+  height: 8.5px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 28%, #555 0%, #0c0c0c 72%);
+  box-shadow: inset 0 0.5px 1px rgba(0, 0, 0, 0.7);
+}
+
+/* 1点(front)、4点(right) 用红色，传统麻将骰子配色 */
+.f-front .pip,
+.f-right .pip {
+  background: radial-gradient(circle at 35% 28%, #ff5b5b 0%, #c62828 72%);
+}
+
+.tl { left: 9px; top: 9px; }
+.tr { right: 9px; top: 9px; }
+.ml { left: 9px; top: 21.5px; }
+.mr { right: 9px; top: 21.5px; }
+.c  { left: 21.5px; top: 21.5px; }
+.bl { left: 9px; bottom: 9px; }
+.br { right: 9px; bottom: 9px; }
+
+/* ===== 文字 ===== */
+.dice-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 8rpx;
+  min-width: 120rpx;
+}
+
+.dice-total {
+  font-size: 56rpx;
+  font-weight: 700;
+  color: #cdd6ff;
+  line-height: 1.1;
+  text-shadow: 0 2rpx 8rpx rgba(120, 140, 255, 0.5);
+}
+
+.dice-cap {
+  font-size: 20rpx;
+  color: rgba(205, 214, 255, 0.65);
+  margin-top: 6rpx;
+}

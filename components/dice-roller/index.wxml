@@ -1,0 +1,45 @@
+<!-- 六个面（两枚骰子复用同一模板） -->
+<template name="cubeFaces">
+  <view class="face f-front"><view class="pip c"></view></view>
+  <view class="face f-back">
+    <view class="pip tl"></view><view class="pip tr"></view>
+    <view class="pip ml"></view><view class="pip mr"></view>
+    <view class="pip bl"></view><view class="pip br"></view>
+  </view>
+  <view class="face f-right">
+    <view class="pip tl"></view><view class="pip tr"></view>
+    <view class="pip bl"></view><view class="pip br"></view>
+  </view>
+  <view class="face f-left">
+    <view class="pip tl"></view><view class="pip tr"></view>
+    <view class="pip c"></view>
+    <view class="pip bl"></view><view class="pip br"></view>
+  </view>
+  <view class="face f-top"><view class="pip tl"></view><view class="pip br"></view></view>
+  <view class="face f-bottom">
+    <view class="pip tl"></view><view class="pip c"></view><view class="pip br"></view>
+  </view>
+</template>
+
+<view class="dice-inline {{rolling?'rolling':''}}" bindtap="roll">
+  <view class="scene">
+    <!-- mover：全屏滚动的位移层；cube：只负责 3D 翻滚，回框时角度保持不变 -->
+    <view class="mover {{homing?'homing':''}}" style="transform: translate3d({{d1.tx}}px,{{d1.ty}}px,0); transition-duration:{{d1.moveDur}}s;">
+      <view class="cube" style="transform: rotateX({{d1.rx}}deg) rotateY({{d1.ry}}deg); transition-duration:{{d1.spinDur}}s;">
+        <template is="cubeFaces"/>
+      </view>
+    </view>
+  </view>
+  <view class="scene">
+    <view class="mover" style="transform: translate3d({{d2.tx}}px,{{d2.ty}}px,0); transition-duration:{{d2.moveDur}}s;">
+      <view class="cube" style="transform: rotateX({{d2.rx}}deg) rotateY({{d2.ry}}deg); transition-duration:{{d2.spinDur}}s;">
+        <template is="cubeFaces"/>
+      </view>
+    </view>
+  </view>
+
+  <view class="dice-meta">
+    <text class="dice-total">{{rolling ? '…' : (total ? total : '摇')}}</text>
+    <text class="dice-cap">{{total ? '点' : '点击摇骰子'}}</text>
+  </view>
+</view>
