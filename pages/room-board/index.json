@@ -1,4 +1,6 @@
 {
   "navigationBarTitleText": "房间",
-  "usingComponents": {}
+  "usingComponents": {
+    "dice-roller": "/components/dice-roller/index"
+  }
 }

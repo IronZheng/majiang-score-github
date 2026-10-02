@@ -1,3 +1,6 @@
 {
-  "navigationBarTitleText": "麻将计分器 - 回合计分"
+  "navigationBarTitleText": "麻将计分器 - 回合计分",
+  "usingComponents": {
+    "dice-roller": "/components/dice-roller/index"
+  }
 }

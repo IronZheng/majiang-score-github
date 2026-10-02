@@ -86,6 +86,9 @@
       <view class="primary-btn host-btn ghost-end" bindtap="finishGame">结束游戏</view>
     </view>
 
+    <!-- 摇骰子：放在结束游戏下方 -->
+    <dice-roller></dice-roller>
+
     <!-- 实时战况：每轮结束后展示各玩家累计得分与排名 -->
     <view class="card live-rank-card" wx:if="{{ranking.length > 0}}">
       <view class="card-title">实时战况 · 当前排名</view>

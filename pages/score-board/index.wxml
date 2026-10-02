@@ -1,4 +1,6 @@
 <view class="container" wx:if="{{game}}">
+  <dice-roller></dice-roller>
+
   <view class="card header-card">
     <view class="round">当前回合：第 {{game.currentRound}} 回合</view>
     <view class="players-grid">
